@@ -1,15 +1,16 @@
-import { Card, Container, Typography } from "@mui/material";
+import { Button, Card, Container, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import styled from "styled-components";
 
 import Example from "../components/graph";
+import ModalBusinessAreas from "../components/modals/BusinessAreas";
 import ComparativeStockSelect from "../components/selecter/ComparativeStockSelect";
 import TermSelect from "../components/selecter/TermSelect";
 import NumberOfStocks from "../components/slider/NumberOfStocksSlider";
 import RebalancingTermSlider from "../components/slider/RebalancingTermSlider";
 
 const MainContainer = styled.div`
-  //border: 3px solid pink;
+  border: 3px solid pink;
   margin: 5px;
   padding-left: 10%;
   padding-right: 10%;
@@ -17,40 +18,43 @@ const MainContainer = styled.div`
 `;
 
 const GraphContainer = styled(Card)`
-  //border: 3px solid blue;
+  border: 3px solid blue;
   margin: 5px;
   width: 50%;
 `;
+
 const GraphSlectContainer = styled.div`
-  //border: 3px solid orange;
+  border: 3px solid orange;
   margin: 5px;
   display: flex;
 `;
 
 const Graph = styled.div`
-  //border: 3px solid green;
+  border: 3px solid green;
   margin: 5px;
   height: 300px;
   padding: 5px;
 `;
 
 const MakeModelContainer = styled.div`
-  //border: 3px solid black;
+  border: 3px solid black;
   argin: 5px;
   display: flex;
 `;
 
 const ModelContainer = styled(Card)`
-  //border: 3px solid red;
+  border: 3px solid red;
   margin: 5px;
   width: 50%;
 `;
 
 const ShowQuantModelYieldContainer = styled(Card)`
-  //border: 3px solid yellow;
+  border: 3px solid yellow;
   margin: 5px;
   margin-top: 10px;
 `;
+
+// const StyledButton = styled(B)
 
 const QuantLabPage = () => {
   return (
@@ -65,6 +69,7 @@ const QuantLabPage = () => {
             <Example></Example>
           </Graph>
         </GraphContainer>
+
         <ModelContainer>
           <Container sx={{ px: "5%" }}>
             <h3>Quant Lab</h3>
@@ -79,10 +84,19 @@ const QuantLabPage = () => {
             }}
           >
             {/* 클릭시 modal 창 열리게 변경*/}
-            <Card>사업분야</Card>
-            <Card>재무상태</Card>
-            <Card>주식성향</Card>
-            <Card>차트정보</Card>
+            {/* <Button variant="contained" sx={{ m: 1 }}>
+              사업분야
+            </Button> */}
+            <Button variant="contained" sx={{ m: 1 }}>
+              재무상태
+            </Button>
+            <Button variant="contained" sx={{ m: 1 }}>
+              주식성향
+            </Button>
+            <Button variant="contained" sx={{ m: 1 }}>
+              차트정보
+            </Button>
+            <ModalBusinessAreas />
           </Box>
         </ModelContainer>
       </MakeModelContainer>

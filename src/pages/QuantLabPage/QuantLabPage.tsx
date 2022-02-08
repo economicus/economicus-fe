@@ -1,7 +1,9 @@
 import { Button, Card, Container, Typography } from "@mui/material";
 import { Box } from "@mui/system";
+import { useState } from "react";
 import styled from "styled-components";
 
+import CheckBoxs from "../../components/CheckBoxs";
 import Example from "../../components/graph";
 import ModalBusinessAreas from "../../components/modals/BusinessAreas";
 import ComparativeStockSelect from "../../components/selecter/ComparativeStockSelect";
@@ -56,7 +58,25 @@ const ShowQuantModelYieldContainer = styled(Card)`
 
 // const StyledButton = styled(B)
 
+// CheckBoxs <-
+
+export interface IBusinessArea {
+  [key: string]: boolean;
+}
+
+export interface IChartInfo {
+  [key: string]: boolean;
+}
+
 const QuantLabPage = () => {
+  const [businessArea, setBusinessArea] = useState({
+    game: true,
+    enter: false,
+    enter2: false,
+    enter3: false,
+  });
+  const [chartInfo, setChartInfo] = useState({});
+
   return (
     <MainContainer>
       <MakeModelContainer>
@@ -96,7 +116,10 @@ const QuantLabPage = () => {
             <Button variant="contained" sx={{ m: 1 }}>
               차트정보
             </Button>
-            <ModalBusinessAreas />
+            <ModalBusinessAreas
+              state={businessArea}
+              setState={setBusinessArea}
+            />
           </Box>
         </ModelContainer>
       </MakeModelContainer>

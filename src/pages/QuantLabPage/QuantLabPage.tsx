@@ -2,12 +2,12 @@ import { Button, Card, Container, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import styled from "styled-components";
 
-import Example from "../components/graph";
-import ModalBusinessAreas from "../components/modals/BusinessAreas";
-import ComparativeStockSelect from "../components/selecter/ComparativeStockSelect";
-import TermSelect from "../components/selecter/TermSelect";
-import NumberOfStocks from "../components/slider/NumberOfStocksSlider";
-import RebalancingTermSlider from "../components/slider/RebalancingTermSlider";
+import Example from "../../components/graph";
+import ModalBusinessAreas from "../../components/modals/BusinessAreas";
+import ComparativeStockSelect from "../../components/selecter/ComparativeStockSelect";
+import TermSelect from "../../components/selecter/TermSelect";
+import NumberOfStocks from "../../components/slider/NumberOfStocksSlider";
+import RebalancingTermSlider from "../../components/slider/RebalancingTermSlider";
 
 const MainContainer = styled.div`
   border: 3px solid pink;

@@ -2,9 +2,9 @@ import { Checkbox, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import styled from "styled-components";
 
-import ContentCard from "../components/ContentCard";
-import OrderSelect from "../components/selecter/OrderSelect";
-import TermSelect from "../components/selecter/TermSelect";
+import ContentCard from "../../components/ContentCard";
+import OrderSelect from "../../components/selecter/OrderSelect";
+import TermSelect from "../../components/selecter/TermSelect";
 
 const ContentsContainer = styled.div`
   width: 100%;

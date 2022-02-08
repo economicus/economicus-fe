@@ -19,7 +19,7 @@ const MainNavigation = () => {
   return (
     // <nav>
     // <Box sx={{ flexGrow: 1 }}>
-    <AppBar position="static" color="inherit">
+    <AppBar color="inherit">
       <Toolbar>
         <Link to="/">
           <EconomicusLogo src="https://avatars.githubusercontent.com/u/98199739?s=200&v=4" />

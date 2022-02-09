@@ -27,7 +27,7 @@ export default function BusinessCheckBoxes({ state, setState }: CheckBoxProps) {
 
   return (
     <FormControl sx={{ m: 3 }} component="fieldset" variant="standard">
-      {<FormLabel component="legend">사업분야</FormLabel>}
+      {<FormLabel component="legend">재무상태</FormLabel>}
 
       <FormGroup
         sx={{

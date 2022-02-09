@@ -5,6 +5,7 @@ import * as React from "react";
 
 import { IChartInfo } from "../../pages/QuantLabPage/QuantLabPage";
 import ChartInfoCheckBoxes from "../CheckBoxes/ChartInfoCheckBoxes";
+import RangeSlider from "../slider/ChartInfoSlider";
 
 const StyledModal = styled(ModalUnstyled)`
   position: fixed;
@@ -69,6 +70,7 @@ export default function ModalChartInfo({
       >
         <Box sx={style}>
           <ChartInfoCheckBoxes state={state} setState={setState} />
+          <RangeSlider />
         </Box>
       </StyledModal>
     </>

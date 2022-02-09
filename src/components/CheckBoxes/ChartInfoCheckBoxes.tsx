@@ -25,7 +25,7 @@ export default function ChartInfoCheckBoxes({
 
   return (
     <FormControl sx={{ m: 3 }} component="fieldset" variant="standard">
-      {<FormLabel component="legend">사업분야</FormLabel>}
+      {<FormLabel component="legend">차트정보</FormLabel>}
 
       <FormGroup
         sx={{

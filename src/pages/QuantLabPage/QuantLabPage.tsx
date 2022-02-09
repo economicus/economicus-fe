@@ -85,7 +85,7 @@ const QuantLabPage = () => {
 
   const onClickMakeButton = async () => {
     const data = await makeQuantModel();
-    setModelTableRows(data);
+    setModelTableRows((prev) => [...prev, data]);
   };
 
   return (

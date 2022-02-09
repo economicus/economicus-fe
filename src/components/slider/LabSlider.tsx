@@ -1,9 +1,10 @@
-import { Input, Slider, Typography } from "@mui/material";
+import { Grid, Slider, TextField, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import React from "react";
 
 interface SliderProps {
   name: string;
+  min: number;
   max: number;
   value: number | string;
   setValue: (newValue: number | string) => void;
@@ -13,7 +14,7 @@ const LabSlider: React.FC<SliderProps> = (props) => {
   const handleChange = (event: Event, newValue: number | number[]): void => {
     props.setValue(newValue as number);
   };
-  const handleBlur = () => {
+  const handleValue = () => {
     if (props.value < 0) {
       props.setValue(0);
     } else if (props.value > props.max) {
@@ -23,33 +24,49 @@ const LabSlider: React.FC<SliderProps> = (props) => {
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     props.setValue(event.target.value === "" ? "" : Number(event.target.value));
   };
+  const marks = [
+    {
+      value: props.min,
+      label: props.min,
+    },
+    {
+      value: props.max,
+      label: props.max,
+    },
+  ];
   return (
-    <Box sx={{ width: "100%" }}>
+    <Box sx={{ width: "95%", mx: "10px" }}>
       <Typography>{props.name}</Typography>
-      <Slider
-        aria-label={props.name}
-        valueLabelDisplay="auto"
-        step={1}
-        marks
-        min={1}
-        max={props.max}
-        size="small"
-        value={typeof props.value === "number" ? props.value : 0}
-        onChange={handleChange}
-      />
-      <Input
-        value={props.value}
-        size="small"
-        onChange={handleInputChange}
-        onBlur={handleBlur}
-        inputProps={{
-          step: 1,
-          min: 0,
-          max: props.max,
-          type: "number",
-          "aria-labelledby": "input-slider",
-        }}
-      />
+      <Grid container spacing={2} alignItems="center">
+        <Grid item xs>
+          <Slider
+            aria-label={props.name}
+            valueLabelDisplay="auto"
+            step={1}
+            marks={marks}
+            min={props.min}
+            max={props.max}
+            size="small"
+            value={typeof props.value === "number" ? props.value : 0}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid item sx={{ width: "80px" }}>
+          <TextField
+            value={props.value}
+            size="small"
+            onChange={handleInputChange}
+            onBlur={handleValue}
+            inputProps={{
+              step: 1,
+              min: props.min,
+              max: props.max,
+              "aria-labelledby": "input-slider",
+              style: { textAlign: "center" },
+            }}
+          />
+        </Grid>
+      </Grid>
     </Box>
   );
 };

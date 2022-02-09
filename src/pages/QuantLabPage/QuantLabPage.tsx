@@ -96,12 +96,14 @@ const QuantLabPage = () => {
             <h3>Quant Lab</h3>
             <LabSlider
               name={"리밸런싱 주기"}
+              min={1}
               max={12}
               value={rebalancingTerm}
               setValue={setRebalancingTerm}
             />
             <LabSlider
               name={"보유 종목 수"}
+              min={1}
               max={50}
               value={numberOfHoldings}
               setValue={setNumberOfHoldings}

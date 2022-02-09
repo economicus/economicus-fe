@@ -33,7 +33,7 @@ const Backdrop = styled("div")`
 `;
 
 const style = {
-  width: 400,
+  width: 700,
   bgcolor: "background.paper",
   border: "2px solid #000",
   p: 2,
@@ -71,11 +71,6 @@ export default function ModalBusinessAreas({
         BackdropComponent={Backdrop}
       >
         <Box sx={style}>
-          {/* <h2 id="unstyled-modal-title" style={{ fontSize: "30px" }}>
-            사업분야
-          </h2>
-          <p id="unstyled-modal-description">체크박스들 들어갈 자리</p> */}
-
           <CheckBoxs state={state} setState={setState} />
         </Box>
       </StyledModal>

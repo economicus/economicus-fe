@@ -70,10 +70,16 @@ export interface IChartInfo {
 
 const QuantLabPage = () => {
   const [businessArea, setBusinessArea] = useState({
-    game: true,
-    enter: false,
-    enter2: false,
-    enter3: false,
+    에너지: true,
+    소재: true,
+    산업재: true,
+    경기관련소비재: true,
+    필수소비재: true,
+    건강관리: true,
+    금융: true,
+    IT: true,
+    커뮤니케이션서비스: true,
+    유틸리티: true,
   });
   const [chartInfo, setChartInfo] = useState({});
 

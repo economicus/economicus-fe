@@ -1,8 +1,10 @@
 import { Button, Card, Container, Typography } from "@mui/material";
 import { Box } from "@mui/system";
+import { GridRowsProp } from "@mui/x-data-grid";
 import { useState } from "react";
 import styled from "styled-components";
 
+import makeQuantModel from "../../apis/makeQuantModel";
 import CheckBoxs from "../../components/CheckBoxs";
 import Example from "../../components/graph";
 import ModalBusinessAreas from "../../components/modals/BusinessAreas";
@@ -10,6 +12,7 @@ import ComparativeStockSelect from "../../components/selecter/ComparativeStockSe
 import TermSelect from "../../components/selecter/TermSelect";
 import NumberOfStocks from "../../components/slider/NumberOfStocksSlider";
 import RebalancingTermSlider from "../../components/slider/RebalancingTermSlider";
+import QuantModelTable from "./QuantModelTable";
 
 const MainContainer = styled.div`
   border: 3px solid pink;
@@ -51,6 +54,8 @@ const ModelContainer = styled(Card)`
 `;
 
 const ShowQuantModelYieldContainer = styled(Card)`
+  height: 100%;
+
   border: 3px solid yellow;
   margin: 5px;
   margin-top: 10px;
@@ -76,6 +81,12 @@ const QuantLabPage = () => {
     enter3: false,
   });
   const [chartInfo, setChartInfo] = useState({});
+  const [modelTableRows, setModelTableRows] = useState<GridRowsProp>([]);
+
+  const onClickMakeButton = async () => {
+    const data = await makeQuantModel();
+    setModelTableRows(data);
+  };
 
   return (
     <MainContainer>
@@ -121,15 +132,12 @@ const QuantLabPage = () => {
               setState={setBusinessArea}
             />
           </Box>
+
+          <Button onClick={onClickMakeButton}>tmp make model</Button>
         </ModelContainer>
       </MakeModelContainer>
       <ShowQuantModelYieldContainer>
-        <Typography>모델</Typography>
-        <Typography>누적수익률</Typography>
-        <Typography>연평균수익</Typography>
-        <Typography>승률</Typography>
-        <Typography>최대손실률</Typography>
-        <Typography>편입종목수</Typography>
+        <QuantModelTable rows={modelTableRows} />
       </ShowQuantModelYieldContainer>
     </MainContainer>
   );

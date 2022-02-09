@@ -75,8 +75,8 @@ const QuantLabPage = () => {
     enter3: false,
   });
   const [chartInfo, setChartInfo] = useState({});
-  const [rebalancingTerm, setRebalancingTerm] = useState<number>(1);
-  const [numberOfHoldings, setNumberOfHoldings] = useState<number>(1);
+  const [rebalancingTerm, setRebalancingTerm] = useState<number | string>(1);
+  const [numberOfHoldings, setNumberOfHoldings] = useState<number | string>(1);
 
   return (
     <MainContainer>

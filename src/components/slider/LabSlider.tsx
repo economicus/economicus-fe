@@ -5,8 +5,8 @@ import React from "react";
 interface SliderProps {
   name: string;
   max: number;
-  value: number;
-  setValue: (newValue: number) => void;
+  value: number | string;
+  setValue: (newValue: number | string) => void;
 }
 
 const LabSlider: React.FC<SliderProps> = (props) => {
@@ -16,8 +16,8 @@ const LabSlider: React.FC<SliderProps> = (props) => {
   const handleBlur = () => {
     if (props.value < 0) {
       props.setValue(0);
-    } else if (props.value > 100) {
-      props.setValue(100);
+    } else if (props.value > props.max) {
+      props.setValue(props.max);
     }
   };
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -34,7 +34,7 @@ const LabSlider: React.FC<SliderProps> = (props) => {
         min={1}
         max={props.max}
         size="small"
-        value={props.value}
+        value={typeof props.value === "number" ? props.value : 0}
         onChange={handleChange}
       />
       <Input

@@ -17,7 +17,7 @@ interface CheckBoxProps {
   setState: React.Dispatch<React.SetStateAction<any>>;
 }
 
-export default function CheckBoxs({ state, setState }: CheckBoxProps) {
+export default function BusinessCheckBoxes({ state, setState }: CheckBoxProps) {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setState({
       ...state,

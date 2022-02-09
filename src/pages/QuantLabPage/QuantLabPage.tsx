@@ -3,9 +3,10 @@ import { Box } from "@mui/system";
 import { useState } from "react";
 import styled from "styled-components";
 
-import CheckBoxs from "../../components/CheckBoxs";
 import Example from "../../components/graph";
-import ModalBusinessAreas from "../../components/modals/BusinessAreas";
+import ModalBusinessAreas from "../../components/modals/BusinessAreasModal";
+import ModalChartInfo from "../../components/modals/ChartInfoModal";
+import ModalFinanceConditions from "../../components/modals/FinanceConditonsModal";
 import ComparativeStockSelect from "../../components/selecter/ComparativeStockSelect";
 import TermSelect from "../../components/selecter/TermSelect";
 import NumberOfStocks from "../../components/slider/NumberOfStocksSlider";
@@ -67,6 +68,9 @@ export interface IBusinessArea {
 export interface IChartInfo {
   [key: string]: boolean;
 }
+export interface IFinance {
+  [key: string]: boolean;
+}
 
 const QuantLabPage = () => {
   const [businessArea, setBusinessArea] = useState({
@@ -81,7 +85,30 @@ const QuantLabPage = () => {
     커뮤니케이션서비스: true,
     유틸리티: true,
   });
-  const [chartInfo, setChartInfo] = useState({});
+  const [financeCondetion, setFinanceCondetion] = useState({
+    PER: true,
+    PBR: true,
+    PSR: true,
+    PCR: true,
+    시가배당률: true,
+    배당성향: true,
+    "매출액 증가율": true,
+    "순이익 증가율": true,
+    ROE: true,
+    ROA: true,
+    부채비율: true,
+  });
+  const [chartInfo, setChartInfo] = useState({
+    시가총액: true,
+    "주가수익률(1개월)": true,
+    "주가수익률(3개월)": true,
+    "주가수익률(6개월)": true,
+    "주가수익률(12개월)": true,
+    "이동평균선(5일)": true,
+    "이동평균선(20일)": true,
+    "이동평균선(60일)": true,
+    "이동평균선(120일)": true,
+  });
 
   return (
     <MainContainer>
@@ -113,15 +140,14 @@ const QuantLabPage = () => {
             {/* <Button variant="contained" sx={{ m: 1 }}>
               사업분야
             </Button> */}
-            <Button variant="contained" sx={{ m: 1 }}>
-              재무상태
-            </Button>
+            <ModalFinanceConditions
+              state={financeCondetion}
+              setState={setFinanceCondetion}
+            />
             <Button variant="contained" sx={{ m: 1 }}>
               주식성향
             </Button>
-            <Button variant="contained" sx={{ m: 1 }}>
-              차트정보
-            </Button>
+            <ModalChartInfo state={chartInfo} setState={setChartInfo} />
             <ModalBusinessAreas
               state={businessArea}
               setState={setBusinessArea}

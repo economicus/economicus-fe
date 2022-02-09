@@ -3,11 +3,8 @@ import { Box, Button } from "@mui/material";
 import { styled } from "@mui/system";
 import * as React from "react";
 
-import {
-  IBusinessArea,
-  IChartInfo,
-} from "../../pages/QuantLabPage/QuantLabPage";
-import CheckBoxs from "../CheckBoxs";
+import { IChartInfo } from "../../pages/QuantLabPage/QuantLabPage";
+import ChartInfoCheckBoxes from "../CheckBoxes/ChartInfoCheckBoxes";
 
 const StyledModal = styled(ModalUnstyled)`
   position: fixed;
@@ -41,15 +38,15 @@ const style = {
   pb: 3,
 };
 
-interface ModalBusinessAreasProps {
-  state: IBusinessArea | IChartInfo;
+interface ModalChartInfoProps {
+  state: IChartInfo;
   setState: React.Dispatch<React.SetStateAction<any>>;
 }
 
-export default function ModalBusinessAreas({
+export default function ModalChartInfo({
   state,
   setState,
-}: ModalBusinessAreasProps) {
+}: ModalChartInfoProps) {
   // export default function Modal({ name, state, setState, children }) {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
@@ -59,7 +56,7 @@ export default function ModalBusinessAreas({
     <>
       {/* <button type="button" onClick={handleOpen}> */}
       <Button variant="contained" onClick={handleOpen} sx={{ m: 1 }}>
-        사업분야
+        차트정보
         {/* {name} */}
       </Button>
       {/* </button> */}
@@ -71,7 +68,7 @@ export default function ModalBusinessAreas({
         BackdropComponent={Backdrop}
       >
         <Box sx={style}>
-          <CheckBoxs state={state} setState={setState} />
+          <ChartInfoCheckBoxes state={state} setState={setState} />
         </Box>
       </StyledModal>
     </>

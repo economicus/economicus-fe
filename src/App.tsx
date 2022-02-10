@@ -1,20 +1,31 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
+import Layout from "./layouts/Layout";
+import MainPage from "./pages/MainPage";
+import PersonalProfilePage from "./pages/PersonalProfilePage";
+import QuantLabPage from "./pages/QuantLabPage";
+import QuantModelDetailsPage from "./pages/QuantModelDetailsPage";
+import SettingsPage from "./pages/SettingsPage";
+
 function App() {
   return (
     <BrowserRouter>
-      <div>It&apos;s Navigation.</div>
-      {/* <div>It's Navigation.</div> */}
-      {/* NOTE: "'"를 &apos; 등으로 대치하라고 eslint에서 에러 */}
-
-      <Routes>
-        <Route path="/" element={<div>It&apos;s Main!</div>} />
-        <Route path="/page1/*" element={<div>It&apos;s Page1.</div>} />
-        <Route path="/page2/*" element={<div>It&apos;s Page2.</div>} />
-      </Routes>
-
-      <div>It&apos;s Footer.</div>
+      <Layout>
+        <Routes>
+          <Route path="/" element={<MainPage />} />
+          <Route
+            path="/PersonalProfilePage"
+            element={<PersonalProfilePage />}
+          />
+          <Route
+            path="/QuantModelDetailsPage"
+            element={<QuantModelDetailsPage />}
+          />
+          <Route path="/QuantLabPage" element={<QuantLabPage />} />
+          <Route path="/SettingsPage" element={<SettingsPage />} />
+        </Routes>
+      </Layout>
     </BrowserRouter>
   );
 }

@@ -3,9 +3,9 @@ import { Box, Button } from "@mui/material";
 import { styled } from "@mui/system";
 import * as React from "react";
 
-import { IFinance } from "../../pages/QuantLabPage/QuantLabPage";
-import FinanceCheckBoxes from "../CheckBoxes/FinanceCheckBoxes";
-import RangeSlider from "../slider/LabModalSlider";
+import { IChartInfo } from "../../pages/QuantLabPage/QuantLabPage";
+import ChartInfoCheckBoxes from "../CheckBoxes-del/ChartInfoCheckBoxes";
+import LabModalSlider from "../slider/LabModalSlider";
 
 const StyledModal = styled(ModalUnstyled)`
   position: fixed;
@@ -31,7 +31,7 @@ const Backdrop = styled("div")`
 `;
 
 const style = {
-  width: 700,
+  width: 600,
   bgcolor: "background.paper",
   border: "2px solid #000",
   p: 2,
@@ -39,16 +39,15 @@ const style = {
   pb: 3,
 };
 
-interface ModalFinanceConditionsProps {
-  state: IFinance;
+interface ModalChartInfoProps {
+  state: IChartInfo;
   setState: React.Dispatch<React.SetStateAction<any>>;
 }
 
-export default function ModalFinanceConditions({
+export default function ModalChartInfo({
   state,
   setState,
-}: ModalFinanceConditionsProps) {
-  // export default function Modal({ name, state, setState, children }) {
+}: ModalChartInfoProps) {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -57,7 +56,7 @@ export default function ModalFinanceConditions({
     <>
       {/* <button type="button" onClick={handleOpen}> */}
       <Button variant="contained" onClick={handleOpen} sx={{ m: 1 }}>
-        재무상태
+        차트정보
         {/* {name} */}
       </Button>
       {/* </button> */}
@@ -69,8 +68,8 @@ export default function ModalFinanceConditions({
         BackdropComponent={Backdrop}
       >
         <Box sx={style}>
-          <FinanceCheckBoxes state={state} setState={setState} />
-          <RangeSlider state={state} setState={setState} />
+          <ChartInfoCheckBoxes state={state} setState={setState} />
+          <LabModalSlider state={state} setState={setState} />
         </Box>
       </StyledModal>
     </>

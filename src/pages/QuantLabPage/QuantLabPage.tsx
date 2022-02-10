@@ -1,18 +1,12 @@
-import { Button, Card, Container } from "@mui/material";
-import { Box } from "@mui/system";
+import { Card } from "@mui/material";
 import { GridSelectionModel } from "@mui/x-data-grid";
 import { useState } from "react";
 import styled from "styled-components";
 
-import makeQuantModel from "../../apis/makeQuantModel";
 import Example from "../../components/graph";
-import ModalBusinessAreas from "../../components/modals/BusinessAreasModal";
-import ModalChartInfo from "../../components/modals/ChartInfoModal";
-import ModalFinanceConditions from "../../components/modals/FinanceConditonsModal";
 import ComparativeStockSelect from "../../components/selecter/ComparativeStockSelect";
 import TermSelect from "../../components/selecter/TermSelect";
-import NumberOfStocks from "../../components/slider/NumberOfStocksSlider";
-import RebalancingTermSlider from "../../components/slider/RebalancingTermSlider";
+import ModelCreation from "./ModelCreation";
 import QuantModelTable from "./QuantModelTable";
 
 const MainContainer = styled.div`
@@ -44,14 +38,8 @@ const Graph = styled.div`
 
 const MakeModelContainer = styled.div`
   border: 3px solid black;
-  argin: 5px;
+  /* argin: 5px; */
   display: flex;
-`;
-
-const ModelContainer = styled(Card)`
-  border: 3px solid red;
-  margin: 5px;
-  width: 50%;
 `;
 
 const ShowQuantModelYieldContainer = styled(Card)`
@@ -96,52 +84,8 @@ export interface IModel {
 }
 
 const QuantLabPage = () => {
-  const [businessArea, setBusinessArea] = useState({
-    에너지: true,
-    소재: true,
-    산업재: true,
-    경기관련소비재: true,
-    필수소비재: true,
-    건강관리: true,
-    금융: true,
-    IT: true,
-    커뮤니케이션서비스: true,
-    유틸리티: true,
-  });
-  const [financeCondetion, setFinanceCondetion] = useState({
-    PER: true,
-    PBR: false,
-    PSR: false,
-    PCR: false,
-    시가배당률: false,
-    배당성향: false,
-    "매출액 증가율": false,
-    "순이익 증가율": false,
-    ROE: false,
-    ROA: false,
-    부채비율: false,
-  });
-  const [chartInfo, setChartInfo] = useState({
-    시가총액: true,
-    "주가수익률(1개월)": false,
-    "주가수익률(3개월)": false,
-    "주가수익률(6개월)": false,
-    "주가수익률(12개월)": false,
-    "이동평균선(5일)": false,
-    "이동평균선(20일)": false,
-    "이동평균선(60일)": false,
-    "이동평균선(120일)": false,
-  });
-
-  // const [modelTableRows, setModelTableRows] = useState<GridRowsProp>([]);
   const [modelList, setModelList] = useState<IModel[]>([]);
   const [selectionModel, setSelectionModel] = useState<GridSelectionModel>([]); // NOTE: 선택된 모델 id의 배열. 이를 통해 그래프 렌더링 예정
-
-  const onClickMakeButton = async () => {
-    const responseData = await makeQuantModel();
-    // setModelTableRows((prev) => [...prev, data]);
-    setModelList((prev) => [...prev, { id: +new Date(), ...responseData }]);
-  };
 
   return (
     <MainContainer>
@@ -156,11 +100,25 @@ const QuantLabPage = () => {
           </Graph>
         </GraphContainer>
 
-        <ModelContainer>
+        <ModelCreation setModelList={setModelList} />
+
+        {/* <ModelContainer>
           <Container sx={{ px: "5%" }}>
             <h3>Quant Lab</h3>
-            <RebalancingTermSlider />
-            <NumberOfStocks />
+            <LabSlider
+              name={"리밸런싱 주기"}
+              min={1}
+              max={12}
+              value={rebalancingTerm}
+              setValue={setRebalancingTerm}
+            />
+            <LabSlider
+              name={"보유 종목 수"}
+              min={1}
+              max={12}
+              value={numberOfHoldings}
+              setValue={setNumberOfHoldings}
+            />
           </Container>
           <Box
             sx={{
@@ -169,10 +127,6 @@ const QuantLabPage = () => {
               p: 3,
             }}
           >
-            {/* 클릭시 modal 창 열리게 변경*/}
-            {/* <Button variant="contained" sx={{ m: 1 }}>
-              사업분야
-            </Button> */}
             <ModalFinanceConditions
               state={financeCondetion}
               setState={setFinanceCondetion}
@@ -181,19 +135,24 @@ const QuantLabPage = () => {
               주식성향
             </Button>
             <ModalChartInfo state={chartInfo} setState={setChartInfo} />
-            <ModalBusinessAreas
+
+            <QuantLabModal
+              btnName="사업분야"
               state={businessArea}
               setState={setBusinessArea}
-            />
+            >
+              <Typography>test</Typography>
+            </QuantLabModal>
           </Box>
 
           <Button onClick={onClickMakeButton}>tmp make model</Button>
-        </ModelContainer>
+        </ModelContainer> */}
       </MakeModelContainer>
       <ShowQuantModelYieldContainer>
         <QuantModelTable
           rows={modelList.map((val) => {
             const { 임시그래프내용, ...field } = val;
+            임시그래프내용; // NOTE: 미사용 워닝 해결을 위해 이렇게 해놓았는데... 괜찮을까? 다른 방법이 있나?
             return field;
           })}
           setSelectionModel={setSelectionModel}

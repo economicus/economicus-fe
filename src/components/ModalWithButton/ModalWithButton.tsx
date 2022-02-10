@@ -1,10 +1,10 @@
 import ModalUnstyled from "@mui/base/ModalUnstyled";
 import { Box, Button } from "@mui/material";
 import { styled } from "@mui/system";
+import { useState } from "react";
 import * as React from "react";
 
 import { IBusinessArea } from "../../pages/QuantLabPage/QuantLabPage";
-import BusinessCheckBoxes from "../CheckBoxes/BusinessCheckBoxes";
 
 const StyledModal = styled(ModalUnstyled)`
   position: fixed;
@@ -38,17 +38,20 @@ const style = {
   pb: 3,
 };
 
-interface ModalBusinessAreasProps {
+interface QuantLabModalProps {
+  btnName: string;
   state: IBusinessArea;
   setState: React.Dispatch<React.SetStateAction<any>>;
+  children: React.ReactNode;
 }
 
-export default function ModalBusinessAreas({
-  state,
-  setState,
-}: ModalBusinessAreasProps) {
-  // export default function Modal({ name, state, setState, children }) {
-  const [open, setOpen] = React.useState(false);
+export default function ModalWithButton({
+  btnName,
+  children,
+}: QuantLabModalProps) {
+  // NOTE: 변수명 수정 필요
+
+  const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
@@ -56,8 +59,7 @@ export default function ModalBusinessAreas({
     <>
       {/* <button type="button" onClick={handleOpen}> */}
       <Button variant="contained" onClick={handleOpen} sx={{ m: 1 }}>
-        사업분야
-        {/* {name} */}
+        {btnName}
       </Button>
       {/* </button> */}
       <StyledModal
@@ -68,7 +70,8 @@ export default function ModalBusinessAreas({
         BackdropComponent={Backdrop}
       >
         <Box sx={style}>
-          <BusinessCheckBoxes state={state} setState={setState} />
+          {/* <BusinessCheckBoxes state={state} setState={setState} /> */}
+          {children}
         </Box>
       </StyledModal>
     </>

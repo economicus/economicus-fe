@@ -17,7 +17,7 @@ interface CheckBoxProps {
   setState: React.Dispatch<React.SetStateAction<any>>;
 }
 
-export default function CheckBoxs({ state, setState }: CheckBoxProps) {
+export default function BusinessCheckBoxes({ state, setState }: CheckBoxProps) {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setState({
       ...state,
@@ -27,7 +27,7 @@ export default function CheckBoxs({ state, setState }: CheckBoxProps) {
 
   return (
     <FormControl sx={{ m: 3 }} component="fieldset" variant="standard">
-      {/* <FormLabel component="legend">form label...</FormLabel> */}
+      {<FormLabel component="legend">재무상태</FormLabel>}
 
       <FormGroup
         sx={{

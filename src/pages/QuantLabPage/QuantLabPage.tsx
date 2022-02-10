@@ -7,7 +7,9 @@ import styled from "styled-components";
 import makeQuantModel from "../../apis/makeQuantModel";
 import CheckBoxs from "../../components/CheckBoxs";
 import Example from "../../components/graph";
-import ModalBusinessAreas from "../../components/modals/BusinessAreas";
+import ModalBusinessAreas from "../../components/modals/BusinessAreasModal";
+import ModalChartInfo from "../../components/modals/ChartInfoModal";
+import ModalFinanceConditions from "../../components/modals/FinanceConditonsModal";
 import ComparativeStockSelect from "../../components/selecter/ComparativeStockSelect";
 import TermSelect from "../../components/selecter/TermSelect";
 import NumberOfStocks from "../../components/slider/NumberOfStocksSlider";
@@ -72,6 +74,9 @@ export interface IBusinessArea {
 export interface IChartInfo {
   [key: string]: boolean;
 }
+export interface IFinance {
+  [key: string]: boolean;
+}
 
 interface ITmp {
   ts: number;
@@ -93,11 +98,42 @@ export interface IModel {
 
 const QuantLabPage = () => {
   const [businessArea, setBusinessArea] = useState({
-    game: true,
-    enter: false,
-    enter2: false,
-    enter3: false,
+    에너지: true,
+    소재: true,
+    산업재: true,
+    경기관련소비재: true,
+    필수소비재: true,
+    건강관리: true,
+    금융: true,
+    IT: true,
+    커뮤니케이션서비스: true,
+    유틸리티: true,
   });
+  const [financeCondetion, setFinanceCondetion] = useState({
+    PER: true,
+    PBR: false,
+    PSR: false,
+    PCR: false,
+    시가배당률: false,
+    배당성향: false,
+    "매출액 증가율": false,
+    "순이익 증가율": false,
+    ROE: false,
+    ROA: false,
+    부채비율: false,
+  });
+  const [chartInfo, setChartInfo] = useState({
+    시가총액: true,
+    "주가수익률(1개월)": false,
+    "주가수익률(3개월)": false,
+    "주가수익률(6개월)": false,
+    "주가수익률(12개월)": false,
+    "이동평균선(5일)": false,
+    "이동평균선(20일)": false,
+    "이동평균선(60일)": false,
+    "이동평균선(120일)": false,
+  });
+
   const [chartInfo, setChartInfo] = useState({});
   // const [modelTableRows, setModelTableRows] = useState<GridRowsProp>([]);
   const [modelList, setModelList] = useState<IModel[]>([]);
@@ -139,15 +175,14 @@ const QuantLabPage = () => {
             {/* <Button variant="contained" sx={{ m: 1 }}>
               사업분야
             </Button> */}
-            <Button variant="contained" sx={{ m: 1 }}>
-              재무상태
-            </Button>
+            <ModalFinanceConditions
+              state={financeCondetion}
+              setState={setFinanceCondetion}
+            />
             <Button variant="contained" sx={{ m: 1 }}>
               주식성향
             </Button>
-            <Button variant="contained" sx={{ m: 1 }}>
-              차트정보
-            </Button>
+            <ModalChartInfo state={chartInfo} setState={setChartInfo} />
             <ModalBusinessAreas
               state={businessArea}
               setState={setBusinessArea}

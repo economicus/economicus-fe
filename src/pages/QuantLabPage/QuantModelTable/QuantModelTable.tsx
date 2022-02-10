@@ -39,11 +39,18 @@ const columns: GridColDef[] = fields.map((val) => {
 });
 
 export default function QuantModelTable({ rows }: ModelListProps) {
+  console.log(rows);
+
   return (
     <div style={{ height: 350, width: "100%" }}>
       <div style={{ display: "flex", height: "100%" }}>
         <div style={{ flexGrow: 1 }}>
-          <DataGrid rows={rows} columns={columns} />
+          <DataGrid
+            checkboxSelection
+            disableSelectionOnClick
+            rows={rows}
+            columns={columns}
+          />
         </div>
       </div>
     </div>

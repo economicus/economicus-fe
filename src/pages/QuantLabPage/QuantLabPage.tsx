@@ -73,6 +73,23 @@ export interface IChartInfo {
   [key: string]: boolean;
 }
 
+interface ITmp {
+  ts: number;
+  data: number;
+}
+
+interface IModelList {
+  id: number;
+  모델: string; // NOTE: 변수명이 한글인 것이 마음에 안든다... 뭔가 enum 같은 것을 사용하고 싶다.
+  누적수익률: number; // TODO: 숫자일까? 여기 구조와 변수 타입도 논의 필요
+  연평균수익: number;
+  승률: number;
+  최대손실률: number;
+  편입종목수: number;
+  임시그래프내용: ITmp[];
+  // TODO: 그래프에 대한 정보를 같이 받을텐데, 이 타입에 대해...
+}
+
 const QuantLabPage = () => {
   const [businessArea, setBusinessArea] = useState({
     game: true,
@@ -81,11 +98,13 @@ const QuantLabPage = () => {
     enter3: false,
   });
   const [chartInfo, setChartInfo] = useState({});
-  const [modelTableRows, setModelTableRows] = useState<GridRowsProp>([]);
+  // const [modelTableRows, setModelTableRows] = useState<GridRowsProp>([]);
+  const [modelList, setModelList] = useState<IModelList[]>([]);
 
   const onClickMakeButton = async () => {
-    const data = await makeQuantModel();
-    setModelTableRows((prev) => [...prev, data]);
+    const responseData = await makeQuantModel();
+    // setModelTableRows((prev) => [...prev, data]);
+    setModelList((prev) => [...prev, { ...responseData, id: +new Date() }]);
   };
 
   return (
@@ -137,7 +156,12 @@ const QuantLabPage = () => {
         </ModelContainer>
       </MakeModelContainer>
       <ShowQuantModelYieldContainer>
-        <QuantModelTable rows={modelTableRows} />
+        <QuantModelTable
+          rows={modelList.map((val) => {
+            const { 임시그래프내용, ...field } = val;
+            return field;
+          })}
+        />
       </ShowQuantModelYieldContainer>
     </MainContainer>
   );

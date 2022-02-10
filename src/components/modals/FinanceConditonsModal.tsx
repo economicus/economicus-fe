@@ -5,6 +5,7 @@ import * as React from "react";
 
 import { IFinance } from "../../pages/QuantLabPage/QuantLabPage";
 import FinanceCheckBoxes from "../CheckBoxes/FinanceCheckBoxes";
+import RangeSlider from "../slider/LabModalSlider";
 
 const StyledModal = styled(ModalUnstyled)`
   position: fixed;
@@ -69,6 +70,7 @@ export default function ModalFinanceConditions({
       >
         <Box sx={style}>
           <FinanceCheckBoxes state={state} setState={setState} />
+          <RangeSlider state={state} setState={setState} />
         </Box>
       </StyledModal>
     </>

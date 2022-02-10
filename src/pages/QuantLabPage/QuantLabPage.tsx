@@ -86,7 +86,7 @@ const QuantLabPage = () => {
     유틸리티: true,
   });
   const [financeCondetion, setFinanceCondetion] = useState({
-    PER: false,
+    PER: true,
     PBR: false,
     PSR: false,
     PCR: false,
@@ -99,7 +99,7 @@ const QuantLabPage = () => {
     부채비율: false,
   });
   const [chartInfo, setChartInfo] = useState({
-    시가총액: false,
+    시가총액: true,
     "주가수익률(1개월)": false,
     "주가수익률(3개월)": false,
     "주가수익률(6개월)": false,

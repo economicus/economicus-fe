@@ -31,7 +31,7 @@ const Backdrop = styled("div")`
 `;
 
 const style = {
-  width: 700,
+  width: 600,
   bgcolor: "background.paper",
   border: "2px solid #000",
   p: 2,
@@ -48,7 +48,6 @@ export default function ModalChartInfo({
   state,
   setState,
 }: ModalChartInfoProps) {
-  // export default function Modal({ name, state, setState, children }) {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -70,7 +69,7 @@ export default function ModalChartInfo({
       >
         <Box sx={style}>
           <ChartInfoCheckBoxes state={state} setState={setState} />
-          <RangeSlider />
+          <RangeSlider state={state} setState={setState} />
         </Box>
       </StyledModal>
     </>

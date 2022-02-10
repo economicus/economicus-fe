@@ -4,6 +4,7 @@ import { styled } from "@mui/system";
 import { useState } from "react";
 import * as React from "react";
 
+import { CheckboxWithSliderInfo } from "../../pages/QuantLabPage/ModelCreation/ModelCreation";
 import { IBusinessArea } from "../../pages/QuantLabPage/QuantLabPage";
 
 const StyledModal = styled(ModalUnstyled)`
@@ -40,7 +41,12 @@ const style = {
 
 interface QuantLabModalProps {
   btnName: string;
-  state: IBusinessArea;
+  state:
+    | IBusinessArea
+    | {
+        PER: CheckboxWithSliderInfo;
+        PBR: CheckboxWithSliderInfo;
+      };
   setState: React.Dispatch<React.SetStateAction<any>>;
   children: React.ReactNode;
 }

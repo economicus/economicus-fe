@@ -101,53 +101,8 @@ const QuantLabPage = () => {
         </GraphContainer>
 
         <ModelCreation setModelList={setModelList} />
-
-        {/* <ModelContainer>
-          <Container sx={{ px: "5%" }}>
-            <h3>Quant Lab</h3>
-            <LabSlider
-              name={"리밸런싱 주기"}
-              min={1}
-              max={12}
-              value={rebalancingTerm}
-              setValue={setRebalancingTerm}
-            />
-            <LabSlider
-              name={"보유 종목 수"}
-              min={1}
-              max={12}
-              value={numberOfHoldings}
-              setValue={setNumberOfHoldings}
-            />
-          </Container>
-          <Box
-            sx={{
-              display: "grid",
-              gridTemplateColumns: "repeat(2, 1fr)",
-              p: 3,
-            }}
-          >
-            <ModalFinanceConditions
-              state={financeCondetion}
-              setState={setFinanceCondetion}
-            />
-            <Button variant="contained" sx={{ m: 1 }}>
-              주식성향
-            </Button>
-            <ModalChartInfo state={chartInfo} setState={setChartInfo} />
-
-            <QuantLabModal
-              btnName="사업분야"
-              state={businessArea}
-              setState={setBusinessArea}
-            >
-              <Typography>test</Typography>
-            </QuantLabModal>
-          </Box>
-
-          <Button onClick={onClickMakeButton}>tmp make model</Button>
-        </ModelContainer> */}
       </MakeModelContainer>
+
       <ShowQuantModelYieldContainer>
         <QuantModelTable
           rows={modelList.map((val) => {

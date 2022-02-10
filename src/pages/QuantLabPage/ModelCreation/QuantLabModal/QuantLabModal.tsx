@@ -1,10 +1,16 @@
 import ModalWithButton from "../../../../components/ModalWithButton/ModalWithButton";
 import TmpForm from "../../../../components/TmpForm/TmpForm";
 import { IBusinessArea } from "../../QuantLabPage";
+import { CheckboxWithSliderInfo } from "../ModelCreation";
 
 interface QuantLabModalProps {
   btnName: string;
-  state: IBusinessArea;
+  state:
+    | IBusinessArea
+    | {
+        PER: CheckboxWithSliderInfo;
+        PBR: CheckboxWithSliderInfo;
+      };
   setState: React.Dispatch<React.SetStateAction<any>>;
   children: React.ReactNode;
 }

@@ -3,11 +3,8 @@ import { Box, Button } from "@mui/material";
 import { styled } from "@mui/system";
 import * as React from "react";
 
-import {
-  IBusinessArea,
-  IChartInfo,
-} from "../../pages/QuantLabPage/QuantLabPage";
-import CheckBoxs from "../CheckBoxs";
+import { IBusinessArea } from "../../pages/QuantLabPage/QuantLabPage";
+import BusinessCheckBoxes from "../CheckBoxes/BusinessCheckBoxes";
 
 const StyledModal = styled(ModalUnstyled)`
   position: fixed;
@@ -33,7 +30,7 @@ const Backdrop = styled("div")`
 `;
 
 const style = {
-  width: 400,
+  width: 700,
   bgcolor: "background.paper",
   border: "2px solid #000",
   p: 2,
@@ -42,7 +39,7 @@ const style = {
 };
 
 interface ModalBusinessAreasProps {
-  state: IBusinessArea | IChartInfo;
+  state: IBusinessArea;
   setState: React.Dispatch<React.SetStateAction<any>>;
 }
 
@@ -71,12 +68,7 @@ export default function ModalBusinessAreas({
         BackdropComponent={Backdrop}
       >
         <Box sx={style}>
-          {/* <h2 id="unstyled-modal-title" style={{ fontSize: "30px" }}>
-            사업분야
-          </h2>
-          <p id="unstyled-modal-description">체크박스들 들어갈 자리</p> */}
-
-          <CheckBoxs state={state} setState={setState} />
+          <BusinessCheckBoxes state={state} setState={setState} />
         </Box>
       </StyledModal>
     </>

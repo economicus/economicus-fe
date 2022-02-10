@@ -1,4 +1,12 @@
-import { DataGrid, GridColDef, GridRowsProp } from "@mui/x-data-grid";
+import {
+  DataGrid,
+  GridColDef,
+  GridRowsProp,
+  GridSelectionModel,
+} from "@mui/x-data-grid";
+import { useState } from "react";
+
+import { IModel } from "../QuantLabPage";
 
 // const rows: GridRowsProp = [
 //   {
@@ -22,7 +30,10 @@ import { DataGrid, GridColDef, GridRowsProp } from "@mui/x-data-grid";
 // ];
 
 interface ModelListProps {
+  // selected: boolean;
+  // models: IModel[];
   rows: GridRowsProp;
+  setSelectionModel: React.Dispatch<React.SetStateAction<GridSelectionModel>>;
 }
 
 const fields = [
@@ -38,8 +49,11 @@ const columns: GridColDef[] = fields.map((val) => {
   return { field: val, headerName: val, width: 150 };
 });
 
-export default function QuantModelTable({ rows }: ModelListProps) {
-  console.log(rows);
+export default function QuantModelTable({
+  rows,
+  setSelectionModel,
+}: ModelListProps) {
+  // console.log(rows);
 
   return (
     <div style={{ height: 350, width: "100%" }}>
@@ -50,6 +64,10 @@ export default function QuantModelTable({ rows }: ModelListProps) {
             disableSelectionOnClick
             rows={rows}
             columns={columns}
+            onSelectionModelChange={(model) => {
+              // console.log("hi...", model);
+              setSelectionModel(model);
+            }}
           />
         </div>
       </div>

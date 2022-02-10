@@ -1,6 +1,6 @@
 import { Button, Card, Container, Typography } from "@mui/material";
 import { Box } from "@mui/system";
-import { GridRowsProp } from "@mui/x-data-grid";
+import { GridRowsProp, GridSelectionModel } from "@mui/x-data-grid";
 import { useState } from "react";
 import styled from "styled-components";
 
@@ -78,7 +78,7 @@ interface ITmp {
   data: number;
 }
 
-interface IModelList {
+export interface IModel {
   id: number;
   모델: string; // NOTE: 변수명이 한글인 것이 마음에 안든다... 뭔가 enum 같은 것을 사용하고 싶다.
   누적수익률: number; // TODO: 숫자일까? 여기 구조와 변수 타입도 논의 필요
@@ -87,6 +87,7 @@ interface IModelList {
   최대손실률: number;
   편입종목수: number;
   임시그래프내용: ITmp[];
+
   // TODO: 그래프에 대한 정보를 같이 받을텐데, 이 타입에 대해...
 }
 
@@ -99,12 +100,13 @@ const QuantLabPage = () => {
   });
   const [chartInfo, setChartInfo] = useState({});
   // const [modelTableRows, setModelTableRows] = useState<GridRowsProp>([]);
-  const [modelList, setModelList] = useState<IModelList[]>([]);
+  const [modelList, setModelList] = useState<IModel[]>([]);
+  const [selectionModel, setSelectionModel] = useState<GridSelectionModel>([]); // NOTE: 선택된 모델 id의 배열. 이를 통해 그래프 렌더링 예정
 
   const onClickMakeButton = async () => {
     const responseData = await makeQuantModel();
     // setModelTableRows((prev) => [...prev, data]);
-    setModelList((prev) => [...prev, { ...responseData, id: +new Date() }]);
+    setModelList((prev) => [...prev, { id: +new Date(), ...responseData }]);
   };
 
   return (
@@ -161,6 +163,9 @@ const QuantLabPage = () => {
             const { 임시그래프내용, ...field } = val;
             return field;
           })}
+          setSelectionModel={setSelectionModel}
+
+          // models={modelList}
         />
       </ShowQuantModelYieldContainer>
     </MainContainer>

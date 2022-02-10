@@ -14,7 +14,10 @@ interface ModalChartInfoProps {
   setState: React.Dispatch<React.SetStateAction<any>>;
 }
 
-export default function RangeSlider({ state, setState }: ModalChartInfoProps) {
+export default function LabModalSlider({
+  state,
+  setState,
+}: ModalChartInfoProps) {
   const [value, setValue] = React.useState<number[]>([20, 37]);
 
   const handleChange = (event: Event, newValue: number | number[]) => {

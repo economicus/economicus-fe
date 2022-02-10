@@ -1,11 +1,10 @@
-import { Button, Card, Container, Typography } from "@mui/material";
+import { Button, Card, Container } from "@mui/material";
 import { Box } from "@mui/system";
-import { GridRowsProp, GridSelectionModel } from "@mui/x-data-grid";
+import { GridSelectionModel } from "@mui/x-data-grid";
 import { useState } from "react";
 import styled from "styled-components";
 
 import makeQuantModel from "../../apis/makeQuantModel";
-import CheckBoxs from "../../components/CheckBoxs";
 import Example from "../../components/graph";
 import ModalBusinessAreas from "../../components/modals/BusinessAreasModal";
 import ModalChartInfo from "../../components/modals/ChartInfoModal";
@@ -134,7 +133,6 @@ const QuantLabPage = () => {
     "이동평균선(120일)": false,
   });
 
-  const [chartInfo, setChartInfo] = useState({});
   // const [modelTableRows, setModelTableRows] = useState<GridRowsProp>([]);
   const [modelList, setModelList] = useState<IModel[]>([]);
   const [selectionModel, setSelectionModel] = useState<GridSelectionModel>([]); // NOTE: 선택된 모델 id의 배열. 이를 통해 그래프 렌더링 예정

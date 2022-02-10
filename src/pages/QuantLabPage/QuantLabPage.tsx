@@ -1,8 +1,11 @@
 import { Button, Card, Container, Typography } from "@mui/material";
 import { Box } from "@mui/system";
+import { GridRowsProp, GridSelectionModel } from "@mui/x-data-grid";
 import { useState } from "react";
 import styled from "styled-components";
 
+import makeQuantModel from "../../apis/makeQuantModel";
+import CheckBoxs from "../../components/CheckBoxs";
 import Example from "../../components/graph";
 import ModalBusinessAreas from "../../components/modals/BusinessAreasModal";
 import ModalChartInfo from "../../components/modals/ChartInfoModal";
@@ -11,6 +14,7 @@ import ComparativeStockSelect from "../../components/selecter/ComparativeStockSe
 import TermSelect from "../../components/selecter/TermSelect";
 import NumberOfStocks from "../../components/slider/NumberOfStocksSlider";
 import RebalancingTermSlider from "../../components/slider/RebalancingTermSlider";
+import QuantModelTable from "./QuantModelTable";
 
 const MainContainer = styled.div`
   border: 3px solid pink;
@@ -52,6 +56,8 @@ const ModelContainer = styled(Card)`
 `;
 
 const ShowQuantModelYieldContainer = styled(Card)`
+  height: 100%;
+
   border: 3px solid yellow;
   margin: 5px;
   margin-top: 10px;
@@ -70,6 +76,24 @@ export interface IChartInfo {
 }
 export interface IFinance {
   [key: string]: boolean;
+}
+
+interface ITmp {
+  ts: number;
+  data: number;
+}
+
+export interface IModel {
+  id: number;
+  모델: string; // NOTE: 변수명이 한글인 것이 마음에 안든다... 뭔가 enum 같은 것을 사용하고 싶다.
+  누적수익률: number; // TODO: 숫자일까? 여기 구조와 변수 타입도 논의 필요
+  연평균수익: number;
+  승률: number;
+  최대손실률: number;
+  편입종목수: number;
+  임시그래프내용: ITmp[];
+
+  // TODO: 그래프에 대한 정보를 같이 받을텐데, 이 타입에 대해...
 }
 
 const QuantLabPage = () => {
@@ -109,6 +133,17 @@ const QuantLabPage = () => {
     "이동평균선(60일)": false,
     "이동평균선(120일)": false,
   });
+
+  const [chartInfo, setChartInfo] = useState({});
+  // const [modelTableRows, setModelTableRows] = useState<GridRowsProp>([]);
+  const [modelList, setModelList] = useState<IModel[]>([]);
+  const [selectionModel, setSelectionModel] = useState<GridSelectionModel>([]); // NOTE: 선택된 모델 id의 배열. 이를 통해 그래프 렌더링 예정
+
+  const onClickMakeButton = async () => {
+    const responseData = await makeQuantModel();
+    // setModelTableRows((prev) => [...prev, data]);
+    setModelList((prev) => [...prev, { id: +new Date(), ...responseData }]);
+  };
 
   return (
     <MainContainer>
@@ -153,15 +188,20 @@ const QuantLabPage = () => {
               setState={setBusinessArea}
             />
           </Box>
+
+          <Button onClick={onClickMakeButton}>tmp make model</Button>
         </ModelContainer>
       </MakeModelContainer>
       <ShowQuantModelYieldContainer>
-        <Typography>모델</Typography>
-        <Typography>누적수익률</Typography>
-        <Typography>연평균수익</Typography>
-        <Typography>승률</Typography>
-        <Typography>최대손실률</Typography>
-        <Typography>편입종목수</Typography>
+        <QuantModelTable
+          rows={modelList.map((val) => {
+            const { 임시그래프내용, ...field } = val;
+            return field;
+          })}
+          setSelectionModel={setSelectionModel}
+
+          // models={modelList}
+        />
       </ShowQuantModelYieldContainer>
     </MainContainer>
   );

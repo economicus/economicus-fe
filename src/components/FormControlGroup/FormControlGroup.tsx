@@ -19,22 +19,6 @@ export default function TmpForm({ children }: TmpFormProps) {
         }}
       >
         {children}
-
-        {/* {Object.keys(state).map((key, idx) => {
-          return (
-            <FormControlLabel
-              key={idx}
-              control={
-                <Checkbox
-                  checked={state[key]}
-                  onChange={handleChange}
-                  name={key}
-                />
-              }
-              label={key}
-            />
-          );
-        })} */}
       </FormGroup>
 
       {/* <FormHelperText>Be careful</FormHelperText> */}

@@ -1,30 +1,119 @@
-import {
-  Box,
-  Button,
-  Card,
-  Container,
-  FormControlLabel,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Card, Container, Typography } from "@mui/material";
 import { useState } from "react";
 import styled from "styled-components";
 
 import makeQuantModel from "../../../apis/makeQuantModel";
 import LabSlider from "../../../components/slider/LabSlider";
 import { IModel } from "../QuantLabPage";
-import QuantLabModal from "./QuantLabModal/QuantLabModal";
-
-const StyledContainer = styled(Card)`
-  border: 3px solid red;
-  margin: 5px;
-  width: 50%;
-`;
+import QuantLabModal from "./LabModal/LabModal";
+import LabModalWithSlider from "./LabModal/LabModalWithSlider";
 
 interface ModelCreationProps {
   setModelList: React.Dispatch<React.SetStateAction<IModel[]>>;
 }
 
-export interface CheckboxWithSliderInfo {
+export default function ModelCreation({ setModelList }: ModelCreationProps) {
+  const [rebalancingTerm, setRebalancingTerm] = useState<number | string>(1);
+  const [numberOfHoldings, setNumberOfHoldings] = useState<number | string>(1);
+
+  const [businessArea, setBusinessArea] = useState(initialBusinessArea);
+  const [financeCondition, setFinanceCondetion] = useState<IFinanceCondition>(
+    initialFinanceCondetion
+  );
+  // const [chartInfo, setChartInfo] = useState(initialChartInfo);
+
+  const onClickMakeButton = async () => {
+    const responseData = await makeQuantModel();
+    // setModelTableRows((prev) => [...prev, data]);
+    setModelList((prev) => [...prev, { id: +new Date(), ...responseData }]);
+  };
+
+  return (
+    <StyledContainer>
+      <Container sx={{ px: "5%" }}>
+        <h3>Quant Lab</h3>
+        <LabSlider
+          name={"리밸런싱 주기"}
+          min={1}
+          max={12}
+          value={rebalancingTerm}
+          setValue={setRebalancingTerm}
+        />
+        <LabSlider
+          name={"보유 종목 수"}
+          min={1}
+          max={12}
+          value={numberOfHoldings}
+          setValue={setNumberOfHoldings}
+        />
+      </Container>
+
+      <Box
+        sx={{
+          display: "grid",
+          gridTemplateColumns: "repeat(2, 1fr)",
+          p: 3,
+        }}
+      >
+        <QuantLabModal
+          btnName="사업분야"
+          state={businessArea}
+          setState={setBusinessArea}
+        />
+
+        {/* <QuantLabModal
+          btnName="차트정보"
+          state={chartInfo}
+          setState={setChartInfo}
+        /> */}
+
+        <LabModalWithSlider
+          btnName="재무상태"
+          state={financeCondition}
+          setState={setFinanceCondetion}
+        />
+
+        {/* {Object.keys(financeCondition).map((key, idx) => {
+          console.log("hi", key, idx, financeCondition[key]);
+        })} */}
+      </Box>
+
+      <Button onClick={onClickMakeButton}>tmp make model</Button>
+    </StyledContainer>
+  );
+}
+
+/*
+ * ANCHOR: models
+ */
+
+export interface IBusinessArea {
+  [key: string]: boolean;
+
+  에너지: boolean;
+  소재: boolean;
+  산업재: boolean;
+  경기관련소비재: boolean;
+  필수소비재: boolean;
+  건강관리: boolean;
+  금융: boolean;
+  IT: boolean;
+  커뮤니케이션서비스: boolean;
+  유틸리티: boolean;
+}
+
+// export interface IChartInfo {
+
+// }
+
+export interface IFinanceCondition {
+  [key: string]: ICheckboxWithSliderInfo;
+
+  PER: ICheckboxWithSliderInfo;
+  PBR: ICheckboxWithSliderInfo;
+}
+
+export interface ICheckboxWithSliderInfo {
   checked: boolean;
   min: number;
   max: number;
@@ -32,10 +121,26 @@ export interface CheckboxWithSliderInfo {
   maxValue: number;
 }
 
+/*
+ * ANCHOR: styles
+ */
+
+const StyledContainer = styled(Card)`
+  border: 3px solid red;
+  margin: 5px;
+  width: 50%;
+`;
+
+/*
+ * ANCHOR: constants
+ */
+
+// NOTE: 여기에 함수를 선언하는 것이 적절한가? useMemo 등을 이때 쓰는건가?
+
 const sliderStateCunstructor = (
   min: number,
   max: number
-): CheckboxWithSliderInfo => {
+): ICheckboxWithSliderInfo => {
   return {
     checked: true,
     min: min,
@@ -45,7 +150,7 @@ const sliderStateCunstructor = (
   };
 };
 
-const initialBusinessArea = {
+const initialBusinessArea: IBusinessArea = {
   에너지: true,
   소재: true,
   산업재: true,
@@ -86,113 +191,3 @@ const initialFinanceCondetion = {
 //   "이동평균선(60일)": false,
 //   "이동평균선(120일)": false,
 // };
-
-export default function ModelCreation({ setModelList }: ModelCreationProps) {
-  const [rebalancingTerm, setRebalancingTerm] = useState<number | string>(1);
-  const [numberOfHoldings, setNumberOfHoldings] = useState<number | string>(1);
-
-  const [businessArea, setBusinessArea] = useState(initialBusinessArea);
-  const [financeCondetion, setFinanceCondetion] = useState<{
-    [key: string]: any;
-    PER: CheckboxWithSliderInfo;
-    PBR: CheckboxWithSliderInfo;
-  }>(initialFinanceCondetion);
-  // const [chartInfo, setChartInfo] = useState(initialChartInfo);
-
-  const onClickMakeButton = async () => {
-    const responseData = await makeQuantModel();
-    // setModelTableRows((prev) => [...prev, data]);
-    setModelList((prev) => [...prev, { id: +new Date(), ...responseData }]);
-  };
-
-  return (
-    <StyledContainer>
-      <Container sx={{ px: "5%" }}>
-        <h3>Quant Lab</h3>
-        <LabSlider
-          name={"리밸런싱 주기"}
-          min={1}
-          max={12}
-          value={rebalancingTerm}
-          setValue={setRebalancingTerm}
-        />
-        <LabSlider
-          name={"보유 종목 수"}
-          min={1}
-          max={12}
-          value={numberOfHoldings}
-          setValue={setNumberOfHoldings}
-        />
-      </Container>
-
-      <Box
-        sx={{
-          display: "grid",
-          gridTemplateColumns: "repeat(2, 1fr)",
-          p: 3,
-        }}
-      >
-        <QuantLabModal
-          btnName="사업분야"
-          state={businessArea}
-          setState={setBusinessArea}
-        >
-          <Typography>test</Typography>
-        </QuantLabModal>
-
-        {/* <QuantLabModal
-          btnName="차트정보"
-          state={chartInfo}
-          setState={setChartInfo}
-        >
-          <Typography>test</Typography>
-        </QuantLabModal> */}
-
-        <QuantLabModal
-          btnName="재무상태"
-          state={financeCondetion}
-          setState={setFinanceCondetion}
-        >
-          {/* <Typography>test</Typography> */}
-
-          {Object.keys(financeCondetion).map((key, idx) => {
-            console.log("hi", key, idx, financeCondetion[key]);
-
-            // return (
-            //   <FormControlLabel
-            //     key={idx}
-            //     control={
-            //       <Checkbox
-            //         checked={state[key]}
-            //         onChange={handleChange}
-            //         name={key}
-            //       />
-            //     }
-            //     label={key}
-            //   />
-            // );
-          })}
-        </QuantLabModal>
-      </Box>
-
-      <Button onClick={onClickMakeButton}>tmp make model</Button>
-    </StyledContainer>
-  );
-}
-/*
-{Object.keys(state).map((key, idx) => {
-  return (
-    <FormControlLabel
-      key={idx}
-      control={
-        <Checkbox
-          checked={state[key]}
-          onChange={handleChange}
-          name={key}
-        />
-      }
-      label={key}
-    />
-  );
-})}
-*/

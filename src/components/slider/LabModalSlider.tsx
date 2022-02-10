@@ -3,14 +3,15 @@ import Box from "@mui/material/Box";
 import Slider from "@mui/material/Slider";
 import * as React from "react";
 
-import { IChartInfo } from "../../pages/QuantLabPage/QuantLabPage";
+import { ICheckboxWithSliderInfo } from "../../pages/QuantLabPage/ModelCreation/ModelCreation";
 
 function valuetext(value: number) {
   return `${value}°C`;
 }
 
 interface ModalChartInfoProps {
-  state: IChartInfo;
+  state: ICheckboxWithSliderInfo;
+
   setState: React.Dispatch<React.SetStateAction<any>>;
 }
 
@@ -32,7 +33,7 @@ export default function LabModalSlider({
           gridTemplateColumns: "repeat(2, 1fr)",
         }}
       >
-        {Object.keys(state).map((key, idx) => {
+        {/* {Object.keys(state).map((key, idx) => {
           if (state[key]) {
             return (
               <Box sx={{ width: 250, m: 1 }}>
@@ -49,7 +50,7 @@ export default function LabModalSlider({
               </Box>
             );
           }
-        })}
+        })} */}
       </FormGroup>
 
       {/* <FormHelperText>Be careful</FormHelperText> */}

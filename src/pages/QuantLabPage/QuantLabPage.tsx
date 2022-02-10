@@ -12,6 +12,7 @@ import ModalChartInfo from "../../components/modals/ChartInfoModal";
 import ModalFinanceConditions from "../../components/modals/FinanceConditonsModal";
 import ComparativeStockSelect from "../../components/selecter/ComparativeStockSelect";
 import TermSelect from "../../components/selecter/TermSelect";
+import LabSlider from "../../components/slider/LabSlider";
 import NumberOfStocks from "../../components/slider/NumberOfStocksSlider";
 import RebalancingTermSlider from "../../components/slider/RebalancingTermSlider";
 import QuantModelTable from "./QuantModelTable";
@@ -135,6 +136,8 @@ const QuantLabPage = () => {
   });
 
   const [chartInfo, setChartInfo] = useState({});
+  const [rebalancingTerm, setRebalancingTerm] = useState<number | string>(1);
+  const [numberOfHoldings, setNumberOfHoldings] = useState<number | string>(1);
   // const [modelTableRows, setModelTableRows] = useState<GridRowsProp>([]);
   const [modelList, setModelList] = useState<IModel[]>([]);
   const [selectionModel, setSelectionModel] = useState<GridSelectionModel>([]); // NOTE: 선택된 모델 id의 배열. 이를 통해 그래프 렌더링 예정
@@ -161,8 +164,20 @@ const QuantLabPage = () => {
         <ModelContainer>
           <Container sx={{ px: "5%" }}>
             <h3>Quant Lab</h3>
-            <RebalancingTermSlider />
-            <NumberOfStocks />
+            <LabSlider
+              name={"리밸런싱 주기"}
+              min={1}
+              max={12}
+              value={rebalancingTerm}
+              setValue={setRebalancingTerm}
+            />
+            <LabSlider
+              name={"보유 종목 수"}
+              min={1}
+              max={50}
+              value={numberOfHoldings}
+              setValue={setNumberOfHoldings}
+            />
           </Container>
           <Box
             sx={{

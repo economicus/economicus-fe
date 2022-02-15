@@ -34,6 +34,7 @@ const LabSlider: React.FC<SliderProps> = (props) => {
       label: props.max,
     },
   ];
+
   return (
     <Box sx={{ width: "95%", mx: "10px" }}>
       <Typography>{props.name}</Typography>

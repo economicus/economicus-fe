@@ -42,3 +42,5 @@ const Graph = styled.div`
   height: 300px;
   padding: 5px;
 `;
+
+// TODO: 아직 상태 적용 X

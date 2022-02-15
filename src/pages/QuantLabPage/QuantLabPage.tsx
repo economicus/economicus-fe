@@ -1,11 +1,10 @@
-import { Card } from "@mui/material";
 import { GridSelectionModel } from "@mui/x-data-grid";
 import { useState } from "react";
 import styled from "styled-components";
 
-import ChartViewer from "./ChartViewer";
-import ModelCreation from "./ModelCreation";
+import QuantModelCreation from "./QuantModelCreation";
 import QuantModelTable from "./QuantModelTable";
+import QuantModelViewer from "./QuantModelViewer";
 
 const QuantLabPage = () => {
   const [modelList, setModelList] = useState<IModel[]>([]);
@@ -13,12 +12,12 @@ const QuantLabPage = () => {
 
   return (
     <MainContainer>
-      <HighContainer>
-        <ChartViewer {...{ selectionModel }} />
-        <ModelCreation {...{ setModelList }} />
-      </HighContainer>
+      <StyledDiv>
+        <QuantModelViewer {...{ selectionModel }} />
+        <QuantModelCreation {...{ setModelList }} />
+      </StyledDiv>
 
-      <LowContainer>
+      <StyledDiv>
         <QuantModelTable
           {...{ setSelectionModel }}
           rows={modelList.map((val) => {
@@ -27,7 +26,7 @@ const QuantLabPage = () => {
             return field;
           })}
         />
-      </LowContainer>
+      </StyledDiv>
     </MainContainer>
   );
 };
@@ -57,26 +56,15 @@ export interface IModel {
  */
 
 const MainContainer = styled.div`
-  border: 3px solid pink;
+  /* border: 3px solid pink; */
   margin: 5px;
   padding-left: 10%;
   padding-right: 10%;
-  padding-top: 30px;
 `;
 
-const HighContainer = styled.div`
-  border: 3px solid black;
-  /* argin: 5px; */
+const StyledDiv = styled.div`
   display: flex;
-`;
-
-// TODO: 적절한 네이밍
-const LowContainer = styled(Card)`
-  height: 100%;
-
-  border: 3px solid yellow;
-  margin: 5px;
-  margin-top: 10px;
+  margin: 15px;
 `;
 
 export default QuantLabPage;

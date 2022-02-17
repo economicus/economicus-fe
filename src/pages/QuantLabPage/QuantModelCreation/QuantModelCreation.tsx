@@ -1,4 +1,4 @@
-import { Button, Typography } from "@mui/material";
+import { Button, Paper, Typography } from "@mui/material";
 import { useState } from "react";
 import styled from "styled-components";
 
@@ -27,33 +27,32 @@ export default function ModelCreation({ setModelList }: ModelCreationProps) {
   };
 
   return (
-    <MainContainer>
-      <Typography variant="h5" sx={{ mt: 3 }}>
-        Quant Lab
-      </Typography>
+    <MainContainer variant="outlined">
+      <Typography variant="h5">Quant Lab</Typography>
 
       <ButtonsContainer>
-        <LabModal
-          btnName="사업분야"
-          state={businessArea}
-          setState={setBusinessArea}
-        />
-        <LabModalWithSlider
-          btnName="재무상태"
-          state={financeCondition}
-          setState={setFinanceCondetion}
-        />
-        {/* <LabModalWithSlider
+        <ConditionButtonsContainer>
+          <LabModal
+            btnName="사업분야"
+            state={businessArea}
+            setState={setBusinessArea}
+          />
+          <LabModalWithSlider
+            btnName="재무상태"
+            state={financeCondition}
+            setState={setFinanceCondetion}
+          />
+          {/* <LabModalWithSlider
           btnName="차트정보"
           state={chartInfo}
           setState={setChartInfo}
         /> */}
-      </ButtonsContainer>
-      <MakeModelButtonContainer>
+        </ConditionButtonsContainer>
+
         <Button sx={{ m: 1 }} variant="outlined" onClick={onClickMakeButton}>
           make model
         </Button>
-      </MakeModelButtonContainer>
+      </ButtonsContainer>
     </MainContainer>
   );
 }
@@ -100,19 +99,37 @@ export interface ICheckboxWithSliderInfo {
  * ANCHOR: styles
  */
 
-const MainContainer = styled.div`
-  width: 100%;
+const MainContainer = styled(Paper)`
+  /* width: 100%; */
+  width: 20%;
+  padding: 20px;
+
+  display: flex;
+  flex-direction: column;
+  /* justify-content: space-between; */
 `;
+
+const ConditionButtonsContainer = styled.div`
+  /* display: grid; */
+  /* grid-template-columns: repeat(2, 1fr); */
+  /* margin-top: 20px; */
+
+  display: flex;
+  flex-direction: column;
+`;
+
+// const MakeModelButtonContainer = styled.div`
+//   display: grid;
+//   grid-template-columns: repeat(1, 1fr);
+// `;
 
 const ButtonsContainer = styled.div`
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  margin-top: 20px;
-`;
+  height: 100%;
+  margin-top: 10px;
 
-const MakeModelButtonContainer = styled.div`
-  display: grid;
-  grid-template-columns: repeat(1, 1fr);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 `;
 
 /*

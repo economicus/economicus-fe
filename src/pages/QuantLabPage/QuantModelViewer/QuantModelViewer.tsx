@@ -1,3 +1,4 @@
+import { Paper } from "@mui/material";
 import { GridSelectionModel } from "@mui/x-data-grid";
 import styled from "styled-components";
 
@@ -9,18 +10,17 @@ interface ChartViewerProps {
 
 export default function ChartViewer({ selectionModel }: ChartViewerProps) {
   return (
-    <Graph>
+    <MainContainer variant="outlined">
       <Example />
-    </Graph>
+    </MainContainer>
   );
 }
 
-const Graph = styled.div`
+const MainContainer = styled(Paper)`
   // border: 3px solid green;
-  width: 100%;
-  // margin: 5px;
-  height: 700px;
-  padding: 5px;
+  width: 79%;
+
+  padding: 20px;
 `;
 
 // TODO: 아직 상태 적용 X

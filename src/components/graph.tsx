@@ -48,17 +48,17 @@ export default class Example extends PureComponent {
     return (
       <ResponsiveContainer width="100%" height="100%">
         <LineChart
-          width={500}
+          // width={500}
           height={300}
           data={data}
           margin={{
-            top: 5,
-            right: 30,
+            top: 20,
+            right: 20,
             left: 0,
             bottom: 5,
           }}
         >
-          <CartesianGrid strokeDasharray="3 3" />
+          <CartesianGrid vertical={false} strokeDasharray="3 3" />
           <XAxis dataKey="name" />
           <YAxis />
           <Tooltip />
@@ -68,6 +68,7 @@ export default class Example extends PureComponent {
             dataKey="kospi"
             stroke="#8884d8"
             activeDot={{ r: 8 }}
+            dot={false}
           />
         </LineChart>
       </ResponsiveContainer>

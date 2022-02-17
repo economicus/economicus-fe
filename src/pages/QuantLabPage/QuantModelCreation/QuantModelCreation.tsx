@@ -1,4 +1,4 @@
-import { Button, Paper, Typography } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import { useState } from "react";
 import styled from "styled-components";
 
@@ -6,17 +6,12 @@ import makeQuantModel from "../../../apis/makeQuantModel";
 import { IModel } from "../QuantLabPage";
 import LabModal from "./LabModal/LabModal";
 import LabModalWithSlider from "./LabModal/LabModalWithSlider";
-import LabSlider from "./LabSlider/LabSlider";
 
 interface ModelCreationProps {
   setModelList: React.Dispatch<React.SetStateAction<IModel[]>>;
 }
 
 export default function ModelCreation({ setModelList }: ModelCreationProps) {
-  // NOTE: SlidersContainer states
-  const [rebalancingTerm, setRebalancingTerm] = useState<number | string>(1);
-  const [numberOfHoldings, setNumberOfHoldings] = useState<number | string>(1);
-
   // NOTE: ButtonsContainer states
   const [businessArea, setBusinessArea] =
     useState<IBusinessArea>(initialBusinessArea);
@@ -33,24 +28,9 @@ export default function ModelCreation({ setModelList }: ModelCreationProps) {
 
   return (
     <MainContainer>
-      <Typography variant="h5">Quant Lab</Typography>
-
-      <SlidersContainer>
-        <LabSlider
-          name="리밸런싱 주기"
-          min={1}
-          max={12}
-          value={rebalancingTerm}
-          setValue={setRebalancingTerm}
-        />
-        <LabSlider
-          name="보유 종목 수"
-          min={1}
-          max={12}
-          value={numberOfHoldings}
-          setValue={setNumberOfHoldings}
-        />
-      </SlidersContainer>
+      <Typography variant="h5" sx={{ mt: 3 }}>
+        Quant Lab
+      </Typography>
 
       <ButtonsContainer>
         <LabModal
@@ -69,8 +49,11 @@ export default function ModelCreation({ setModelList }: ModelCreationProps) {
           setState={setChartInfo}
         /> */}
       </ButtonsContainer>
-
-      <Button onClick={onClickMakeButton}>tmp make model</Button>
+      <MakeModelButtonContainer>
+        <Button sx={{ m: 1 }} variant="outlined" onClick={onClickMakeButton}>
+          make model
+        </Button>
+      </MakeModelButtonContainer>
     </MainContainer>
   );
 }
@@ -117,21 +100,19 @@ export interface ICheckboxWithSliderInfo {
  * ANCHOR: styles
  */
 
-const MainContainer = styled(Paper)`
-  /* border: 3px solid red; */
-  width: 50%;
-  margin: 5px;
-  padding: 20px;
-`;
-
-const SlidersContainer = styled.div`
-  margin-top: 20px;
+const MainContainer = styled.div`
+  width: 100%;
 `;
 
 const ButtonsContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   margin-top: 20px;
+`;
+
+const MakeModelButtonContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
 `;
 
 /*

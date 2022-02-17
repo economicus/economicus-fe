@@ -12,21 +12,18 @@ const QuantLabPage = () => {
 
   return (
     <MainContainer>
-      <StyledDiv>
-        <QuantModelViewer {...{ selectionModel }} />
-        <QuantModelCreation {...{ setModelList }} />
-      </StyledDiv>
+      <QuantModelCreation {...{ setModelList }} />
 
-      <StyledDiv>
-        <QuantModelTable
-          {...{ setSelectionModel }}
-          rows={modelList.map((val) => {
-            const { 임시그래프내용, ...field } = val;
-            임시그래프내용; // NOTE: 미사용 워닝 해결을 위해 이렇게 해놓았는데... 괜찮을까? 다른 방법이 있나?
-            return field;
-          })}
-        />
-      </StyledDiv>
+      <QuantModelTable
+        {...{ setSelectionModel }}
+        rows={modelList.map((val) => {
+          const { 임시그래프내용, ...field } = val;
+          임시그래프내용; // NOTE: 미사용 워닝 해결을 위해 이렇게 해놓았는데... 괜찮을까? 다른 방법이 있나?
+          return field;
+        })}
+      />
+
+      <QuantModelViewer {...{ selectionModel }} />
     </MainContainer>
   );
 };
@@ -60,11 +57,6 @@ const MainContainer = styled.div`
   margin: 5px;
   padding-left: 10%;
   padding-right: 10%;
-`;
-
-const StyledDiv = styled.div`
-  display: flex;
-  margin: 15px;
 `;
 
 export default QuantLabPage;

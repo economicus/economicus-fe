@@ -4,7 +4,7 @@ import { styled } from "@mui/system";
 import { useState } from "react";
 import * as React from "react";
 
-import { ICheckboxWithSliderInfo } from "../../pages/QuantLabPage/ModelCreation/ModelCreation";
+import { ICheckboxWithSliderInfo } from "../../pages/QuantLabPage/QuantModelCreation/QuantModelCreation";
 
 interface QuantLabModalProps {
   btnName: string;

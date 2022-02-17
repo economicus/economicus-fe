@@ -1,11 +1,10 @@
-import { Box, Button, Card, Container, Typography } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import { useState } from "react";
 import styled from "styled-components";
 
 import makeQuantModel from "../../../apis/makeQuantModel";
-import LabSlider from "../../../components/slider/LabSlider";
 import { IModel } from "../QuantLabPage";
-import QuantLabModal from "./LabModal/LabModal";
+import LabModal from "./LabModal/LabModal";
 import LabModalWithSlider from "./LabModal/LabModalWithSlider";
 
 interface ModelCreationProps {
@@ -13,73 +12,49 @@ interface ModelCreationProps {
 }
 
 export default function ModelCreation({ setModelList }: ModelCreationProps) {
-  const [rebalancingTerm, setRebalancingTerm] = useState<number | string>(1);
-  const [numberOfHoldings, setNumberOfHoldings] = useState<number | string>(1);
-
-  const [businessArea, setBusinessArea] = useState(initialBusinessArea);
+  // NOTE: ButtonsContainer states
+  const [businessArea, setBusinessArea] =
+    useState<IBusinessArea>(initialBusinessArea);
   const [financeCondition, setFinanceCondetion] = useState<IFinanceCondition>(
     initialFinanceCondetion
   );
-  // const [chartInfo, setChartInfo] = useState(initialChartInfo);
+  // const [chartInfo, setChartInfo] = useState<IChartInfo>(initialChartInfo);
 
+  // NOTE: handlers
   const onClickMakeButton = async () => {
     const responseData = await makeQuantModel();
-    // setModelTableRows((prev) => [...prev, data]);
     setModelList((prev) => [...prev, { id: +new Date(), ...responseData }]);
   };
 
   return (
-    <StyledContainer>
-      <Container sx={{ px: "5%" }}>
-        <h3>Quant Lab</h3>
-        <LabSlider
-          name={"리밸런싱 주기"}
-          min={1}
-          max={12}
-          value={rebalancingTerm}
-          setValue={setRebalancingTerm}
-        />
-        <LabSlider
-          name={"보유 종목 수"}
-          min={1}
-          max={12}
-          value={numberOfHoldings}
-          setValue={setNumberOfHoldings}
-        />
-      </Container>
+    <MainContainer>
+      <Typography variant="h5" sx={{ mt: 3 }}>
+        Quant Lab
+      </Typography>
 
-      <Box
-        sx={{
-          display: "grid",
-          gridTemplateColumns: "repeat(2, 1fr)",
-          p: 3,
-        }}
-      >
-        <QuantLabModal
+      <ButtonsContainer>
+        <LabModal
           btnName="사업분야"
           state={businessArea}
           setState={setBusinessArea}
         />
-
-        {/* <QuantLabModal
-          btnName="차트정보"
-          state={chartInfo}
-          setState={setChartInfo}
-        /> */}
-
         <LabModalWithSlider
           btnName="재무상태"
           state={financeCondition}
           setState={setFinanceCondetion}
         />
-
-        {/* {Object.keys(financeCondition).map((key, idx) => {
-          console.log("hi", key, idx, financeCondition[key]);
-        })} */}
-      </Box>
-
-      <Button onClick={onClickMakeButton}>tmp make model</Button>
-    </StyledContainer>
+        {/* <LabModalWithSlider
+          btnName="차트정보"
+          state={chartInfo}
+          setState={setChartInfo}
+        /> */}
+      </ButtonsContainer>
+      <MakeModelButtonContainer>
+        <Button sx={{ m: 1 }} variant="outlined" onClick={onClickMakeButton}>
+          make model
+        </Button>
+      </MakeModelButtonContainer>
+    </MainContainer>
   );
 }
 
@@ -102,16 +77,16 @@ export interface IBusinessArea {
   유틸리티: boolean;
 }
 
-// export interface IChartInfo {
-
-// }
-
 export interface IFinanceCondition {
   [key: string]: ICheckboxWithSliderInfo;
 
   PER: ICheckboxWithSliderInfo;
   PBR: ICheckboxWithSliderInfo;
 }
+
+// export interface IChartInfo {
+
+// }
 
 export interface ICheckboxWithSliderInfo {
   checked: boolean;
@@ -125,10 +100,19 @@ export interface ICheckboxWithSliderInfo {
  * ANCHOR: styles
  */
 
-const StyledContainer = styled(Card)`
-  border: 3px solid red;
-  margin: 5px;
-  width: 50%;
+const MainContainer = styled.div`
+  width: 100%;
+`;
+
+const ButtonsContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  margin-top: 20px;
+`;
+
+const MakeModelButtonContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
 `;
 
 /*

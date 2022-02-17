@@ -3,12 +3,12 @@ import styled from "styled-components";
 
 import TmpForm from "../../../../components/FormControlGroup/FormControlGroup";
 import ModalWithButton from "../../../../components/ModalWithButton/ModalWithButton";
-import { IFinanceCondition } from "../ModelCreation";
+import { IFinanceCondition } from "../QuantModelCreation";
 
 interface QuantLabModalProps {
   btnName: string;
   state: IFinanceCondition;
-  setState: React.Dispatch<React.SetStateAction<any>>;
+  setState: React.Dispatch<React.SetStateAction<IFinanceCondition>>;
 }
 
 export default function LabModalWithSlider({
@@ -55,9 +55,8 @@ export default function LabModalWithSlider({
       <TmpForm>
         {Object.keys(state).map((key, idx) => {
           return (
-            <Container>
+            <Container key={idx}>
               <FormControlLabel
-                key={idx}
                 control={
                   <Checkbox
                     checked={state[key].checked}

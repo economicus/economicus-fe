@@ -1,11 +1,10 @@
-import { Card } from "@mui/material";
 import { GridSelectionModel } from "@mui/x-data-grid";
 import { useState } from "react";
 import styled from "styled-components";
 
-import ChartViewer from "./ChartViewer";
-import ModelCreation from "./ModelCreation";
+import QuantModelCreation from "./QuantModelCreation";
 import QuantModelTable from "./QuantModelTable";
+import QuantModelViewer from "./QuantModelViewer";
 
 const QuantLabPage = () => {
   const [modelList, setModelList] = useState<IModel[]>([]);
@@ -13,21 +12,18 @@ const QuantLabPage = () => {
 
   return (
     <MainContainer>
-      <HighContainer>
-        <ChartViewer {...{ selectionModel }} />
-        <ModelCreation {...{ setModelList }} />
-      </HighContainer>
+      <QuantModelCreation {...{ setModelList }} />
 
-      <LowContainer>
-        <QuantModelTable
-          {...{ setSelectionModel }}
-          rows={modelList.map((val) => {
-            const { 임시그래프내용, ...field } = val;
-            임시그래프내용; // NOTE: 미사용 워닝 해결을 위해 이렇게 해놓았는데... 괜찮을까? 다른 방법이 있나?
-            return field;
-          })}
-        />
-      </LowContainer>
+      <QuantModelTable
+        {...{ setSelectionModel }}
+        rows={modelList.map((val) => {
+          const { 임시그래프내용, ...field } = val;
+          임시그래프내용; // NOTE: 미사용 워닝 해결을 위해 이렇게 해놓았는데... 괜찮을까? 다른 방법이 있나?
+          return field;
+        })}
+      />
+
+      <QuantModelViewer {...{ selectionModel }} />
     </MainContainer>
   );
 };
@@ -57,26 +53,10 @@ export interface IModel {
  */
 
 const MainContainer = styled.div`
-  border: 3px solid pink;
+  /* border: 3px solid pink; */
   margin: 5px;
   padding-left: 10%;
   padding-right: 10%;
-  padding-top: 30px;
-`;
-
-const HighContainer = styled.div`
-  border: 3px solid black;
-  /* argin: 5px; */
-  display: flex;
-`;
-
-// TODO: 적절한 네이밍
-const LowContainer = styled(Card)`
-  height: 100%;
-
-  border: 3px solid yellow;
-  margin: 5px;
-  margin-top: 10px;
 `;
 
 export default QuantLabPage;

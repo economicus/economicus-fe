@@ -20,7 +20,7 @@ export default function QuantModelTable({
 
   // TODO: 추후 mui와 styled-components 사용으로 개선 필요
   return (
-    <div style={{ height: 320, width: "100%" }}>
+    <div style={{ height: 250, width: "100%" }}>
       <div style={{ display: "flex", height: "100%" }}>
         <div style={{ flexGrow: 1 }}>
           <DataGrid

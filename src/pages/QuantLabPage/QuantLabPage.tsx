@@ -12,7 +12,10 @@ const QuantLabPage = () => {
 
   return (
     <MainContainer>
-      <QuantModelCreation {...{ setModelList }} />
+      <StyledDiv>
+        <QuantModelViewer {...{ selectionModel }} />
+        <QuantModelCreation {...{ setModelList }} />
+      </StyledDiv>
 
       <QuantModelTable
         {...{ setSelectionModel }}
@@ -22,8 +25,6 @@ const QuantLabPage = () => {
           return field;
         })}
       />
-
-      <QuantModelViewer {...{ selectionModel }} />
     </MainContainer>
   );
 };
@@ -53,10 +54,19 @@ export interface IModel {
  */
 
 const MainContainer = styled.div`
-  /* border: 3px solid pink; */
-  margin: 5px;
+  width: 100vw;
+  height: 100%;
+
   padding-left: 10%;
   padding-right: 10%;
+`;
+
+const StyledDiv = styled.div`
+  height: 600px;
+
+  display: flex;
+  padding: 20px 0;
+  justify-content: space-between;
 `;
 
 export default QuantLabPage;

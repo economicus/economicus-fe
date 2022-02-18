@@ -1,4 +1,5 @@
 import { Checkbox, FormControlLabel, Slider } from "@mui/material";
+import { useState } from "react";
 import styled from "styled-components";
 
 import TmpForm from "../../../../components/FormControlGroup/FormControlGroup";
@@ -16,6 +17,17 @@ export default function LabModalWithSlider({
   state,
   setState,
 }: QuantLabModalProps) {
+  const [selecAll, setSelectAll] = useState(true);
+  const selectAllHandleChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setSelectAll(event.target.checked);
+    const newState = state;
+    Object.keys(newState).forEach((key) => {
+      newState[key].checked = event.target.checked;
+    });
+    setState(newState);
+  };
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setState({
       ...state,
@@ -52,6 +64,12 @@ export default function LabModalWithSlider({
 
   return (
     <ModalWithButton btnName={btnName}>
+      <FormControlLabel
+        control={
+          <Checkbox checked={selecAll} onChange={selectAllHandleChange} />
+        }
+        label="Select all"
+      />
       <TmpForm>
         {Object.keys(state).map((key, idx) => {
           return (

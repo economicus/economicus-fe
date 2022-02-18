@@ -13,7 +13,7 @@ export default async function makeQuantModel() {
     모델: "모델명",
     누적수익률: 128.1,
     연평균수익: 16,
-    승률: 66,
+    승률: Math.random(),
     최대손실률: -29,
     편입종목수: 22,
     임시그래프내용: [

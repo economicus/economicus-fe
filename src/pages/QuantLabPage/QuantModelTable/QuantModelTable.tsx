@@ -1,22 +1,73 @@
+import { Delete, Save } from "@material-ui/icons";
 import {
   DataGrid,
+  GridActionsCellItem,
   GridColDef,
+  GridRowId,
+  GridRowParams,
   GridRowsProp,
   GridSelectionModel,
 } from "@mui/x-data-grid";
+import { useCallback, useMemo } from "react";
+
+import { IModel } from "../QuantLabPage";
 
 interface ModelListProps {
   rows: GridRowsProp;
   setSelectionModel: React.Dispatch<React.SetStateAction<GridSelectionModel>>;
+  setModelList: React.Dispatch<React.SetStateAction<IModel[]>>;
 }
 
 export default function QuantModelTable({
   rows,
   setSelectionModel,
+  setModelList,
 }: ModelListProps) {
   const columns: GridColDef[] = FIELDS.map((val) => {
     return { field: val, headerName: val, width: 150 };
   });
+
+  const deleteModel = useCallback(
+    (id: GridRowId) => () => {
+      setTimeout(() => {
+        setModelList((prev) => prev.filter((model) => model.id !== id));
+      });
+    },
+    []
+  );
+
+  const saveModel = useCallback(
+    (id: GridRowId) => () => {
+      setTimeout(() => {
+        console.log("saved...?", id);
+      });
+    },
+    []
+  );
+
+  const columnsWithButton = useMemo(
+    () => [
+      ...columns,
+      {
+        field: "actions",
+        type: "actions",
+        getActions: (params: GridRowParams) => [
+          <GridActionsCellItem
+            icon={<Delete />}
+            onClick={deleteModel(params.id)}
+            label="Delete"
+          />,
+          <GridActionsCellItem
+            icon={<Save />}
+            onClick={saveModel(params.id)}
+            label="Save"
+            key={2}
+          />,
+        ],
+      },
+    ],
+    [deleteModel, saveModel]
+  );
 
   // TODO: 추후 mui와 styled-components 사용으로 개선 필요
   return (
@@ -32,7 +83,7 @@ export default function QuantModelTable({
             checkboxSelection
             disableSelectionOnClick
             rows={rows}
-            columns={columns}
+            columns={columnsWithButton}
             onSelectionModelChange={(model) => {
               // console.log("hi...", model);
               setSelectionModel(model);

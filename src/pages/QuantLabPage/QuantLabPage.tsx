@@ -10,6 +10,8 @@ const QuantLabPage = () => {
   const [modelList, setModelList] = useState<IModel[]>([]);
   const [selectionModel, setSelectionModel] = useState<GridSelectionModel>([]); // NOTE: 선택된 모델 id의 배열. 이를 통해 그래프 렌더링 예정
 
+  console.log(modelList);
+
   return (
     <MainContainer>
       <StyledDiv>
@@ -18,7 +20,7 @@ const QuantLabPage = () => {
       </StyledDiv>
 
       <QuantModelTable
-        {...{ setSelectionModel }}
+        {...{ setSelectionModel, setModelList }}
         rows={modelList.map((val) => {
           const { 임시그래프내용, ...field } = val;
           임시그래프내용; // NOTE: 미사용 워닝 해결을 위해 이렇게 해놓았는데... 괜찮을까? 다른 방법이 있나?

@@ -15,7 +15,7 @@ export default function TmpForm({ children }: TmpFormProps) {
       <FormGroup
         sx={{
           display: "grid",
-          gridTemplateColumns: "repeat(3, 1fr)",
+          gridTemplateColumns: "repeat(2, 1fr)",
         }}
       >
         {children}

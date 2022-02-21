@@ -81,6 +81,15 @@ export interface IFinanceCondition {
 
   PER: ICheckboxWithSliderInfo;
   PBR: ICheckboxWithSliderInfo;
+  PSR: ICheckboxWithSliderInfo;
+  PCR: ICheckboxWithSliderInfo;
+  시가배당률: ICheckboxWithSliderInfo;
+  배당성향: ICheckboxWithSliderInfo;
+  "매출액 증가율": ICheckboxWithSliderInfo;
+  "순이익 증가율": ICheckboxWithSliderInfo;
+  ROE: ICheckboxWithSliderInfo;
+  ROA: ICheckboxWithSliderInfo;
+  부채비율: ICheckboxWithSliderInfo;
 }
 
 // export interface IChartInfo {
@@ -143,7 +152,7 @@ const sliderStateCunstructor = (
   max: number
 ): ICheckboxWithSliderInfo => {
   return {
-    checked: true,
+    checked: false,
     min: min,
     max: max,
     minValue: min,
@@ -165,20 +174,17 @@ const initialBusinessArea: IBusinessArea = {
 };
 
 const initialFinanceCondetion = {
-  PER: sliderStateCunstructor(1, 10),
-  PBR: sliderStateCunstructor(3, 7),
-
-  // PER: true,
-  // PBR: false,
-  // PSR: false,
-  // PCR: false,
-  // 시가배당률: false,
-  // 배당성향: false,
-  // "매출액 증가율": false,
-  // "순이익 증가율": false,
-  // ROE: false,
-  // ROA: false,
-  // 부채비율: false,
+  PER: sliderStateCunstructor(-100, 100),
+  PBR: sliderStateCunstructor(0, 100),
+  PSR: sliderStateCunstructor(-100, 100),
+  PCR: sliderStateCunstructor(-100, 100),
+  시가배당률: sliderStateCunstructor(0, 100),
+  배당성향: sliderStateCunstructor(-100, 100),
+  "매출액 증가율": sliderStateCunstructor(-100, 100),
+  "순이익 증가율": sliderStateCunstructor(-100, 100),
+  ROE: sliderStateCunstructor(-100, 100),
+  ROA: sliderStateCunstructor(-100, 100),
+  부채비율: sliderStateCunstructor(0, 2000),
 };
 
 // const initialChartInfo = {

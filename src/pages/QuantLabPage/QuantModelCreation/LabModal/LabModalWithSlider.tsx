@@ -1,5 +1,5 @@
 import { Checkbox, FormControlLabel, Slider } from "@mui/material";
-import { useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
 import TmpForm from "../../../../components/FormControlGroup/FormControlGroup";
@@ -17,7 +17,7 @@ export default function LabModalWithSlider({
   state,
   setState,
 }: QuantLabModalProps) {
-  const [selecAll, setSelectAll] = useState(true);
+  const [selecAll, setSelectAll] = useState(false);
   const selectAllHandleChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -28,6 +28,7 @@ export default function LabModalWithSlider({
     });
     setState(newState);
   };
+
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setState({
       ...state,
@@ -43,7 +44,7 @@ export default function LabModalWithSlider({
   }
 
   const handleSliderChange = (event: Event, newValue: number | number[]) => {
-    console.log(newValue);
+    // console.log(newValue);
 
     const castedNewValue = newValue as number[];
     const [minValue, maxValue] = castedNewValue;
@@ -83,14 +84,22 @@ export default function LabModalWithSlider({
                   />
                 }
                 label={key}
+                sx={{ width: 500 }}
               />
               <Slider
-                // getAriaLabel={() => "Temperature range"}
                 value={[state[key].minValue, state[key].maxValue]}
                 onChange={handleSliderChange}
                 name={key}
+                min={state[key].min}
+                max={state[key].max}
+                marks={[
+                  { value: state[key].min, label: state[key].min },
+                  { value: state[key].max, label: state[key].max },
+                ]}
                 valueLabelDisplay="auto"
-                // getAriaValueText={valuetext}
+                disabled={!state[key].checked}
+                sx={{ width: 400 }}
+                size="small"
               />
             </Container>
           );
@@ -102,5 +111,8 @@ export default function LabModalWithSlider({
 
 const Container = styled.div`
   display: flex;
-  width: 200px;
+  width: 250px;
+  padding-top: 20px;
+  margin-right: 50px;
+  align-items: center;
 `;

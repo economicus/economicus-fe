@@ -26,7 +26,7 @@ interface ITmpData {
 }
 
 const data1 = {
-  model_name: "임시1",
+  model_name: "tmp1",
 
   cumulative_return: 15.951946962191434,
   annual_average_return: -2.2114148369615254,
@@ -163,7 +163,7 @@ const data1 = {
 };
 
 const data2 = {
-  model_name: "임시2",
+  model_name: "tmp2",
 
   cumulative_return: 15.951946962191434,
   annual_average_return: -2.2114148369615254,
@@ -207,24 +207,28 @@ interface IDataFormat {
 
 function kospiToBalance(data: ITmpData) {
   const kospi: number[] = data.chart.profit_kospi_data;
-  const val: number[] = [1000];
+  const seed = 1000;
 
   for (let index = 0; index < kospi.length - 1; index++) {
-    const kospiPropit = kospi[index + 1] / kospi[index];
-    val.push(val[index] * kospiPropit);
+    const kospiPropit =
+      ((kospi[index + 1] - kospi[index]) / kospi[index]) * 100;
+    data.chart.profit_kospi_data[index] = seed + (seed * kospiPropit) / 100;
   }
-  return val;
 }
 
 function propitToBalance(data: ITmpData) {
   const propit: number[] = data.chart.profit_rate_data;
-  const val: number[] = [1000];
+  const seed = 1000;
 
   for (let index = 0; index < propit.length; index++) {
-    val.push(val[index] * propit[index]);
+    data.chart.profit_rate_data[index] = seed + (seed * propit[index]) / 100;
   }
-  return val;
 }
+
+kospiToBalance(data1);
+
+propitToBalance(data1);
+propitToBalance(data2);
 
 function yearAndMonthToString(date: Date) {
   let tmp: string;
@@ -233,37 +237,6 @@ function yearAndMonthToString(date: Date) {
   tmp = tmp + "/" + (date.getMonth() + 1).toString();
   return tmp;
 }
-
-// const graphDataParse = (
-//   start_date: string,
-//   profit_rate_data: number[],
-//   profit_kospi_data: number[]
-// ) => {
-//   const graphDate = new Date(start_date.split("T")[0]);
-
-//   graphDate.setDate(1);
-//   const data: IDataFormat[] = [];
-//   for (let index = 0; index < profit_kospi_data.length; index++) {
-//     const tmpData: IDataFormat = {
-//       name: yearAndMonthToString(graphDate),
-//       kospi: profit_kospi_data[index],
-//       // modalProfit: profit_rate_data[index],
-//       ["model" + index]: profit_rate_data[index],
-//     };
-//     console.log(tmpData);
-//     // console.log(graphDate.toDateString());
-//     graphDate.setMonth(graphDate.getMonth() + 1);
-//     data.push(tmpData);
-//   }
-
-//   return data;
-// };
-
-// const graphData = graphDataParse(
-//   data1.chart.start_date,
-//   data1.chart.profit_rate_data,
-//   data1.chart.profit_kospi_data
-// );
 
 const graphDataParse = (tmpData: ITmpData[]) => {
   const tmp: IDataFormat[] = [];
@@ -289,44 +262,35 @@ const graphDataParse = (tmpData: ITmpData[]) => {
 
 const graphData = graphDataParse([data1, data2]);
 
-// const data = [
-//   {
-//     name: "1990",
-//     kospi: 600,
-//모델1: 100,
-//     모델2: 300
-//   },
-//   {
-//     name: "1995",
-//     kospi: 500,
-//   },
-//   {
-//     name: "2000",
-//     kospi: 900,
-//   },
-//   {
-//     name: "2005",
-//     kospi: 1400,
-//   },
-//   {
-//     name: "2010",
-//     kospi: 1600,
-//   },
-//   {
-//     name: "2015",
-//     kospi: 1900,
-//   },
-//   {
-//     name: "2020",
-//     kospi: 3000,
-//   },
-// ];
-
 const generateColor = (name: string): string => {
-  return "#8884d8";
+  const colors = [
+    "#e51c23",
+    "#e91e63",
+    "#9c27b0",
+    "#673ab7",
+    "#3f51b5",
+    "#5677fc",
+    "#03a9f4",
+    "#00bcd4",
+    "#009688",
+    "#259b24",
+    "#8bc34a",
+    "#afb42b",
+    "#ff9800",
+    "#ff5722",
+    "#795548",
+    "#607d8b",
+  ];
+  let hash = 0;
+  //if (name.length === 0) return hash;
+  for (let i = 0; i < name.length; i++) {
+    hash = name.charCodeAt(i) + ((hash << 5) - hash);
+    hash = hash & hash;
+  }
+  hash = ((hash % colors.length) + colors.length) % colors.length;
+  return colors[hash];
 };
 
-// console.log(graphData, Object.keys(graphData));
 export default class Example extends PureComponent {
   static demoUrl = "https://codesandbox.io/s/simple-line-chart-kec3v";
 
@@ -334,7 +298,6 @@ export default class Example extends PureComponent {
     return (
       <ResponsiveContainer width="100%" height="100%">
         <LineChart
-          // width={500}
           height={300}
           data={graphData}
           margin={{

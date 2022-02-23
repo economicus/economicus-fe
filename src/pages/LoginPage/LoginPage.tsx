@@ -10,7 +10,10 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
+import { useDispatch } from "react-redux";
 import styled from "styled-components";
+
+import { loginThunk } from "../../stores/session";
 
 const EconomicusLogo = styled("img")({
   borderRadius: 5,
@@ -22,14 +25,24 @@ const EconomicusLogo = styled("img")({
 const theme = createTheme();
 
 const LoginPage = () => {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const dispatch = useDispatch();
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     // eslint-disable-next-line no-console
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+    // console.log({
+    //   email: data.get("email"),
+    //   password: data.get("password"),
+    // });
+
+    const loginInfo = {
+      email: data.get("email") as string, // NOTE: 추후 개선 필요?
+      password: data.get("password") as string,
+    };
+
+    const resultAction = await dispatch(loginThunk(loginInfo));
+    // console.log(resultAction);
   };
 
   return (

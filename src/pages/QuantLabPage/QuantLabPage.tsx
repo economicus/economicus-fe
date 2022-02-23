@@ -1,151 +1,74 @@
-import { Button, Card, Container, Typography } from "@mui/material";
-import { Box } from "@mui/system";
+import { GridSelectionModel } from "@mui/x-data-grid";
 import { useState } from "react";
 import styled from "styled-components";
 
-import CheckBoxs from "../../components/CheckBoxs";
-import Example from "../../components/graph";
-import ModalBusinessAreas from "../../components/modals/BusinessAreas";
-import ComparativeStockSelect from "../../components/selecter/ComparativeStockSelect";
-import TermSelect from "../../components/selecter/TermSelect";
-import LabSlider from "../../components/slider/LabSlider";
-
-const MainContainer = styled.div`
-  border: 3px solid pink;
-  margin: 5px;
-  padding-left: 10%;
-  padding-right: 10%;
-  padding-top: 30px;
-`;
-
-const GraphContainer = styled(Card)`
-  border: 3px solid blue;
-  margin: 5px;
-  width: 50%;
-`;
-
-const GraphSlectContainer = styled.div`
-  border: 3px solid orange;
-  margin: 5px;
-  display: flex;
-`;
-
-const Graph = styled.div`
-  border: 3px solid green;
-  margin: 5px;
-  height: 300px;
-  padding: 5px;
-`;
-
-const MakeModelContainer = styled.div`
-  border: 3px solid black;
-  argin: 5px;
-  display: flex;
-`;
-
-const ModelContainer = styled(Card)`
-  border: 3px solid red;
-  margin: 5px;
-  width: 50%;
-`;
-
-const ShowQuantModelYieldContainer = styled(Card)`
-  border: 3px solid yellow;
-  margin: 5px;
-  margin-top: 10px;
-`;
-
-// const StyledButton = styled(B)
-
-// CheckBoxs <-
-
-export interface IBusinessArea {
-  [key: string]: boolean;
-}
-
-export interface IChartInfo {
-  [key: string]: boolean;
-}
+import QuantModelCreation from "./QuantModelCreation";
+import QuantModelTable from "./QuantModelTable";
+import QuantModelViewer from "./QuantModelViewer";
 
 const QuantLabPage = () => {
-  const [businessArea, setBusinessArea] = useState({
-    game: true,
-    enter: false,
-    enter2: false,
-    enter3: false,
-  });
-  const [chartInfo, setChartInfo] = useState({});
-  const [rebalancingTerm, setRebalancingTerm] = useState<number | string>(1);
-  const [numberOfHoldings, setNumberOfHoldings] = useState<number | string>(1);
+  const [modelList, setModelList] = useState<IModel[]>([]);
+  const [selectionModel, setSelectionModel] = useState<GridSelectionModel>([]); // NOTE: 선택된 모델 id의 배열. 이를 통해 그래프 렌더링 예정
+
+  console.log(modelList);
 
   return (
     <MainContainer>
-      <MakeModelContainer>
-        <GraphContainer>
-          <GraphSlectContainer>
-            <ComparativeStockSelect />
-            <TermSelect />
-          </GraphSlectContainer>
-          <Graph>
-            <Example></Example>
-          </Graph>
-        </GraphContainer>
+      <StyledDiv>
+        <QuantModelViewer {...{ selectionModel }} />
+        <QuantModelCreation {...{ setModelList }} />
+      </StyledDiv>
 
-        <ModelContainer>
-          <Container sx={{ px: "5%" }}>
-            <h3>Quant Lab</h3>
-            <LabSlider
-              name={"리밸런싱 주기"}
-              min={1}
-              max={12}
-              value={rebalancingTerm}
-              setValue={setRebalancingTerm}
-            />
-            <LabSlider
-              name={"보유 종목 수"}
-              min={1}
-              max={50}
-              value={numberOfHoldings}
-              setValue={setNumberOfHoldings}
-            />
-          </Container>
-          <Box
-            sx={{
-              display: "grid",
-              gridTemplateColumns: "repeat(2, 1fr)",
-              p: 3,
-            }}
-          >
-            {/* 클릭시 modal 창 열리게 변경*/}
-            {/* <Button variant="contained" sx={{ m: 1 }}>
-              사업분야
-            </Button> */}
-            <Button variant="contained" sx={{ m: 1 }}>
-              재무상태
-            </Button>
-            <Button variant="contained" sx={{ m: 1 }}>
-              주식성향
-            </Button>
-            <Button variant="contained" sx={{ m: 1 }}>
-              차트정보
-            </Button>
-            <ModalBusinessAreas
-              state={businessArea}
-              setState={setBusinessArea}
-            />
-          </Box>
-        </ModelContainer>
-      </MakeModelContainer>
-      <ShowQuantModelYieldContainer>
-        <Typography>모델</Typography>
-        <Typography>누적수익률</Typography>
-        <Typography>연평균수익</Typography>
-        <Typography>승률</Typography>
-        <Typography>최대손실률</Typography>
-        <Typography>편입종목수</Typography>
-      </ShowQuantModelYieldContainer>
+      <QuantModelTable
+        {...{ setSelectionModel, setModelList }}
+        rows={modelList.map((val) => {
+          const { 임시그래프내용, ...field } = val;
+          임시그래프내용; // NOTE: 미사용 워닝 해결을 위해 이렇게 해놓았는데... 괜찮을까? 다른 방법이 있나?
+          return field;
+        })}
+      />
     </MainContainer>
   );
 };
+
+/*
+ * ANCHOR: models
+ */
+
+interface IChartElement {
+  ts: number;
+  data: number;
+}
+
+export interface IModel {
+  id: number;
+  모델: string; // NOTE: 변수명은 어떻게 할까?
+  누적수익률: number; // NOTE: 구조 추후 논의 필요
+  연평균수익: number;
+  승률: number;
+  최대손실률: number;
+  편입종목수: number;
+  임시그래프내용: IChartElement[];
+}
+
+/*
+ * ANCHOR: styles
+ */
+
+const MainContainer = styled.div`
+  width: 100vw;
+  height: 100%;
+
+  padding-left: 10%;
+  padding-right: 10%;
+`;
+
+const StyledDiv = styled.div`
+  height: 600px;
+
+  display: flex;
+  padding: 20px 0;
+  justify-content: space-between;
+`;
 
 export default QuantLabPage;

@@ -1,7 +1,9 @@
 import { GridSelectionModel } from "@mui/x-data-grid";
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 
+import { RootState } from "../../stores/store";
 import QuantModelCreation from "./QuantModelCreation";
 import QuantModelTable from "./QuantModelTable";
 import QuantModelViewer from "./QuantModelViewer";

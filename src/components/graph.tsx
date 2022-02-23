@@ -38,8 +38,8 @@ const data1 = {
     profit_rate_data: [
       8.31201047,
       15.13554791,
-      -1.33652122,
-      -1.42408167,
+      -10.33652122,
+      -20.42408167,
       10.42078459,
       8.30569164,
       17.68356243,
@@ -48,18 +48,18 @@ const data1 = {
       5.5424435,
       6.65444626,
       -2.5551126,
-      2.78251544,
-      1.60430797,
+      20.78251544,
+      10.60430797,
       -5.50608302,
       4.48940976,
       7.67556972,
       -0.69061304,
       -11.60413821,
       -10.07694755,
-      -1.09885958,
-      -6.63640131,
+      -10.09885958,
+      -60.63640131,
       -13.46021816,
-      -2.12960605,
+      -20.12960605,
       -4.23366001,
       10.07353571,
       18.49689674,
@@ -157,7 +157,8 @@ const data1 = {
       2160.23,
       2091.64,
       2067.57,
-      2026.46, // 지수 (number)
+      2026.46,
+      2160.23, // 지수 (number)
     ],
   },
 };
@@ -173,8 +174,8 @@ const data2 = {
   chart: {
     start_date: "2016-12-31T00:00:000Z",
     profit_rate_data: [
-      10.31201047, 10.13554791, -1.33652122, -1.42408167, 10.42078459,
-      8.30569164, 17.68356243, 9.40703498, -4.15162926, 5.5424435, 6.65444626,
+      10.31201047, 10.13554791, -10.33652122, -10.42408167, 10.42078459,
+      8.30569164, -17.68356243, -9.40703498, 4.15162926, 5.5424435, 6.65444626,
       -2.5551126, 2.78251544, 1.60430797, -5.50608302, 4.48940976, 7.67556972,
       -0.69061304, -11.60413821, -10.07694755, -1.09885958, -6.63640131,
       -13.46021816, -2.12960605, -4.23366001, 10.07353571, 18.49689674,
@@ -206,23 +207,43 @@ interface IDataFormat {
 }
 
 function kospiToBalance(data: ITmpData) {
-  const kospi: number[] = data.chart.profit_kospi_data;
+  const kospi: number[] = data.chart.profit_kospi_data.slice();
   const seed = 1000;
 
-  for (let index = 0; index < kospi.length - 1; index++) {
-    const kospiPropit =
-      ((kospi[index + 1] - kospi[index]) / kospi[index]) * 100;
-    data.chart.profit_kospi_data[index] = seed + (seed * kospiPropit) / 100;
+  data.chart.profit_kospi_data[0] = seed;
+  for (let index = 1; index < kospi.length; index++) {
+    const kospiPropit = (kospi[index] - kospi[index - 1]) / kospi[index - 1];
+    data.chart.profit_kospi_data[index] =
+      data.chart.profit_kospi_data[index - 1] +
+      data.chart.profit_kospi_data[index - 1] * kospiPropit;
   }
+  const kospiPropit =
+    (kospi[kospi.length] - kospi[kospi.length - 1]) / kospi[kospi.length - 1];
+  const tmpBalace =
+    data.chart.profit_kospi_data[kospi.length] +
+    (data.chart.profit_kospi_data[kospi.length] * kospiPropit) / 100;
+  data.chart.profit_kospi_data.push(tmpBalace);
 }
 
 function propitToBalance(data: ITmpData) {
-  const propit: number[] = data.chart.profit_rate_data;
+  const propit: number[] = data.chart.profit_rate_data.slice();
   const seed = 1000;
 
   for (let index = 0; index < propit.length; index++) {
-    data.chart.profit_rate_data[index] = seed + (seed * propit[index]) / 100;
+    if (index == 0) {
+      data.chart.profit_rate_data[0] = seed;
+    } else {
+      data.chart.profit_rate_data[index] =
+        data.chart.profit_rate_data[index - 1] +
+        (data.chart.profit_rate_data[index - 1] * propit[index - 1]) / 100;
+    }
   }
+  const tmpBalace =
+    data.chart.profit_rate_data[propit.length - 1] +
+    (data.chart.profit_rate_data[propit.length - 1] *
+      propit[propit.length - 1]) /
+      100;
+  data.chart.profit_rate_data.push(tmpBalace);
 }
 
 kospiToBalance(data1);
@@ -244,7 +265,7 @@ const graphDataParse = (tmpData: ITmpData[]) => {
   const graphDate = new Date(tmpData[0].chart["start_date"].split("T")[0]);
   graphDate.setDate(1);
 
-  for (let idx = 0; idx < tmpData[0].chart["start_date"].length; idx++) {
+  for (let idx = 0; idx < tmpData[0].chart["profit_rate_data"].length; idx++) {
     const context: IDataFormat = { name: "", kospi: 0 };
     context.name = yearAndMonthToString(graphDate);
     context.kospi = tmpData[0].chart["profit_kospi_data"][idx];

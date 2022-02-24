@@ -8,9 +8,10 @@ import {
   GridRowsProp,
   GridSelectionModel,
 } from "@mui/x-data-grid";
-import { useCallback, useMemo } from "react";
+import { useCallback, useMemo, useState } from "react";
 
 import { IModel } from "../QuantLabPage";
+import QuantLabSaveModal from "../QuantModelCreation/LabModal/LabSaveModal";
 
 interface ModelListProps {
   rows: GridRowsProp;
@@ -39,7 +40,8 @@ export default function QuantModelTable({
   const saveModel = useCallback(
     (id: GridRowId) => () => {
       setTimeout(() => {
-        console.log("saved...?", id);
+        console.log("asdf", id);
+        return <QuantLabSaveModal id={id}></QuantLabSaveModal>;
       });
     },
     []
@@ -95,10 +97,6 @@ export default function QuantModelTable({
   );
 }
 
-/*
- * ANCHOR: constants
- */
-
 const FIELDS = [
   "모델",
   "누적수익률",
@@ -107,7 +105,6 @@ const FIELDS = [
   "최대손실률",
   "편입종목수",
 ]; // NOTE: 적절한가? 잘 모르겠음
-
 /* TODO
  * 데이터 구조, 상수화 등에 대한 고민
  * 폭 개선 (디자인 개선)

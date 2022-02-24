@@ -26,7 +26,7 @@ interface ITmpData {
 }
 
 const data1 = {
-  model_name: "임시1",
+  model_name: "tmp1",
 
   cumulative_return: 15.951946962191434,
   annual_average_return: -2.2114148369615254,
@@ -37,9 +37,9 @@ const data1 = {
     start_date: "2016-12-31T00:00:000Z",
     profit_rate_data: [
       8.31201047,
-      15.13554791,
-      -1.33652122,
-      -1.42408167,
+      1.13554791,
+      -10.33652122,
+      -20.42408167,
       10.42078459,
       8.30569164,
       17.68356243,
@@ -48,18 +48,18 @@ const data1 = {
       5.5424435,
       6.65444626,
       -2.5551126,
-      2.78251544,
-      1.60430797,
+      20.78251544,
+      10.60430797,
       -5.50608302,
       4.48940976,
       7.67556972,
       -0.69061304,
       -11.60413821,
       -10.07694755,
-      -1.09885958,
-      -6.63640131,
+      -10.09885958,
+      -60.63640131,
       -13.46021816,
-      -2.12960605,
+      -20.12960605,
       -4.23366001,
       10.07353571,
       18.49689674,
@@ -157,13 +157,14 @@ const data1 = {
       2160.23,
       2091.64,
       2067.57,
-      2026.46, // 지수 (number)
+      2026.46,
+      2160.23, // 지수 (number)
     ],
   },
 };
 
 const data2 = {
-  model_name: "임시2",
+  model_name: "tmp2",
 
   cumulative_return: 15.951946962191434,
   annual_average_return: -2.2114148369615254,
@@ -173,8 +174,8 @@ const data2 = {
   chart: {
     start_date: "2016-12-31T00:00:000Z",
     profit_rate_data: [
-      10.31201047, 10.13554791, -1.33652122, -1.42408167, 10.42078459,
-      8.30569164, 17.68356243, 9.40703498, -4.15162926, 5.5424435, 6.65444626,
+      10.31201047, 10.13554791, -10.33652122, -10.42408167, 10.42078459,
+      8.30569164, -17.68356243, -9.40703498, 4.15162926, 5.5424435, 6.65444626,
       -2.5551126, 2.78251544, 1.60430797, -5.50608302, 4.48940976, 7.67556972,
       -0.69061304, -11.60413821, -10.07694755, -1.09885958, -6.63640131,
       -13.46021816, -2.12960605, -4.23366001, 10.07353571, 18.49689674,
@@ -206,25 +207,49 @@ interface IDataFormat {
 }
 
 function kospiToBalance(data: ITmpData) {
-  const kospi: number[] = data.chart.profit_kospi_data;
-  const val: number[] = [1000];
+  const kospi: number[] = data.chart.profit_kospi_data.slice();
+  const seed = 1000;
 
-  for (let index = 0; index < kospi.length - 1; index++) {
-    const kospiPropit = kospi[index + 1] / kospi[index];
-    val.push(val[index] * kospiPropit);
+  data.chart.profit_kospi_data[0] = seed;
+  for (let index = 1; index < kospi.length; index++) {
+    const kospiPropit = (kospi[index] - kospi[index - 1]) / kospi[index - 1];
+    data.chart.profit_kospi_data[index] =
+      data.chart.profit_kospi_data[index - 1] +
+      data.chart.profit_kospi_data[index - 1] * kospiPropit;
   }
-  return val;
+  const kospiPropit =
+    (kospi[kospi.length] - kospi[kospi.length - 1]) / kospi[kospi.length - 1];
+  const tmpBalace =
+    data.chart.profit_kospi_data[kospi.length] +
+    (data.chart.profit_kospi_data[kospi.length] * kospiPropit) / 100;
+  data.chart.profit_kospi_data.push(tmpBalace);
 }
 
 function propitToBalance(data: ITmpData) {
-  const propit: number[] = data.chart.profit_rate_data;
-  const val: number[] = [1000];
+  const propit: number[] = data.chart.profit_rate_data.slice();
+  const seed = 1000;
 
   for (let index = 0; index < propit.length; index++) {
-    val.push(val[index] * propit[index]);
+    if (index == 0) {
+      data.chart.profit_rate_data[0] = seed;
+    } else {
+      data.chart.profit_rate_data[index] =
+        data.chart.profit_rate_data[index - 1] +
+        (data.chart.profit_rate_data[index - 1] * propit[index - 1]) / 100;
+    }
   }
-  return val;
+  const tmpBalace =
+    data.chart.profit_rate_data[propit.length - 1] +
+    (data.chart.profit_rate_data[propit.length - 1] *
+      propit[propit.length - 1]) /
+      100;
+  data.chart.profit_rate_data.push(tmpBalace);
 }
+
+kospiToBalance(data1);
+
+propitToBalance(data1);
+propitToBalance(data2);
 
 function yearAndMonthToString(date: Date) {
   let tmp: string;
@@ -234,44 +259,13 @@ function yearAndMonthToString(date: Date) {
   return tmp;
 }
 
-// const graphDataParse = (
-//   start_date: string,
-//   profit_rate_data: number[],
-//   profit_kospi_data: number[]
-// ) => {
-//   const graphDate = new Date(start_date.split("T")[0]);
-
-//   graphDate.setDate(1);
-//   const data: IDataFormat[] = [];
-//   for (let index = 0; index < profit_kospi_data.length; index++) {
-//     const tmpData: IDataFormat = {
-//       name: yearAndMonthToString(graphDate),
-//       kospi: profit_kospi_data[index],
-//       // modalProfit: profit_rate_data[index],
-//       ["model" + index]: profit_rate_data[index],
-//     };
-//     console.log(tmpData);
-//     // console.log(graphDate.toDateString());
-//     graphDate.setMonth(graphDate.getMonth() + 1);
-//     data.push(tmpData);
-//   }
-
-//   return data;
-// };
-
-// const graphData = graphDataParse(
-//   data1.chart.start_date,
-//   data1.chart.profit_rate_data,
-//   data1.chart.profit_kospi_data
-// );
-
 const graphDataParse = (tmpData: ITmpData[]) => {
   const tmp: IDataFormat[] = [];
 
   const graphDate = new Date(tmpData[0].chart["start_date"].split("T")[0]);
   graphDate.setDate(1);
 
-  for (let idx = 0; idx < tmpData[0].chart["start_date"].length; idx++) {
+  for (let idx = 0; idx < tmpData[0].chart["profit_rate_data"].length; idx++) {
     const context: IDataFormat = { name: "", kospi: 0 };
     context.name = yearAndMonthToString(graphDate);
     context.kospi = tmpData[0].chart["profit_kospi_data"][idx];
@@ -289,44 +283,35 @@ const graphDataParse = (tmpData: ITmpData[]) => {
 
 const graphData = graphDataParse([data1, data2]);
 
-// const data = [
-//   {
-//     name: "1990",
-//     kospi: 600,
-//모델1: 100,
-//     모델2: 300
-//   },
-//   {
-//     name: "1995",
-//     kospi: 500,
-//   },
-//   {
-//     name: "2000",
-//     kospi: 900,
-//   },
-//   {
-//     name: "2005",
-//     kospi: 1400,
-//   },
-//   {
-//     name: "2010",
-//     kospi: 1600,
-//   },
-//   {
-//     name: "2015",
-//     kospi: 1900,
-//   },
-//   {
-//     name: "2020",
-//     kospi: 3000,
-//   },
-// ];
-
 const generateColor = (name: string): string => {
-  return "#8884d8";
+  const colors = [
+    "#e51c23",
+    "#e91e63",
+    "#9c27b0",
+    "#673ab7",
+    "#3f51b5",
+    "#5677fc",
+    "#03a9f4",
+    "#00bcd4",
+    "#009688",
+    "#259b24",
+    "#8bc34a",
+    "#afb42b",
+    "#ff9800",
+    "#ff5722",
+    "#795548",
+    "#607d8b",
+  ];
+  let hash = 0;
+  //if (name.length === 0) return hash;
+  for (let i = 0; i < name.length; i++) {
+    hash = name.charCodeAt(i) + ((hash << 5) - hash);
+    hash = hash & hash;
+  }
+  hash = ((hash % colors.length) + colors.length) % colors.length;
+  return colors[hash];
 };
 
-// console.log(graphData, Object.keys(graphData));
 export default class Example extends PureComponent {
   static demoUrl = "https://codesandbox.io/s/simple-line-chart-kec3v";
 
@@ -334,7 +319,6 @@ export default class Example extends PureComponent {
     return (
       <ResponsiveContainer width="100%" height="100%">
         <LineChart
-          // width={500}
           height={300}
           data={graphData}
           margin={{

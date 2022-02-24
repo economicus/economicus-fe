@@ -121,8 +121,9 @@ export interface ICheckboxWithSliderInfo {
   checked: boolean;
   min: number;
   max: number;
-  minValue: number;
-  maxValue: number;
+  // minValue: number;
+  // maxValue: number;
+  values: number[];
 }
 
 /*
@@ -176,8 +177,9 @@ const sliderStateCunstructor = (
     checked: false,
     min: min,
     max: max,
-    minValue: min,
-    maxValue: max,
+    // minValue: min,
+    // maxValue: max,
+    values: [min, max],
   };
 };
 

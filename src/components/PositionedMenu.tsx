@@ -3,9 +3,16 @@ import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
+import { logout } from "../stores/session";
+import { RootState } from "../stores/store";
+
 const PositionedMenu = () => {
+  const dispatch = useDispatch();
+  const { isLoggedin } = useSelector((state: RootState) => state.session); // TODO: 하나씩으로 개선
+
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -57,7 +64,7 @@ const PositionedMenu = () => {
         </MenuItem>
         <MenuItem onClick={handleClose}>
           <Link
-            to={"/QuantLabPage"}
+            to="/QuantLabPage"
             style={{ textDecoration: "none", color: "black" }}
           >
             Quant Lab
@@ -65,18 +72,32 @@ const PositionedMenu = () => {
         </MenuItem>
         <MenuItem onClick={handleClose}>
           <Link
-            to={"/SettingsPage"}
+            to="/SettingsPage"
             style={{ textDecoration: "none", color: "black" }}
           >
             Settings
           </Link>
         </MenuItem>
-        <MenuItem
-          onClick={handleClose}
-          style={{ textDecoration: "none", color: "black" }}
-        >
-          Logout
-        </MenuItem>
+        {isLoggedin ? (
+          <MenuItem
+            onClick={() => {
+              dispatch(logout());
+              handleClose();
+            }}
+            style={{ textDecoration: "none", color: "black" }}
+          >
+            Logout
+          </MenuItem>
+        ) : (
+          <MenuItem onClick={handleClose}>
+            <Link
+              to="/LoginPage"
+              style={{ textDecoration: "none", color: "black" }}
+            >
+              Login
+            </Link>
+          </MenuItem>
+        )}
       </Menu>
     </div>
   );

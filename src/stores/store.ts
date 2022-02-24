@@ -5,7 +5,7 @@ import { counterSlice } from "./session";
 
 export const store = configureStore({
   reducer: {
-    user: counterSlice.reducer,
+    session: counterSlice.reducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
 });

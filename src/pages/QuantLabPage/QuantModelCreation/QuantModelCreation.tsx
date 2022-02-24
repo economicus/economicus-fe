@@ -1,5 +1,5 @@
-import { Button, Paper, Typography } from "@mui/material";
-import { useState } from "react";
+import { Button, Paper, TextField, Typography } from "@mui/material";
+import { useRef, useState } from "react";
 import styled from "styled-components";
 
 import makeQuantModel from "../../../apis/makeQuantModel";
@@ -18,17 +18,38 @@ export default function ModelCreation({ setModelList }: ModelCreationProps) {
   const [financeCondition, setFinanceCondetion] = useState<IFinanceCondition>(
     initialFinanceCondetion
   );
+  // NOTE: ModelName state
+  const [modelName, setModelName] = useState<string>("");
+  const modelNameInputRef = useRef<HTMLDivElement>(null);
+
   // const [chartInfo, setChartInfo] = useState<IChartInfo>(initialChartInfo);
 
   // NOTE: handlers
   const onClickMakeButton = async () => {
+    if (modelName.length === 0) {
+      modelNameInputRef.current?.focus();
+      return;
+    }
     const responseData = await makeQuantModel();
     setModelList((prev) => [...prev, { id: +new Date(), ...responseData }]);
+  };
+  const modelNameHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setModelName(event.target.value);
   };
 
   return (
     <MainContainer variant="outlined">
       <Typography variant="h5">Quant Lab</Typography>
+      <TextField
+        id="model-name"
+        label="모델명"
+        variant="outlined"
+        size="small"
+        value={modelName}
+        onChange={modelNameHandler}
+        sx={{ mx: 1, mt: 1 }}
+        inputRef={modelNameInputRef}
+      />
 
       <ButtonsContainer>
         <ConditionButtonsContainer>

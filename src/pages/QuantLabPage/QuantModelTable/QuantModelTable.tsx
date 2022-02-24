@@ -1,4 +1,4 @@
-import { Delete, Save } from "@material-ui/icons";
+import { Delete } from "@material-ui/icons";
 import {
   DataGrid,
   GridActionsCellItem,
@@ -11,6 +11,7 @@ import {
 import { useCallback, useMemo } from "react";
 
 import { IModel } from "../QuantLabPage";
+import QuantLabSaveModal from "../QuantModelCreation/LabModal/LabSaveModal";
 
 interface ModelListProps {
   rows: GridRowsProp;
@@ -39,7 +40,7 @@ export default function QuantModelTable({
   const saveModel = useCallback(
     (id: GridRowId) => () => {
       setTimeout(() => {
-        console.log("saved...?", id);
+        console.log("asdf", id);
       });
     },
     []
@@ -57,12 +58,13 @@ export default function QuantModelTable({
             onClick={deleteModel(params.id)}
             label="Delete"
           />,
-          <GridActionsCellItem
-            icon={<Save />}
-            onClick={saveModel(params.id)}
-            label="Save"
-            key={2}
-          />,
+          //   <GridActionsCellItem
+          //     icon={<Save />}
+          //     onClick={saveModel(params.id)}
+          //     label="Save"
+          //     key={2}
+          //   />,
+          <QuantLabSaveModal id={params.id} />,
         ],
       },
     ],
@@ -95,10 +97,6 @@ export default function QuantModelTable({
   );
 }
 
-/*
- * ANCHOR: constants
- */
-
 const FIELDS = [
   "모델",
   "누적수익률",
@@ -107,7 +105,6 @@ const FIELDS = [
   "최대손실률",
   "편입종목수",
 ]; // NOTE: 적절한가? 잘 모르겠음
-
 /* TODO
  * 데이터 구조, 상수화 등에 대한 고민
  * 폭 개선 (디자인 개선)

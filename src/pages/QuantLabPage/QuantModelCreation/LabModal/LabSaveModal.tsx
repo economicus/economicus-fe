@@ -1,7 +1,8 @@
+import { Save } from "@material-ui/icons";
 import ModalUnstyled from "@mui/base/ModalUnstyled";
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { styled } from "@mui/system";
-import { GridRowId } from "@mui/x-data-grid";
+import { GridActionsCellItem, GridRowId } from "@mui/x-data-grid";
 import { useState } from "react";
 import * as React from "react";
 
@@ -13,19 +14,21 @@ export default function QuantLabSaveModal({ id }: QuantLabModalProps) {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  console.log("asdfasdfasdf", id);
-  handleOpen;
   return (
     <>
+      <GridActionsCellItem
+        icon={<Save />}
+        onClick={handleOpen}
+        label="Save"
+        key={2}
+      />
       <StyledModal
-        // aria-labelledby="unstyled-modal-title"
-        // aria-describedby="unstyled-modal-description"
         open={open}
         onClose={handleClose}
         BackdropComponent={Backdrop}
       >
         <Box sx={style}>
-          <Typography>"hello"</Typography>
+          <Typography>{id}</Typography>
         </Box>
       </StyledModal>
     </>

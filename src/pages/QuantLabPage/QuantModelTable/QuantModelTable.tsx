@@ -1,4 +1,4 @@
-import { Delete, Save } from "@material-ui/icons";
+import { Delete } from "@material-ui/icons";
 import {
   DataGrid,
   GridActionsCellItem,
@@ -8,7 +8,7 @@ import {
   GridRowsProp,
   GridSelectionModel,
 } from "@mui/x-data-grid";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo } from "react";
 
 import { IModel } from "../QuantLabPage";
 import QuantLabSaveModal from "../QuantModelCreation/LabModal/LabSaveModal";
@@ -41,7 +41,6 @@ export default function QuantModelTable({
     (id: GridRowId) => () => {
       setTimeout(() => {
         console.log("asdf", id);
-        return <QuantLabSaveModal id={id}></QuantLabSaveModal>;
       });
     },
     []
@@ -59,12 +58,13 @@ export default function QuantModelTable({
             onClick={deleteModel(params.id)}
             label="Delete"
           />,
-          <GridActionsCellItem
-            icon={<Save />}
-            onClick={saveModel(params.id)}
-            label="Save"
-            key={2}
-          />,
+          //   <GridActionsCellItem
+          //     icon={<Save />}
+          //     onClick={saveModel(params.id)}
+          //     label="Save"
+          //     key={2}
+          //   />,
+          <QuantLabSaveModal id={params.id} />,
         ],
       },
     ],

@@ -18,7 +18,7 @@ interface IActivities {
   [key: string]: MinAndMax;
 }
 
-export interface createQuantModelParam {
+export interface createQuantModelBody {
   name: string;
 
   main_sector: string[];
@@ -50,17 +50,21 @@ export interface createQuantModelParam {
   end_date: string;
 }
 
-export default async function createQuantModel(param: createQuantModelParam) {
+export default async function createQuantModel(
+  body: createQuantModelBody,
+  token: string
+) {
   // NOTE: useEffect 등의 테스트를 위해, setTimeout을 활용해 만든 임시 api 함수입니다.
 
   // await setTimeout(() => console.log("data fetched!"), 3000);
   // await sleep(1000);
-  console.log(param);
+  console.log("create api test", body, token);
 
   try {
-    const res = await axios.post(endpoint + "/quants/quant", param, {
+    const res = await axios.post(endpoint + "/quants/quant", body, {
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
     });
 

@@ -1,10 +1,12 @@
 import { Button, Paper, TextField, Typography } from "@mui/material";
 import { useRef, useState } from "react";
+import { useSelector } from "react-redux";
 import styled from "styled-components";
 
 import createQuantModel, {
-  createQuantModelParam,
+  createQuantModelBody,
 } from "../../../apis/createQuantModel";
+import { RootState } from "../../../stores/store";
 import { IModel } from "../QuantLabPage";
 import LabModal from "./LabModal/LabModal";
 import LabModalWithSlider from "./LabModal/LabModalWithSlider";
@@ -14,6 +16,8 @@ interface ModelCreationProps {
 }
 
 export default function ModelCreation({ setModelList }: ModelCreationProps) {
+  const token = useSelector((state: RootState) => state.session.token);
+
   // NOTE: ButtonsContainer states
   const [businessArea, setBusinessArea] =
     useState<IBusinessArea>(initialBusinessArea);
@@ -54,18 +58,21 @@ export default function ModelCreation({ setModelList }: ModelCreationProps) {
     // console.log(activities);
 
     try {
-      const responseData = await createQuantModel({
-        name: modelName,
-        main_sector: Object.entries(businessArea)
-          .filter(([, value]) => value === true)
-          .map(([key]) => key),
-        ...notActivitiesValue,
-        activities: {
-          ...activitiesValue,
-        },
-        start_date: "2012-04-23T18:25:43.511Z",
-        end_date: "2012-04-23T18:25:43.511Z",
-      } as createQuantModelParam);
+      const responseData = await createQuantModel(
+        {
+          name: modelName,
+          main_sector: Object.entries(businessArea)
+            .filter(([, value]) => value === true)
+            .map(([key]) => key),
+          ...notActivitiesValue,
+          activities: {
+            ...activitiesValue,
+          },
+          start_date: "2012-04-23T18:25:43.511Z",
+          end_date: "2012-04-23T18:25:43.511Z",
+        } as createQuantModelBody,
+        token
+      );
 
       if (responseData instanceof Error) throw Error("api error");
 

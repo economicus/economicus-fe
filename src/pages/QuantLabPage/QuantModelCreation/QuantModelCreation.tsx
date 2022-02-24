@@ -2,7 +2,9 @@ import { Button, Paper, TextField, Typography } from "@mui/material";
 import { useRef, useState } from "react";
 import styled from "styled-components";
 
-import makeQuantModel from "../../../apis/makeQuantModel";
+import createQuantModel, {
+  createQuantModelParam,
+} from "../../../apis/createQuantModel";
 import { IModel } from "../QuantLabPage";
 import LabModal from "./LabModal/LabModal";
 import LabModalWithSlider from "./LabModal/LabModalWithSlider";
@@ -30,7 +32,38 @@ export default function ModelCreation({ setModelList }: ModelCreationProps) {
       modelNameInputRef.current?.focus();
       return;
     }
-    const responseData = await makeQuantModel();
+
+    const notActivitiesValue = Object.fromEntries(
+      Object.entries(financeCondition)
+        .filter(([key]) => !key.startsWith("activities_"))
+        .map(([key, value]) => [
+          key,
+          { min: value.values[0], max: value.values[1] },
+        ])
+    );
+
+    const activitiesValue = Object.fromEntries(
+      Object.entries(financeCondition)
+        .filter(([key]) => key.startsWith("activities_"))
+        .map(([key, value]) => [
+          key.split("_")[1],
+          { min: value.values[0], max: value.values[1] },
+        ])
+    );
+
+    // console.log(activities);
+
+    const responseData = await createQuantModel({
+      name: modelName,
+      main_sector: Object.entries(businessArea)
+        .filter(([, value]) => value === true)
+        .map(([key]) => key),
+      ...notActivitiesValue,
+      activities: {
+        ...activitiesValue,
+      },
+    } as createQuantModelParam);
+
     setModelList((prev) => [...prev, { id: +new Date(), ...responseData }]);
   };
   const modelNameHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -100,18 +133,28 @@ export interface IBusinessArea {
 export interface IFinanceCondition {
   [key: string]: ICheckboxWithSliderInfo;
 
-  PER: ICheckboxWithSliderInfo;
-  PBR: ICheckboxWithSliderInfo;
-  PSR: ICheckboxWithSliderInfo;
-  PCR: ICheckboxWithSliderInfo;
-  시가배당률: ICheckboxWithSliderInfo;
-  배당성향: ICheckboxWithSliderInfo;
-  "매출액 증가율": ICheckboxWithSliderInfo;
-  "순이익 증가율": ICheckboxWithSliderInfo;
-  ROE: ICheckboxWithSliderInfo;
-  ROA: ICheckboxWithSliderInfo;
-  부채비율: ICheckboxWithSliderInfo;
-}
+  net_revenue: ICheckboxWithSliderInfo;
+  net_revenue_rate: ICheckboxWithSliderInfo;
+  net_profit: ICheckboxWithSliderInfo;
+  net_profit_rate: ICheckboxWithSliderInfo;
+  de_ratio: ICheckboxWithSliderInfo;
+  per: ICheckboxWithSliderInfo;
+  psr: ICheckboxWithSliderInfo;
+  pbr: ICheckboxWithSliderInfo;
+  pcr: ICheckboxWithSliderInfo;
+  dividend_yield: ICheckboxWithSliderInfo;
+  dividend_payout_ratio: ICheckboxWithSliderInfo;
+  roa: ICheckboxWithSliderInfo;
+  roe: ICheckboxWithSliderInfo;
+  market_cap: ICheckboxWithSliderInfo;
+  activities_operating: ICheckboxWithSliderInfo;
+  activities_investing: ICheckboxWithSliderInfo;
+  activities_financing: ICheckboxWithSliderInfo;
+
+  // acti: ICheckboxWithSliderInfo;
+  // ROA: ICheckboxWithSliderInfo;
+  // 부채비율: ICheckboxWithSliderInfo;
+} // TODO: chart info에 들어갈 항목들이 뭘까? 그리고 한글로는 뭐라고 나타내야 하나?(몰라서 api 변수명 그대로 함)
 
 // export interface IChartInfo {
 
@@ -197,17 +240,23 @@ const initialBusinessArea: IBusinessArea = {
 };
 
 const initialFinanceCondetion = {
-  PER: sliderStateCunstructor(-100, 100),
-  PBR: sliderStateCunstructor(0, 100),
-  PSR: sliderStateCunstructor(-100, 100),
-  PCR: sliderStateCunstructor(-100, 100),
-  시가배당률: sliderStateCunstructor(0, 100),
-  배당성향: sliderStateCunstructor(-100, 100),
-  "매출액 증가율": sliderStateCunstructor(-100, 100),
-  "순이익 증가율": sliderStateCunstructor(-100, 100),
-  ROE: sliderStateCunstructor(-100, 100),
-  ROA: sliderStateCunstructor(-100, 100),
-  부채비율: sliderStateCunstructor(0, 2000),
+  net_revenue: sliderStateCunstructor(-100, 100),
+  net_revenue_rate: sliderStateCunstructor(-100, 100),
+  net_profit: sliderStateCunstructor(-100, 100),
+  net_profit_rate: sliderStateCunstructor(-100, 100),
+  de_ratio: sliderStateCunstructor(-100, 100),
+  per: sliderStateCunstructor(-100, 100),
+  psr: sliderStateCunstructor(-100, 100),
+  pbr: sliderStateCunstructor(-100, 100),
+  pcr: sliderStateCunstructor(-100, 100),
+  dividend_yield: sliderStateCunstructor(-100, 100),
+  dividend_payout_ratio: sliderStateCunstructor(-100, 100),
+  roa: sliderStateCunstructor(-100, 100),
+  roe: sliderStateCunstructor(-100, 100),
+  market_cap: sliderStateCunstructor(-100, 100),
+  activities_operating: sliderStateCunstructor(-100, 100),
+  activities_investing: sliderStateCunstructor(-100, 100),
+  activities_financing: sliderStateCunstructor(-100, 100),
 };
 
 // const initialChartInfo = {

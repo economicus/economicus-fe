@@ -1,4 +1,11 @@
-import { Button, Paper, TextField, Typography } from "@mui/material";
+import {
+  Alert,
+  Button,
+  Paper,
+  Snackbar,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
@@ -17,6 +24,8 @@ interface ModelCreationProps {
 
 export default function ModelCreation({ setModelList }: ModelCreationProps) {
   const token = useSelector((state: RootState) => state.session.token);
+
+  const [error, setError] = useState<string>("");
 
   // NOTE: ButtonsContainer states
   const [businessArea, setBusinessArea] =
@@ -57,6 +66,11 @@ export default function ModelCreation({ setModelList }: ModelCreationProps) {
 
     // console.log(activities);
 
+    if (!token) {
+      setError("로그인이 필요한 기능입니다.");
+      return;
+    }
+
     try {
       const responseData = await createQuantModel(
         {
@@ -78,7 +92,8 @@ export default function ModelCreation({ setModelList }: ModelCreationProps) {
 
       setModelList((prev) => [...prev, { id: +new Date(), ...responseData }]);
     } catch (e) {
-      console.error("QuantModelCreation:", e);
+      // console.error("QuantModelCreation:", e);
+      setError((e as Error).message);
     }
   };
   const modelNameHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -86,43 +101,57 @@ export default function ModelCreation({ setModelList }: ModelCreationProps) {
   };
 
   return (
-    <MainContainer variant="outlined">
-      <Typography variant="h5">Quant Lab</Typography>
-      <TextField
-        id="model-name"
-        label="모델명"
-        variant="outlined"
-        size="small"
-        value={modelName}
-        onChange={modelNameHandler}
-        sx={{ mx: 1, mt: 1 }}
-        inputRef={modelNameInputRef}
-      />
+    <>
+      <MainContainer variant="outlined">
+        {error && (
+          <Snackbar
+            open={!!error}
+            autoHideDuration={6000}
+            onClose={() => {
+              setError("");
+            }}
+          >
+            <Alert severity="error">{error}</Alert>
+          </Snackbar>
+        )}
 
-      <ButtonsContainer>
-        <ConditionButtonsContainer>
-          <LabModal
-            btnName="사업분야"
-            state={businessArea}
-            setState={setBusinessArea}
-          />
-          <LabModalWithSlider
-            btnName="재무상태"
-            state={financeCondition}
-            setState={setFinanceCondetion}
-          />
-          {/* <LabModalWithSlider
+        <Typography variant="h5">Quant Lab</Typography>
+        <TextField
+          id="model-name"
+          label="모델명"
+          variant="outlined"
+          size="small"
+          value={modelName}
+          onChange={modelNameHandler}
+          sx={{ mx: 1, mt: 1 }}
+          inputRef={modelNameInputRef}
+        />
+
+        <ButtonsContainer>
+          <ConditionButtonsContainer>
+            <LabModal
+              btnName="사업분야"
+              state={businessArea}
+              setState={setBusinessArea}
+            />
+            <LabModalWithSlider
+              btnName="재무상태"
+              state={financeCondition}
+              setState={setFinanceCondetion}
+            />
+            {/* <LabModalWithSlider
           btnName="차트정보"
           state={chartInfo}
           setState={setChartInfo}
         /> */}
-        </ConditionButtonsContainer>
+          </ConditionButtonsContainer>
 
-        <Button sx={{ m: 1 }} variant="outlined" onClick={onClickMakeButton}>
-          make model
-        </Button>
-      </ButtonsContainer>
-    </MainContainer>
+          <Button sx={{ m: 1 }} variant="outlined" onClick={onClickMakeButton}>
+            make model
+          </Button>
+        </ButtonsContainer>
+      </MainContainer>
+    </>
   );
 }
 

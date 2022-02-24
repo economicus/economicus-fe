@@ -339,7 +339,6 @@ export default class Example extends PureComponent {
               console.log(val);
               return (
                 <Line
-                  type="monotone"
                   dataKey={val}
                   stroke={generateColor(val)}
                   activeDot={{ r: 8 }}

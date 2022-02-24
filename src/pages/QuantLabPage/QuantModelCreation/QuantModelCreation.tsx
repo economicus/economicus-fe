@@ -53,18 +53,26 @@ export default function ModelCreation({ setModelList }: ModelCreationProps) {
 
     // console.log(activities);
 
-    const responseData = await createQuantModel({
-      name: modelName,
-      main_sector: Object.entries(businessArea)
-        .filter(([, value]) => value === true)
-        .map(([key]) => key),
-      ...notActivitiesValue,
-      activities: {
-        ...activitiesValue,
-      },
-    } as createQuantModelParam);
+    try {
+      const responseData = await createQuantModel({
+        name: modelName,
+        main_sector: Object.entries(businessArea)
+          .filter(([, value]) => value === true)
+          .map(([key]) => key),
+        ...notActivitiesValue,
+        activities: {
+          ...activitiesValue,
+        },
+        start_date: "2012-04-23T18:25:43.511Z",
+        end_date: "2012-04-23T18:25:43.511Z",
+      } as createQuantModelParam);
 
-    setModelList((prev) => [...prev, { id: +new Date(), ...responseData }]);
+      if (responseData instanceof Error) throw Error("api error");
+
+      setModelList((prev) => [...prev, { id: +new Date(), ...responseData }]);
+    } catch (e) {
+      console.error("QuantModelCreation:", e);
+    }
   };
   const modelNameHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     setModelName(event.target.value);

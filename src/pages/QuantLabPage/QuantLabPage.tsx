@@ -12,8 +12,6 @@ const QuantLabPage = () => {
   const [modelList, setModelList] = useState<IModel[]>([]);
   const [selectionModel, setSelectionModel] = useState<GridSelectionModel>([]); // NOTE: 선택된 모델 id의 배열. 이를 통해 그래프 렌더링 예정
 
-  console.log(modelList);
-
   return (
     <MainContainer>
       <StyledDiv>

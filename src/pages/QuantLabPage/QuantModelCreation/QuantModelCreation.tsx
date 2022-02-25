@@ -75,7 +75,7 @@ export default function ModelCreation({ setModelList }: ModelCreationProps) {
       const responseData = await createQuantModel(
         {
           name: modelName,
-          main_sector: Object.entries(businessArea)
+          main_sectors: Object.entries(businessArea)
             .filter(([, value]) => value === true)
             .map(([key]) => key),
           ...notActivitiesValue,

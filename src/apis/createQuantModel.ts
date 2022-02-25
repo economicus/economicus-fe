@@ -21,7 +21,7 @@ interface IActivities {
 export interface createQuantModelBody {
   name: string;
 
-  main_sector: string[];
+  main_sectors: string[];
 
   net_revenue: MinAndMax;
   net_revenue_rate: MinAndMax;

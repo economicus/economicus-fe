@@ -10,6 +10,8 @@ import {
   YAxis,
 } from "recharts";
 
+import { tmpModel } from "../pages/QuantLabPage/QuantModelViewer/QuantModelViewer";
+
 interface ITmpData {
   model_name: string; // 임시
 
@@ -259,19 +261,25 @@ function yearAndMonthToString(date: Date) {
   return tmp;
 }
 
-const graphDataParse = (tmpData: ITmpData[]) => {
+const graphDataParse = (tmpData: tmpModel[]) => {
+  if (!tmpData.length) return [];
+
   const tmp: IDataFormat[] = [];
 
-  const graphDate = new Date(tmpData[0].chart["start_date"].split("T")[0]);
+  const graphDate = new Date(tmpData[0].chart_data["start_date"].split("T")[0]);
   graphDate.setDate(1);
 
-  for (let idx = 0; idx < tmpData[0].chart["profit_rate_data"].length; idx++) {
+  for (
+    let idx = 0;
+    idx < tmpData[0].chart_data["profit_rate_data"].length;
+    idx++
+  ) {
     const context: IDataFormat = { name: "", kospi: 0 };
     context.name = yearAndMonthToString(graphDate);
-    context.kospi = tmpData[0].chart["profit_kospi_data"][idx];
+    context.kospi = tmpData[0].chart_data["profit_kospi_data"][idx];
 
     tmpData.forEach((data) => {
-      context[data["model_name"]] = data.chart.profit_rate_data[idx];
+      context[data["model_name"]] = data.chart_data.profit_rate_data[idx];
     });
 
     graphDate.setMonth(graphDate.getMonth() + 1);
@@ -281,7 +289,7 @@ const graphDataParse = (tmpData: ITmpData[]) => {
   return tmp; // {name: string, kospi: number, 모델명:..., 모델명:...,}
 };
 
-const graphData = graphDataParse([data1, data2]);
+// const graphData = graphDataParse([data1, data2]);
 
 const generateColor = (name: string): string => {
   const colors = [
@@ -312,28 +320,37 @@ const generateColor = (name: string): string => {
   return colors[hash];
 };
 
-export default class Example extends PureComponent {
-  static demoUrl = "https://codesandbox.io/s/simple-line-chart-kec3v";
+interface Props {
+  models: tmpModel[];
+}
 
-  render() {
-    return (
-      <ResponsiveContainer width="100%" height="100%">
-        <LineChart
-          height={300}
-          data={graphData}
-          margin={{
-            top: 20,
-            right: 20,
-            left: 0,
-            bottom: 5,
-          }}
-        >
-          <CartesianGrid vertical={false} strokeDasharray="3 3" />
-          <XAxis dataKey="name" />
-          <YAxis />
-          <Tooltip />
-          <Legend />
-          {Object.keys(graphData[0])
+export default function Graph({ models }: Props) {
+  // static demoUrl = "https://codesandbox.io/s/simple-line-chart-kec3v";
+
+  const graphData = graphDataParse(models);
+
+  if (!graphData.length)
+    return <span>선택된 모델이 없습니다! (아직 미처리)</span>;
+
+  return (
+    <ResponsiveContainer width="100%" height="100%">
+      <LineChart
+        height={300}
+        data={graphData}
+        margin={{
+          top: 20,
+          right: 20,
+          left: 0,
+          bottom: 5,
+        }}
+      >
+        <CartesianGrid vertical={false} strokeDasharray="3 3" />
+        <XAxis dataKey="name" />
+        <YAxis />
+        <Tooltip />
+        <Legend />
+        {graphData.length &&
+          Object.keys(graphData[0])
             .filter((val) => val !== "name")
             .map((val, idx) => {
               console.log(val);
@@ -347,8 +364,7 @@ export default class Example extends PureComponent {
                 />
               );
             })}
-        </LineChart>
-      </ResponsiveContainer>
-    );
-  }
+      </LineChart>
+    </ResponsiveContainer>
+  );
 }

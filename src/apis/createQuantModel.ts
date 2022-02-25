@@ -58,7 +58,6 @@ export default async function createQuantModel(
 
   // await setTimeout(() => console.log("data fetched!"), 3000);
   // await sleep(1000);
-  console.log("create api test", body, token);
 
   try {
     const res = await axios.post(endpoint + "/quants/quant", body, {

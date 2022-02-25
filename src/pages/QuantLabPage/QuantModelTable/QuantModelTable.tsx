@@ -98,12 +98,12 @@ export default function QuantModelTable({
 }
 
 const FIELDS = [
-  "모델",
-  "누적수익률",
-  "연평균수익",
-  "승률",
-  "최대손실률",
-  "편입종목수",
+  "model_name",
+  "cumulative_return",
+  "annual_average_return",
+  "winning_percentage",
+  "max_loss_rate",
+  "holdings_count",
 ]; // NOTE: 적절한가? 잘 모르겠음
 /* TODO
  * 데이터 구조, 상수화 등에 대한 고민

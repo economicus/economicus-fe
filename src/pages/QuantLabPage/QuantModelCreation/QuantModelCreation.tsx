@@ -82,15 +82,21 @@ export default function ModelCreation({ setModelList }: ModelCreationProps) {
           activities: {
             ...activitiesValue,
           },
-          start_date: "2012-04-23T18:25:43.511Z",
-          end_date: "2012-04-23T18:25:43.511Z",
+          start_date: "2016-04-30T00:00:00.000Z",
+          end_date: "2021-04-30T00:00:00.000Z",
         } as createQuantModelBody,
         token
       );
 
-      if (responseData instanceof Error) throw Error("api error");
+      if (responseData instanceof Error)
+        throw Error((responseData as Error).message);
 
-      setModelList((prev) => [...prev, { id: +new Date(), ...responseData }]);
+      console.log("hey!", responseData);
+      setModelList((prev) => [
+        ...prev,
+        { id: +new Date(), model_name: modelName, ...responseData },
+      ]);
+      setModelName("");
     } catch (e) {
       // console.error("QuantModelCreation:", e);
       setError((e as Error).message);

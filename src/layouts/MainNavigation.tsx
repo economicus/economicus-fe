@@ -38,9 +38,10 @@ const MainNavigation = () => {
             ml: 1,
             "&:hover": { backgroundColor: "transparent" },
           }}
-          href="/"
         >
-          <Home />
+          <Link to="/">
+            <Home />
+          </Link>
         </IconButton>
         <IconButton
           size="large"
@@ -52,7 +53,6 @@ const MainNavigation = () => {
             ml: 1,
             "&:hover": { backgroundColor: "transparent" },
           }}
-          href="/"
         >
           <People />
         </IconButton>
@@ -66,7 +66,6 @@ const MainNavigation = () => {
             ml: 1,
             "&:hover": { backgroundColor: "transparent" },
           }}
-          href="/"
         >
           <ChatBubble />
         </IconButton>
@@ -80,7 +79,6 @@ const MainNavigation = () => {
             ml: 1,
             "&:hover": { backgroundColor: "transparent" },
           }}
-          href="/"
         >
           <Notifications />
         </IconButton>

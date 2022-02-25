@@ -1,8 +1,19 @@
-import { Button, Paper, Typography } from "@mui/material";
-import { useState } from "react";
+import {
+  Alert,
+  Button,
+  Paper,
+  Snackbar,
+  TextField,
+  Typography,
+} from "@mui/material";
+import { useRef, useState } from "react";
+import { useSelector } from "react-redux";
 import styled from "styled-components";
 
-import makeQuantModel from "../../../apis/makeQuantModel";
+import createQuantModel, {
+  createQuantModelBody,
+} from "../../../apis/createQuantModel";
+import { RootState } from "../../../stores/store";
 import { IModel } from "../QuantLabPage";
 import LabModal from "./LabModal/LabModal";
 import LabModalWithSlider from "./LabModal/LabModalWithSlider";
@@ -12,48 +23,143 @@ interface ModelCreationProps {
 }
 
 export default function ModelCreation({ setModelList }: ModelCreationProps) {
+  const token = useSelector((state: RootState) => state.session.token);
+
+  const [error, setError] = useState<string>("");
+
   // NOTE: ButtonsContainer states
   const [businessArea, setBusinessArea] =
     useState<IBusinessArea>(initialBusinessArea);
   const [financeCondition, setFinanceCondetion] = useState<IFinanceCondition>(
     initialFinanceCondetion
   );
+  // NOTE: ModelName state
+  const [[modelName, firstTry], setModelName] = useState(["", 1]);
+  const modelNameInputRef = useRef<HTMLDivElement>(null);
+
   // const [chartInfo, setChartInfo] = useState<IChartInfo>(initialChartInfo);
 
   // NOTE: handlers
   const onClickMakeButton = async () => {
-    const responseData = await makeQuantModel();
-    setModelList((prev) => [...prev, { id: +new Date(), ...responseData }]);
+    if (modelName.length === 0) {
+      modelNameInputRef.current?.focus();
+      setModelName(["", 0]);
+      return;
+    }
+
+    const notActivitiesValue = Object.fromEntries(
+      Object.entries(financeCondition)
+        .filter(([key]) => !key.startsWith("activities_"))
+        .map(([key, value]) => [
+          key,
+          { min: value.values[0], max: value.values[1] },
+        ])
+    );
+
+    const activitiesValue = Object.fromEntries(
+      Object.entries(financeCondition)
+        .filter(([key]) => key.startsWith("activities_"))
+        .map(([key, value]) => [
+          key.split("_")[1],
+          { min: value.values[0], max: value.values[1] },
+        ])
+    );
+
+    // console.log(activities);
+
+    if (!token) {
+      setError("로그인이 필요한 기능입니다.");
+      return;
+    }
+
+    try {
+      const responseData = await createQuantModel(
+        {
+          name: modelName,
+          main_sectors: Object.entries(businessArea)
+            .filter(([, value]) => value === true)
+            .map(([key]) => key),
+          ...notActivitiesValue,
+          activities: {
+            ...activitiesValue,
+          },
+          start_date: "2016-04-30T00:00:00.000Z",
+          end_date: "2021-04-30T00:00:00.000Z",
+        } as createQuantModelBody,
+        token
+      );
+
+      if (responseData instanceof Error)
+        throw Error((responseData as Error).message);
+
+      console.log("hey!", responseData);
+      setModelList((prev) => [
+        ...prev,
+        { id: +new Date(), model_name: modelName, ...responseData },
+      ]);
+      setModelName(["", 1]);
+    } catch (e) {
+      // console.error("QuantModelCreation:", e);
+      setError((e as Error).message);
+    }
+  };
+  const modelNameHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setModelName([event.target.value, 1]);
   };
 
   return (
-    <MainContainer variant="outlined">
-      <Typography variant="h5">Quant Lab</Typography>
+    <>
+      <MainContainer variant="outlined">
+        {error && (
+          <Snackbar
+            open={!!error}
+            autoHideDuration={6000}
+            onClose={() => {
+              setError("");
+            }}
+          >
+            <Alert severity="error">{error}</Alert>
+          </Snackbar>
+        )}
 
-      <ButtonsContainer>
-        <ConditionButtonsContainer>
-          <LabModal
-            btnName="사업분야"
-            state={businessArea}
-            setState={setBusinessArea}
-          />
-          <LabModalWithSlider
-            btnName="재무상태"
-            state={financeCondition}
-            setState={setFinanceCondetion}
-          />
-          {/* <LabModalWithSlider
+        <Typography variant="h5">Quant Lab</Typography>
+        <TextField
+          id="model-name"
+          label="모델명"
+          variant="outlined"
+          size="small"
+          value={modelName}
+          onChange={modelNameHandler}
+          sx={{ mx: 1, mt: 1 }}
+          error={modelName === "" && firstTry === 0}
+          inputRef={modelNameInputRef}
+        />
+
+        <ButtonsContainer>
+          <ConditionButtonsContainer>
+            <LabModal
+              btnName="사업분야"
+              state={businessArea}
+              setState={setBusinessArea}
+            />
+            <LabModalWithSlider
+              btnName="재무상태"
+              state={financeCondition}
+              setState={setFinanceCondetion}
+            />
+            {/* <LabModalWithSlider
           btnName="차트정보"
           state={chartInfo}
           setState={setChartInfo}
         /> */}
-        </ConditionButtonsContainer>
+          </ConditionButtonsContainer>
 
-        <Button sx={{ m: 1 }} variant="outlined" onClick={onClickMakeButton}>
-          make model
-        </Button>
-      </ButtonsContainer>
-    </MainContainer>
+          <Button sx={{ m: 1 }} variant="outlined" onClick={onClickMakeButton}>
+            make model
+          </Button>
+        </ButtonsContainer>
+      </MainContainer>
+    </>
   );
 }
 
@@ -79,18 +185,28 @@ export interface IBusinessArea {
 export interface IFinanceCondition {
   [key: string]: ICheckboxWithSliderInfo;
 
-  PER: ICheckboxWithSliderInfo;
-  PBR: ICheckboxWithSliderInfo;
-  PSR: ICheckboxWithSliderInfo;
-  PCR: ICheckboxWithSliderInfo;
-  시가배당률: ICheckboxWithSliderInfo;
-  배당성향: ICheckboxWithSliderInfo;
-  "매출액 증가율": ICheckboxWithSliderInfo;
-  "순이익 증가율": ICheckboxWithSliderInfo;
-  ROE: ICheckboxWithSliderInfo;
-  ROA: ICheckboxWithSliderInfo;
-  부채비율: ICheckboxWithSliderInfo;
-}
+  net_revenue: ICheckboxWithSliderInfo;
+  net_revenue_rate: ICheckboxWithSliderInfo;
+  net_profit: ICheckboxWithSliderInfo;
+  net_profit_rate: ICheckboxWithSliderInfo;
+  de_ratio: ICheckboxWithSliderInfo;
+  per: ICheckboxWithSliderInfo;
+  psr: ICheckboxWithSliderInfo;
+  pbr: ICheckboxWithSliderInfo;
+  pcr: ICheckboxWithSliderInfo;
+  dividend_yield: ICheckboxWithSliderInfo;
+  dividend_payout_ratio: ICheckboxWithSliderInfo;
+  roa: ICheckboxWithSliderInfo;
+  roe: ICheckboxWithSliderInfo;
+  market_cap: ICheckboxWithSliderInfo;
+  activities_operating: ICheckboxWithSliderInfo;
+  activities_investing: ICheckboxWithSliderInfo;
+  activities_financing: ICheckboxWithSliderInfo;
+
+  // acti: ICheckboxWithSliderInfo;
+  // ROA: ICheckboxWithSliderInfo;
+  // 부채비율: ICheckboxWithSliderInfo;
+} // TODO: chart info에 들어갈 항목들이 뭘까? 그리고 한글로는 뭐라고 나타내야 하나?(몰라서 api 변수명 그대로 함)
 
 // export interface IChartInfo {
 
@@ -100,8 +216,9 @@ export interface ICheckboxWithSliderInfo {
   checked: boolean;
   min: number;
   max: number;
-  minValue: number;
-  maxValue: number;
+  // minValue: number;
+  // maxValue: number;
+  values: number[];
 }
 
 /*
@@ -155,8 +272,9 @@ const sliderStateCunstructor = (
     checked: false,
     min: min,
     max: max,
-    minValue: min,
-    maxValue: max,
+    // minValue: min,
+    // maxValue: max,
+    values: [min, max],
   };
 };
 
@@ -174,17 +292,23 @@ const initialBusinessArea: IBusinessArea = {
 };
 
 const initialFinanceCondetion = {
-  PER: sliderStateCunstructor(-100, 100),
-  PBR: sliderStateCunstructor(0, 100),
-  PSR: sliderStateCunstructor(-100, 100),
-  PCR: sliderStateCunstructor(-100, 100),
-  시가배당률: sliderStateCunstructor(0, 100),
-  배당성향: sliderStateCunstructor(-100, 100),
-  "매출액 증가율": sliderStateCunstructor(-100, 100),
-  "순이익 증가율": sliderStateCunstructor(-100, 100),
-  ROE: sliderStateCunstructor(-100, 100),
-  ROA: sliderStateCunstructor(-100, 100),
-  부채비율: sliderStateCunstructor(0, 2000),
+  net_revenue: sliderStateCunstructor(-100, 100),
+  net_revenue_rate: sliderStateCunstructor(-100, 100),
+  net_profit: sliderStateCunstructor(-100, 100),
+  net_profit_rate: sliderStateCunstructor(-100, 100),
+  de_ratio: sliderStateCunstructor(-100, 100),
+  per: sliderStateCunstructor(-100, 100),
+  psr: sliderStateCunstructor(-100, 100),
+  pbr: sliderStateCunstructor(-100, 100),
+  pcr: sliderStateCunstructor(-100, 100),
+  dividend_yield: sliderStateCunstructor(-100, 100),
+  dividend_payout_ratio: sliderStateCunstructor(-100, 100),
+  roa: sliderStateCunstructor(-100, 100),
+  roe: sliderStateCunstructor(-100, 100),
+  market_cap: sliderStateCunstructor(-100, 100),
+  activities_operating: sliderStateCunstructor(-100, 100),
+  activities_investing: sliderStateCunstructor(-100, 100),
+  activities_financing: sliderStateCunstructor(-100, 100),
 };
 
 // const initialChartInfo = {

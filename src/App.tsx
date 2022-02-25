@@ -1,4 +1,5 @@
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import Layout from "./layouts/Layout";
@@ -8,6 +9,7 @@ import PersonalProfilePage from "./pages/PersonalProfilePage";
 import QuantLabPage from "./pages/QuantLabPage";
 import QuantModelDetailsPage from "./pages/QuantModelDetailsPage";
 import SettingsPage from "./pages/SettingsPage";
+import { RootState } from "./stores/store";
 
 function App() {
   return (

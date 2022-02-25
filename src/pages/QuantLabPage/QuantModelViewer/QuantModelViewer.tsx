@@ -2,16 +2,29 @@ import { Paper } from "@mui/material";
 import { GridSelectionModel } from "@mui/x-data-grid";
 import styled from "styled-components";
 
-import Example from "../../../components/graph";
+import Graph from "../../../components/graph";
+import { IModel } from "../QuantLabPage";
 
+export interface tmpModel {
+  id: number;
+  model_name: string;
+  chart_data: {
+    start_date: string;
+    profit_kospi_data: number[];
+    profit_rate_data: number[];
+  };
+}
 interface ChartViewerProps {
-  selectionModel: GridSelectionModel;
+  models: tmpModel[];
 }
 
-export default function ChartViewer({ selectionModel }: ChartViewerProps) {
+export default function ChartViewer({ models }: ChartViewerProps) {
+  console.log("test", models);
+
   return (
     <MainContainer variant="outlined">
-      <Example />
+      {/* <Example /> */}
+      <Graph models={models} />
     </MainContainer>
   );
 }

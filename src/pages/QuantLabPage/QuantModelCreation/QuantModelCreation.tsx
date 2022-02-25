@@ -34,7 +34,7 @@ export default function ModelCreation({ setModelList }: ModelCreationProps) {
     initialFinanceCondetion
   );
   // NOTE: ModelName state
-  const [modelName, setModelName] = useState<string>("");
+  const [[modelName, firstTry], setModelName] = useState(["", 1]);
   const modelNameInputRef = useRef<HTMLDivElement>(null);
 
   // const [chartInfo, setChartInfo] = useState<IChartInfo>(initialChartInfo);
@@ -43,6 +43,7 @@ export default function ModelCreation({ setModelList }: ModelCreationProps) {
   const onClickMakeButton = async () => {
     if (modelName.length === 0) {
       modelNameInputRef.current?.focus();
+      setModelName(["", 0]);
       return;
     }
 
@@ -96,14 +97,14 @@ export default function ModelCreation({ setModelList }: ModelCreationProps) {
         ...prev,
         { id: +new Date(), model_name: modelName, ...responseData },
       ]);
-      setModelName("");
+      setModelName(["", 1]);
     } catch (e) {
       // console.error("QuantModelCreation:", e);
       setError((e as Error).message);
     }
   };
   const modelNameHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setModelName(event.target.value);
+    setModelName([event.target.value, 1]);
   };
 
   return (
@@ -130,6 +131,7 @@ export default function ModelCreation({ setModelList }: ModelCreationProps) {
           value={modelName}
           onChange={modelNameHandler}
           sx={{ mx: 1, mt: 1 }}
+          error={modelName === "" && firstTry === 0}
           inputRef={modelNameInputRef}
         />
 

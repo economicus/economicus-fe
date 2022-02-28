@@ -66,36 +66,54 @@ export default function LabModalWithSlider({
       />
       <TmpForm>
         {Object.keys(state).map((key, idx) => {
-          return (
-            <Container key={idx}>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={state[key].checked}
-                    onChange={handleCheckboxChange}
-                    name={key}
-                  />
-                }
-                label={key}
-                sx={{ width: 500 }}
-              />
-              <Slider
-                value={[...state[key].values]}
-                onChange={handleSliderChange}
-                name={key}
-                min={state[key].min}
-                max={state[key].max}
-                marks={[
-                  { value: state[key].min, label: state[key].min },
-                  { value: state[key].max, label: state[key].max },
-                ]}
-                valueLabelDisplay="auto"
-                disabled={!state[key].checked}
-                sx={{ width: 400 }}
-                size="small"
-              />
-            </Container>
-          );
+          if (state[key].checked) {
+            return (
+              <Container key={idx}>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={state[key].checked}
+                      onChange={handleCheckboxChange}
+                      name={key}
+                    />
+                  }
+                  label={key}
+                  sx={{ width: 500 }}
+                />
+                <Slider
+                  value={[...state[key].values]}
+                  onChange={handleSliderChange}
+                  name={key}
+                  min={state[key].min}
+                  max={state[key].max}
+                  marks={[
+                    { value: state[key].min, label: state[key].min },
+                    { value: state[key].max, label: state[key].max },
+                  ]}
+                  valueLabelDisplay="auto"
+                  disabled={!state[key].checked}
+                  sx={{ width: 400 }}
+                  size="small"
+                />
+              </Container>
+            );
+          } else {
+            return (
+              <Container key={idx}>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={state[key].checked}
+                      onChange={handleCheckboxChange}
+                      name={key}
+                    />
+                  }
+                  label={key}
+                  sx={{ width: 500 }}
+                />
+              </Container>
+            );
+          }
         })}
       </TmpForm>
     </ModalWithButton>
@@ -104,6 +122,7 @@ export default function LabModalWithSlider({
 
 const Container = styled.div`
   display: flex;
+  height: 60px;
   width: 250px;
   padding-top: 20px;
   margin-right: 50px;

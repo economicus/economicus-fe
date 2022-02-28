@@ -10,6 +10,7 @@ import {
 } from "@mui/x-data-grid";
 import { useCallback, useMemo } from "react";
 
+import { KoreanName } from "../constants";
 import { IModel } from "../QuantLabPage";
 import QuantLabSaveModal from "../QuantModelCreation/LabModal/LabSaveModal";
 
@@ -25,7 +26,12 @@ export default function QuantModelTable({
   setModelList,
 }: ModelListProps) {
   const columns: GridColDef[] = FIELDS.map((val) => {
-    return { field: val, headerName: val, width: 150 };
+    return {
+      field: val,
+      headerName: KoreanName[`${val}` as keyof typeof KoreanName],
+      width: 150,
+    };
+    // return { field: val, headerName: val, width: 150 };
   });
 
   const deleteModel = useCallback(

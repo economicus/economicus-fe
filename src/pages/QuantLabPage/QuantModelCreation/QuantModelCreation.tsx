@@ -92,7 +92,6 @@ export default function ModelCreation({ setModelList }: ModelCreationProps) {
       if (responseData instanceof Error)
         throw Error((responseData as Error).message);
 
-      console.log("hey!", responseData);
       setModelList((prev) => [
         ...prev,
         { id: +new Date(), model_name: modelName, ...responseData },

@@ -19,8 +19,6 @@ interface ChartViewerProps {
 }
 
 export default function ChartViewer({ models }: ChartViewerProps) {
-  console.log("test", models);
-
   return (
     <MainContainer variant="outlined">
       {/* <Example /> */}

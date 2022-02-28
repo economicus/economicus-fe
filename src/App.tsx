@@ -9,6 +9,7 @@ import PersonalProfilePage from "./pages/PersonalProfilePage";
 import QuantLabPage from "./pages/QuantLabPage";
 import QuantModelDetailsPage from "./pages/QuantModelDetailsPage";
 import SettingsPage from "./pages/SettingsPage";
+import SignUpPage from "./pages/SignUpPage";
 import { RootState } from "./stores/store";
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
           <Route path="/QuantLabPage" element={<QuantLabPage />} />
           <Route path="/SettingsPage" element={<SettingsPage />} />
           <Route path="/LoginPage" element={<LoginPage />} />
+          <Route path="/SignUpPage" element={<SignUpPage />} />
         </Routes>
       </Layout>
     </BrowserRouter>

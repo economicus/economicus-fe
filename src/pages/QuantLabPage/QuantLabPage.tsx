@@ -1,30 +1,26 @@
 import { GridSelectionModel } from "@mui/x-data-grid";
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 
-import { RootState } from "../../stores/store";
 import QuantModelCreation from "./QuantModelCreation";
 import QuantModelTable from "./QuantModelTable";
 import QuantModelViewer from "./QuantModelViewer";
-import { tmpModel } from "./QuantModelViewer/QuantModelViewer";
 
 const QuantLabPage = () => {
   const [modelList, setModelList] = useState<IModel[]>([]);
-  const [selectionModel, setSelectionModel] = useState<GridSelectionModel>([]); // NOTE: 선택된 모델 id의 배열. 이를 통해 그래프 렌더링 예정
+  const [selectionModel, setSelectionModel] = useState<GridSelectionModel>([]); // NOTE: 선택된 모델 id의 배열
 
-  const models: tmpModel[] = modelList
+  const charts: IChart[] = modelList
     .filter((val) => selectionModel.includes(val.id))
     .map((val) => {
       const { id, model_name, chart_data } = val;
       return { id, model_name, chart_data };
     });
-  // console.log("model", modelList, selectionModel, models);
 
   return (
     <MainContainer>
       <StyledDiv>
-        <QuantModelViewer {...{ models }} />
+        <QuantModelViewer {...{ charts }} />
         <QuantModelCreation {...{ setModelList }} />
       </StyledDiv>
 
@@ -32,7 +28,7 @@ const QuantLabPage = () => {
         {...{ setSelectionModel, setModelList }}
         rows={modelList.map((val) => {
           const { chart_data, ...field } = val;
-          chart_data; // NOTE: 미사용 워닝 해결을 위해 이렇게 해놓았는데... 괜찮을까? 다른 방법이 있나?
+          chart_data; // NOTE: 미사용 워닝 해결을 위해
           return field;
         })}
       />
@@ -44,23 +40,22 @@ const QuantLabPage = () => {
  * ANCHOR: models
  */
 
-interface IChartElement {
-  start_date: string;
-  profit_kospi_data: number[];
-  profit_rate_data: number[];
+export interface IChart {
+  id: number;
+  model_name: string;
+  chart_data: {
+    start_date: string;
+    profit_kospi_data: number[];
+    profit_rate_data: number[];
+  };
 }
 
-export interface IModel {
-  id: number;
-  model_name: string; // NOTE: 변수명은 어떻게 할까?
-
-  cumulative_return: number; // NOTE: 구조 추후 논의 필요
+export interface IModel extends IChart {
+  cumulative_return: number;
   annual_average_return: number;
   winning_percentage: number;
   max_loss_rate: number;
   holdings_count: number;
-
-  chart_data: IChartElement;
 }
 
 /*

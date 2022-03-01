@@ -9,7 +9,7 @@ interface MinAndMax {
 
 interface IActivities {
   [key: string]: MinAndMax;
-}
+} // NOTE: 추후 request 형식 바뀌면 삭제 예정
 
 export interface createQuantModelBody {
   name: string;

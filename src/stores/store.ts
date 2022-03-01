@@ -1,11 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import logger from "redux-logger";
 
-import { counterSlice } from "./session";
+import { sessionSlice } from "./session";
 
 export const store = configureStore({
   reducer: {
-    session: counterSlice.reducer,
+    session: sessionSlice.reducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
 });

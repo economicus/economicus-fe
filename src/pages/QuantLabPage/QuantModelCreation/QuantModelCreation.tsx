@@ -28,17 +28,16 @@ export default function ModelCreation({ setModelList }: ModelCreationProps) {
 
   const [error, setError] = useState<string>("");
 
+  // NOTE: ModelName state
+  const [[modelName, firstTry], setModelName] = useState(["", 1]);
+  const modelNameInputRef = useRef<HTMLDivElement>(null);
+
   // NOTE: ButtonsContainer states
   const [businessArea, setBusinessArea] =
     useState<IBusinessArea>(initialBusinessArea);
   const [financeCondition, setFinanceCondetion] = useState<IFinanceCondition>(
     initialFinanceCondetion
   );
-  // NOTE: ModelName state
-  const [[modelName, firstTry], setModelName] = useState(["", 1]);
-  const modelNameInputRef = useRef<HTMLDivElement>(null);
-
-  // const [chartInfo, setChartInfo] = useState<IChartInfo>(initialChartInfo);
 
   // NOTE: handlers
   const onClickMakeButton = async () => {
@@ -143,11 +142,6 @@ export default function ModelCreation({ setModelList }: ModelCreationProps) {
               state={financeCondition}
               setState={setFinanceCondetion}
             />
-            {/* <LabModalWithSlider
-          btnName="차트정보"
-          state={chartInfo}
-          setState={setChartInfo}
-        /> */}
           </ConditionButtonsContainer>
 
           <Button sx={{ m: 1 }} variant="outlined" onClick={onClickMakeButton}>
@@ -198,22 +192,12 @@ export interface IFinanceCondition {
   activities_operating: ICheckboxWithSliderInfo;
   activities_investing: ICheckboxWithSliderInfo;
   activities_financing: ICheckboxWithSliderInfo;
-
-  // acti: ICheckboxWithSliderInfo;
-  // ROA: ICheckboxWithSliderInfo;
-  // 부채비율: ICheckboxWithSliderInfo;
-} // TODO: chart info에 들어갈 항목들이 뭘까? 그리고 한글로는 뭐라고 나타내야 하나?(몰라서 api 변수명 그대로 함)
-
-// export interface IChartInfo {
-
-// }
+}
 
 export interface ICheckboxWithSliderInfo {
   checked: boolean;
   min: number;
   max: number;
-  // minValue: number;
-  // maxValue: number;
   values: number[];
 }
 
@@ -222,28 +206,17 @@ export interface ICheckboxWithSliderInfo {
  */
 
 const MainContainer = styled(Paper)`
-  /* width: 100%; */
   width: 20%;
   padding: 20px;
 
   display: flex;
   flex-direction: column;
-  /* justify-content: space-between; */
 `;
 
 const ConditionButtonsContainer = styled.div`
-  /* display: grid; */
-  /* grid-template-columns: repeat(2, 1fr); */
-  /* margin-top: 20px; */
-
   display: flex;
   flex-direction: column;
 `;
-
-// const MakeModelButtonContainer = styled.div`
-//   display: grid;
-//   grid-template-columns: repeat(1, 1fr);
-// `;
 
 const ButtonsContainer = styled.div`
   height: 100%;
@@ -268,8 +241,6 @@ const sliderStateCunstructor = (
     checked: false,
     min: min,
     max: max,
-    // minValue: min,
-    // maxValue: max,
     values: [min, max],
   };
 };
@@ -306,15 +277,3 @@ const initialFinanceCondetion = {
   activities_investing: sliderStateCunstructor(-100, 100),
   activities_financing: sliderStateCunstructor(-100, 100),
 };
-
-// const initialChartInfo = {
-//   시가총액: true,
-//   "주가수익률(1개월)": false,
-//   "주가수익률(3개월)": false,
-//   "주가수익률(6개월)": false,
-//   "주가수익률(12개월)": false,
-//   "이동평균선(5일)": false,
-//   "이동평균선(20일)": false,
-//   "이동평균선(60일)": false,
-//   "이동평균선(120일)": false,
-// };

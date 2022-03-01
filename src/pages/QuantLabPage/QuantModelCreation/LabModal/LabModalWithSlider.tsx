@@ -2,8 +2,8 @@ import { Checkbox, FormControlLabel, Slider } from "@mui/material";
 import React, { useState } from "react";
 import styled from "styled-components";
 
-import TmpForm from "../../../../components/FormControlGroup/FormControlGroup";
-import ModalWithButton from "../../../../components/ModalWithButton/ModalWithButton";
+import FormControlGroup from "../../../../components/FormControlGroup";
+import ModalWithButton from "../../../../components/ModalWithButton";
 import { IFinanceCondition } from "../QuantModelCreation";
 
 interface QuantLabModalProps {
@@ -87,7 +87,7 @@ export default function LabModalWithSlider({
         }
         label="Select all"
       />
-      <TmpForm>
+      <FormControlGroup>
         {Object.keys(state).map((key, idx) => {
           return (
             <Container key={idx}>
@@ -118,7 +118,7 @@ export default function LabModalWithSlider({
             </Container>
           );
         })}
-      </TmpForm>
+      </FormControlGroup>
     </ModalWithButton>
   );
 }

@@ -1,10 +1,8 @@
 import ModalUnstyled from "@mui/base/ModalUnstyled";
-import { Box, Button } from "@mui/material";
+import { Button, Paper } from "@mui/material";
 import { styled } from "@mui/system";
 import { useState } from "react";
 import * as React from "react";
-
-import { ICheckboxWithSliderInfo } from "../../pages/QuantLabPage/QuantModelCreation/QuantModelCreation";
 
 interface QuantLabModalProps {
   btnName: string;
@@ -23,22 +21,22 @@ export default function ModalWithButton({
 
   return (
     <>
-      {/* <button type="button" onClick={handleOpen}> */}
       <Button variant="contained" onClick={handleOpen} sx={{ m: 1 }}>
         {btnName}
       </Button>
-      {/* </button> */}
       <StyledModal
-        // aria-labelledby="unstyled-modal-title"
-        // aria-describedby="unstyled-modal-description"
         open={open}
         onClose={handleClose}
         BackdropComponent={Backdrop}
       >
-        <Box sx={style}>
-          {/* <BusinessCheckBoxes state={state} setState={setState} /> */}
+        <StyledPaper elevation={12}>
           {children}
-        </Box>
+          <ButtonContainer>
+            <Button variant="contained" onClick={handleClose}>
+              확인
+            </Button>
+          </ButtonContainer>
+        </StyledPaper>
       </StyledModal>
     </>
   );
@@ -67,11 +65,13 @@ const Backdrop = styled("div")`
   -webkit-tap-highlight-color: transparent;
 `;
 
-const style = {
-  width: 700,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  p: 2,
-  px: 4,
-  pb: 3,
-};
+const StyledPaper = styled(Paper)`
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+`;
+
+const ButtonContainer = styled("div")`
+  display: flex;
+  justify-content: end;
+`;

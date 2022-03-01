@@ -6,6 +6,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { AxiosError } from "axios";
 import { useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
@@ -65,8 +66,6 @@ export default function ModelCreation({ setModelList }: ModelCreationProps) {
         ])
     );
 
-    // console.log(activities);
-
     if (!token) {
       setError("로그인이 필요한 기능입니다.");
       return;
@@ -89,18 +88,15 @@ export default function ModelCreation({ setModelList }: ModelCreationProps) {
         token
       );
 
-      if (responseData instanceof Error)
-        throw Error((responseData as Error).message);
+      if (responseData instanceof Error) throw responseData;
 
-      console.log("hey!", responseData);
       setModelList((prev) => [
         ...prev,
         { id: +new Date(), model_name: modelName, ...responseData },
       ]);
       setModelName(["", 1]);
     } catch (e) {
-      // console.error("QuantModelCreation:", e);
-      setError((e as Error).message);
+      setError((e as AxiosError).response?.data.message);
     }
   };
   const modelNameHandler = (event: React.ChangeEvent<HTMLInputElement>) => {

@@ -1,11 +1,5 @@
-import {
-  Alert,
-  Button,
-  Paper,
-  Snackbar,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { LoadingButton } from "@mui/lab";
+import { Alert, Paper, Snackbar, TextField, Typography } from "@mui/material";
 import { AxiosError } from "axios";
 import { useRef, useState } from "react";
 import { useSelector } from "react-redux";
@@ -39,6 +33,9 @@ export default function ModelCreation({ setModelList }: ModelCreationProps) {
     initialFinanceCondetion
   );
 
+  // NOTE: LodingButton states
+  const [isLoading, setIsLoading] = useState(false);
+
   // NOTE: handlers
   const onClickMakeButton = async () => {
     if (modelName.length === 0) {
@@ -46,6 +43,8 @@ export default function ModelCreation({ setModelList }: ModelCreationProps) {
       setModelName(["", 0]);
       return;
     }
+
+    setIsLoading(true);
 
     const notActivitiesValue = Object.fromEntries(
       Object.entries(financeCondition)
@@ -86,6 +85,7 @@ export default function ModelCreation({ setModelList }: ModelCreationProps) {
         } as createQuantModelBody,
         token
       );
+      setIsLoading(false);
 
       if (responseData instanceof Error) throw responseData;
 
@@ -144,9 +144,15 @@ export default function ModelCreation({ setModelList }: ModelCreationProps) {
             />
           </ConditionButtonsContainer>
 
-          <Button sx={{ m: 1 }} variant="outlined" onClick={onClickMakeButton}>
-            make model
-          </Button>
+          <LoadingButton
+            sx={{ m: 1 }}
+            loading={isLoading}
+            loadingPosition="start"
+            variant="outlined"
+            onClick={onClickMakeButton}
+          >
+            {isLoading ? "모델 생성중..." : "make model"}
+          </LoadingButton>
         </ButtonsContainer>
       </MainContainer>
     </>

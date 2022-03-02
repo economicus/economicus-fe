@@ -1,4 +1,12 @@
-import { Checkbox, FormControlLabel, Slider } from "@mui/material";
+import {
+  Card,
+  Checkbox,
+  FormControlLabel,
+  Grid,
+  Popover,
+  Slider,
+  Typography,
+} from "@mui/material";
 import React, { useState } from "react";
 import styled from "styled-components";
 
@@ -21,14 +29,14 @@ export const ChangedFinanceConditionName: IChangedFinanceConditionName = {
   net_profit: "순이익(?원)",
   net_profit_rate: "순이익 증가율(%)",
   de_ratio: "부채 비율(%)",
-  per: "PER",
-  psr: "PSR",
-  pbr: "PBR",
-  pcr: "PCR",
+  per: "PER(?)",
+  psr: "PSR(?)",
+  pbr: "PBR(?)",
+  pcr: "PCR(?)",
   dividend_yield: "현금배당수익률(?)",
   dividend_payout_ratio: "현금배당성향(?)",
-  roa: "ROA",
-  roe: "ROE",
+  roa: "ROA(?)",
+  roe: "ROE(?)",
   market_cap: "시가총액(?원)",
   activities_operating: "영업현금흐름(?)",
   activities_investing: "투자현금흐름(?)",
@@ -80,46 +88,110 @@ export default function LabModalWithSlider({
   };
 
   return (
-    <ModalWithButton btnName={btnName}>
-      <FormControlLabel
-        control={
-          <Checkbox checked={selecAll} onChange={selectAllHandleChange} />
-        }
-        label="Select all"
-      />
-      <FormControlGroup>
-        {Object.keys(state).map((key, idx) => {
-          return (
-            <Container key={idx}>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={state[key].checked}
-                    onChange={handleCheckboxChange}
-                    name={key}
-                  />
-                }
-                label={ChangedFinanceConditionName[key]}
-                sx={{ width: 500 }}
-              />
-              {state[key].checked && (
-                <CustomizedSlider
-                  value={[...state[key].values]}
-                  onChange={handleSliderChange}
-                  name={key}
-                  min={state[key].min}
-                  max={state[key].max}
-                  valueLabelDisplay="on"
-                  disabled={!state[key].checked}
-                  sx={{ width: 400 }}
-                  size="small"
+    <>
+      <ModalWithButton btnName={btnName}>
+        <FormControlLabel
+          control={
+            <Checkbox checked={selecAll} onChange={selectAllHandleChange} />
+          }
+          label="Select all"
+        />
+        <FormControlGroup>
+          {Object.keys(state).map((key, idx) => {
+            return (
+              <Container key={idx}>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={state[key].checked}
+                      onChange={handleCheckboxChange}
+                      name={key}
+                    />
+                  }
+                  label={ChangedFinanceConditionName[key]}
+                  sx={{ width: 500 }}
                 />
-              )}
-            </Container>
+                {state[key].checked && (
+                  <CustomizedSlider
+                    value={[...state[key].values]}
+                    onChange={handleSliderChange}
+                    name={key}
+                    min={state[key].min}
+                    max={state[key].max}
+                    valueLabelDisplay="on"
+                    disabled={!state[key].checked}
+                    sx={{ width: 400 }}
+                    size="small"
+                  />
+                )}
+              </Container>
+            );
+          })}
+        </FormControlGroup>
+      </ModalWithButton>
+      {/* 컴포넌트로 따로 빼면 좋을 거같음! */}
+      <Grid container sx={{ mt: 1 }}>
+        {Object.keys(state).map((key) => {
+          const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(
+            null
           );
+
+          const handlePopoverOpen = (event: React.MouseEvent<HTMLElement>) => {
+            setAnchorEl(event.currentTarget);
+          };
+
+          const handlePopoverClose = () => {
+            setAnchorEl(null);
+          };
+
+          const open = Boolean(anchorEl);
+          if (state[key].checked) {
+            return (
+              <>
+                <Card
+                  aria-owns={open ? "mouse-over-popover" : undefined}
+                  aria-haspopup="true"
+                  onMouseEnter={handlePopoverOpen}
+                  onMouseLeave={handlePopoverClose}
+                  sx={{
+                    px: 1,
+                    m: 0.3,
+                    fontSize: "small",
+                  }}
+                >
+                  {ChangedFinanceConditionName[key].substring(
+                    0,
+                    ChangedFinanceConditionName[key].indexOf("(")
+                  )}
+                </Card>
+                <Popover
+                  id="mouse-over-popover"
+                  sx={{
+                    pointerEvents: "none",
+                  }}
+                  open={open}
+                  anchorEl={anchorEl}
+                  anchorOrigin={{
+                    vertical: "bottom",
+                    horizontal: "left",
+                  }}
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "left",
+                  }}
+                  onClose={handlePopoverClose}
+                  disableRestoreFocus
+                >
+                  <Typography sx={{ p: 1 }}>
+                    {state[key].values[0] + " ~ " + state[key].values[1]}
+                  </Typography>
+                </Popover>
+              </>
+            );
+          }
         })}
-      </FormControlGroup>
-    </ModalWithButton>
+      </Grid>
+    </>
   );
 }
 

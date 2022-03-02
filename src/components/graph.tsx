@@ -313,8 +313,8 @@ const data2 = {
 export default function Graph({ models }: Props) {
   // static demoUrl = "https://codesandbox.io/s/simple-line-chart-kec3v";
 
-  // const graphData = graphDataParse([data1, data2]); // NOTE: 테스트용 더미 데이터
-  const graphData = graphDataParse(models);
+  const graphData = graphDataParse([data1]); // NOTE: 테스트용 더미 데이터
+  //   const graphData = graphDataParse(models);
 
   if (!graphData.length)
     return <span>선택된 모델이 없습니다! (아직 미처리)</span>;

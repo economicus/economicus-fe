@@ -1,14 +1,16 @@
 import { Card, Grid, Popover, Typography } from "@mui/material";
 import { useState } from "react";
 
-import { ChangedFinanceConditionName } from "../pages/QuantLabPage/QuantModelCreation/LabModal/LabModalWithSlider";
-import { IFinanceCondition } from "../pages/QuantLabPage/QuantModelCreation/QuantModelCreation";
+import { IFinanceCondition } from "../QuantModelCreation";
+import { ChangedFinanceConditionName } from "./LabModalWithSlider";
 
-interface ShowCheckedItemProps {
+interface CheckedItemCardsProps {
   state: IFinanceCondition;
 }
 
-export default function ShowCheckedItem({ state }: ShowCheckedItemProps) {
+export default function CheckedFinanceConditionCards({
+  state,
+}: CheckedItemCardsProps) {
   return (
     <Grid container sx={{ mt: 1 }}>
       {Object.keys(state).map((key) => {

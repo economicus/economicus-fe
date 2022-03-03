@@ -4,8 +4,8 @@ import styled from "styled-components";
 
 import FormControlGroup from "../../../../components/FormControlGroup";
 import ModalWithButton from "../../../../components/ModalWithButton";
-import ShowCheckedItem from "../../../../components/ShowCheckedItem";
 import { IFinanceCondition } from "../QuantModelCreation";
+import CheckedFinanceConditionCards from "./CheckedFinanceConditionCards";
 
 interface QuantLabModalProps {
   btnName: string;
@@ -122,7 +122,7 @@ export default function LabModalWithSlider({
           })}
         </FormControlGroup>
       </ModalWithButton>
-      <ShowCheckedItem state={state} />
+      <CheckedFinanceConditionCards state={state} />
     </>
   );
 }

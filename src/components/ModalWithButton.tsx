@@ -47,7 +47,7 @@ export default function ModalWithButton({
     <>
       <Button variant="contained" onClick={handleOpen} sx={{ m: 1 }}>
         {btnName}
-        <PositionBadge badgeContent={getBadgeCoount(state)} color="info" />
+        <CountBadge badgeContent={getBadgeCoount(state)} color="info" />
       </Button>
       <StyledModal
         open={open}
@@ -101,7 +101,7 @@ const ButtonContainer = styled("div")`
   justify-content: end;
 `;
 
-const PositionBadge = styled(Badge)`
+const CountBadge = styled(Badge)`
   position: absolute;
   margin-left: 95%;
   margin-bottom: 15%;

@@ -44,8 +44,6 @@ export default function ModelCreation({ setModelList }: ModelCreationProps) {
       return;
     }
 
-    setIsLoading(true);
-
     const notActivitiesValue = Object.fromEntries(
       Object.entries(financeCondition)
         .filter(([key]) => !key.startsWith("activities_"))
@@ -68,6 +66,8 @@ export default function ModelCreation({ setModelList }: ModelCreationProps) {
       setError("로그인이 필요한 기능입니다.");
       return;
     }
+
+    setIsLoading(true);
 
     try {
       const responseData = await createQuantModel(

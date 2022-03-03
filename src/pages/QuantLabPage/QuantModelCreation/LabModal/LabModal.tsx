@@ -28,6 +28,7 @@ export default function QuantLabModal({
     });
     setState(newState);
   };
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setState({
       ...state,
@@ -36,7 +37,7 @@ export default function QuantLabModal({
   };
 
   return (
-    <ModalWithButton btnName={btnName}>
+    <ModalWithButton btnName={btnName} state={state}>
       <FormControlLabel
         control={
           <Checkbox checked={selecAll} onChange={selectAllHandleChange} />

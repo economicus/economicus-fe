@@ -1,17 +1,10 @@
-import {
-  Card,
-  Checkbox,
-  FormControlLabel,
-  Grid,
-  Popover,
-  Slider,
-  Typography,
-} from "@mui/material";
+import { Checkbox, FormControlLabel, Slider } from "@mui/material";
 import React, { useState } from "react";
 import styled from "styled-components";
 
 import FormControlGroup from "../../../../components/FormControlGroup";
 import ModalWithButton from "../../../../components/ModalWithButton";
+import ShowCheckedItem from "../../../../components/ShowCheckedItem";
 import { IFinanceCondition } from "../QuantModelCreation";
 
 interface QuantLabModalProps {
@@ -89,7 +82,7 @@ export default function LabModalWithSlider({
 
   return (
     <>
-      <ModalWithButton btnName={btnName}>
+      <ModalWithButton btnName={btnName} state={state}>
         <FormControlLabel
           control={
             <Checkbox checked={selecAll} onChange={selectAllHandleChange} />
@@ -129,68 +122,7 @@ export default function LabModalWithSlider({
           })}
         </FormControlGroup>
       </ModalWithButton>
-      {/* 컴포넌트로 따로 빼면 좋을 거같음! */}
-      <Grid container sx={{ mt: 1 }}>
-        {Object.keys(state).map((key) => {
-          const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(
-            null
-          );
-
-          const handlePopoverOpen = (event: React.MouseEvent<HTMLElement>) => {
-            setAnchorEl(event.currentTarget);
-          };
-
-          const handlePopoverClose = () => {
-            setAnchorEl(null);
-          };
-
-          const open = Boolean(anchorEl);
-          if (state[key].checked) {
-            return (
-              <>
-                <Card
-                  aria-owns={open ? "mouse-over-popover" : undefined}
-                  aria-haspopup="true"
-                  onMouseEnter={handlePopoverOpen}
-                  onMouseLeave={handlePopoverClose}
-                  sx={{
-                    px: 1,
-                    m: 0.3,
-                    fontSize: "small",
-                  }}
-                >
-                  {ChangedFinanceConditionName[key].substring(
-                    0,
-                    ChangedFinanceConditionName[key].indexOf("(")
-                  )}
-                </Card>
-                <Popover
-                  id="mouse-over-popover"
-                  sx={{
-                    pointerEvents: "none",
-                  }}
-                  open={open}
-                  anchorEl={anchorEl}
-                  anchorOrigin={{
-                    vertical: "bottom",
-                    horizontal: "left",
-                  }}
-                  transformOrigin={{
-                    vertical: "top",
-                    horizontal: "left",
-                  }}
-                  onClose={handlePopoverClose}
-                  disableRestoreFocus
-                >
-                  <Typography sx={{ p: 1 }}>
-                    {state[key].values[0] + " ~ " + state[key].values[1]}
-                  </Typography>
-                </Popover>
-              </>
-            );
-          }
-        })}
-      </Grid>
+      <ShowCheckedItem state={state} />
     </>
   );
 }

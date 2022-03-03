@@ -1,16 +1,23 @@
 import ModalUnstyled from "@mui/base/ModalUnstyled";
-import { Button, Paper } from "@mui/material";
+import { Badge, Button, Paper } from "@mui/material";
 import { styled } from "@mui/system";
 import { useState } from "react";
 import * as React from "react";
 
+import {
+  IBusinessArea,
+  IFinanceCondition,
+} from "../pages/QuantLabPage/QuantModelCreation/QuantModelCreation";
+
 interface QuantLabModalProps {
   btnName: string;
+  state: IBusinessArea | IFinanceCondition;
   children: React.ReactNode;
 }
 
 export default function ModalWithButton({
   btnName,
+  state,
   children,
 }: QuantLabModalProps) {
   // NOTE: 변수명 수정 필요
@@ -19,10 +26,28 @@ export default function ModalWithButton({
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+  const getBadgeCoount = (state: IBusinessArea | IFinanceCondition) => {
+    let count: number;
+    count = 0;
+    if ("에너지" in state) {
+      for (const keys in state) {
+        const value = state[keys];
+        if (value === true) count++;
+      }
+    } else if ("net_revenue" in state) {
+      for (const keys in state) {
+        const value = state[keys].checked;
+        if (value === true) count++;
+      }
+    }
+    return count;
+  };
+
   return (
     <>
       <Button variant="contained" onClick={handleOpen} sx={{ m: 1 }}>
         {btnName}
+        <PositionBadge badgeContent={getBadgeCoount(state)} color="info" />
       </Button>
       <StyledModal
         open={open}
@@ -74,4 +99,10 @@ const StyledPaper = styled(Paper)`
 const ButtonContainer = styled("div")`
   display: flex;
   justify-content: end;
+`;
+
+const PositionBadge = styled(Badge)`
+  position: absolute;
+  margin-left: 95%;
+  margin-bottom: 15%;
 `;

@@ -9,7 +9,7 @@ import Grid from "@mui/material/Grid";
 import * as React from "react";
 import { Link } from "react-router-dom";
 
-export default function ModelHeader() {
+export default function ModelHeader(props: any) {
   return (
     <Box sx={{ flexGrow: 1 }} display="flex" alignItems="center">
       <Box
@@ -45,13 +45,26 @@ export default function ModelHeader() {
           borderRadius: 1,
         }}
       >
-        <Button component={Link} variant="outlined" to="/QuantModelListPage">
-          <FormatListBulletedIcon />
-          <Typography component="div" sx={{ ml: 2, mr: 2 }}>
-            현재 종목 확인
-          </Typography>
-          {/* TODO:현재 화면에 따라 변경해야함 */}
-        </Button>
+        {props.state === true ? (
+          <Button component={Link} variant="outlined" to="/QuantModelListPage">
+            <FormatListBulletedIcon />
+            <Typography component="div" sx={{ ml: 2, mr: 2 }}>
+              현재 종목 확인
+            </Typography>
+          </Button>
+        ) : (
+          <Button
+            component={Link}
+            variant="outlined"
+            to="/QuantModelDetailsPage"
+          >
+            <FormatListBulletedIcon />
+            <Typography component="div" sx={{ ml: 2, mr: 2 }}>
+              모델 그래프 보기
+            </Typography>
+          </Button>
+        )}
+        {/* TODO:현재 화면에 따라 변경해야함 */}
         <IconButton
           size="large"
           edge="start"

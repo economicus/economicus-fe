@@ -21,7 +21,7 @@ const QuantModelListPage = () => {
 
   return (
     <MainContainer>
-      <ModelHeader />
+      <ModelHeader state={false} />
       <ModelList />
     </MainContainer>
   );

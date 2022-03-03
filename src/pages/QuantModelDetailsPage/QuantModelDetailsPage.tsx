@@ -21,7 +21,7 @@ const QuantModelDetailsPage = () => {
 
   return (
     <MainContainer>
-      <ModelHeader />
+      <ModelHeader state={true} />
       <ChartViewerSizeUp {...{ models }} />
       <ModelDescription />
     </MainContainer>

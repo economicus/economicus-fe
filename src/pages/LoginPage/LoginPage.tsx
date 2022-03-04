@@ -4,12 +4,11 @@ import Checkbox from "@mui/material/Checkbox";
 import Container from "@mui/material/Container";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Grid from "@mui/material/Grid";
-import Link from "@mui/material/Link";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Navigate } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import styled from "styled-components";
 
 import { loginThunk } from "../../stores/session";
@@ -62,7 +61,7 @@ const LoginPage = () => {
             required
             fullWidth
             id="email"
-            label="Email Address"
+            label="이메일"
             name="email"
             autoComplete="email"
             autoFocus
@@ -73,7 +72,7 @@ const LoginPage = () => {
             required
             fullWidth
             name="password"
-            label="Password"
+            label="비밀번호"
             type="password"
             id="password"
             autoComplete="current-password"
@@ -94,14 +93,10 @@ const LoginPage = () => {
           </Button>
           <Grid container>
             <Grid item xs>
-              <Link href="#" variant="body2">
-                비밀번호 찾기
-              </Link>
+              <Link to="#">비밀번호 찾기</Link>
             </Grid>
             <Grid item>
-              <Link href="#" variant="body2">
-                {"회원가입 하기"}
-              </Link>
+              <Link to="/SignUpPage">{"회원가입 하기"}</Link>
             </Grid>
           </Grid>
         </Box>

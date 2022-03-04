@@ -4,6 +4,7 @@ import { GridActionsCellItem, GridRowId } from "@mui/x-data-grid";
 import { useState } from "react";
 import * as React from "react";
 import { createPortal } from "react-dom";
+import { useNavigate } from "react-router-dom";
 
 interface QuantLabModalProps {
   id: GridRowId;
@@ -12,6 +13,7 @@ export default function QuantLabSaveModal({ id }: QuantLabModalProps) {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const navigate = useNavigate();
 
   const onClickSaveBtn = () => {
     handleOpen();
@@ -19,7 +21,7 @@ export default function QuantLabSaveModal({ id }: QuantLabModalProps) {
 
   const onClickMoveBtn = () => {
     handleClose();
-    console.log("id", id); // TODO: 동적 라우팅
+    navigate(`/QuantModelDetailsPage/${id}`); // NOTE: 동적 라우팅
   };
 
   const action = (

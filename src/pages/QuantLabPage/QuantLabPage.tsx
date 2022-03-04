@@ -1,115 +1,86 @@
-import { Button, Card, Container, Typography } from "@mui/material";
-import { Box } from "@mui/system";
+import { GridSelectionModel } from "@mui/x-data-grid";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 
-import Example from "../../components/graph";
-import ModalBusinessAreas from "../../components/modals/BusinessAreas";
-import ComparativeStockSelect from "../../components/selecter/ComparativeStockSelect";
-import TermSelect from "../../components/selecter/TermSelect";
-import NumberOfStocks from "../../components/slider/NumberOfStocksSlider";
-import RebalancingTermSlider from "../../components/slider/RebalancingTermSlider";
-
-const MainContainer = styled.div`
-  border: 3px solid pink;
-  margin: 5px;
-  padding-left: 10%;
-  padding-right: 10%;
-  padding-top: 30px;
-`;
-
-const GraphContainer = styled(Card)`
-  border: 3px solid blue;
-  margin: 5px;
-  width: 50%;
-`;
-
-const GraphSlectContainer = styled.div`
-  border: 3px solid orange;
-  margin: 5px;
-  display: flex;
-`;
-
-const Graph = styled.div`
-  border: 3px solid green;
-  margin: 5px;
-  height: 300px;
-  padding: 5px;
-`;
-
-const MakeModelContainer = styled.div`
-  border: 3px solid black;
-  argin: 5px;
-  display: flex;
-`;
-
-const ModelContainer = styled(Card)`
-  border: 3px solid red;
-  margin: 5px;
-  width: 50%;
-`;
-
-const ShowQuantModelYieldContainer = styled(Card)`
-  border: 3px solid yellow;
-  margin: 5px;
-  margin-top: 10px;
-`;
-
-// const StyledButton = styled(B)
+import { RootState } from "../../stores/store";
+import QuantModelCreation from "./QuantModelCreation";
+import QuantModelTable from "./QuantModelTable";
+import QuantModelViewer from "./QuantModelViewer";
+import { tmpModel } from "./QuantModelViewer/QuantModelViewer";
 
 const QuantLabPage = () => {
+  const [modelList, setModelList] = useState<IModel[]>([]);
+  const [selectionModel, setSelectionModel] = useState<GridSelectionModel>([]); // NOTE: 선택된 모델 id의 배열. 이를 통해 그래프 렌더링 예정
+
+  const models: tmpModel[] = modelList
+    .filter((val) => selectionModel.includes(val.id))
+    .map((val) => {
+      const { id, model_name, chart_data } = val;
+      return { id, model_name, chart_data };
+    });
+  // console.log("model", modelList, selectionModel, models);
+
   return (
     <MainContainer>
-      <MakeModelContainer>
-        <GraphContainer>
-          <GraphSlectContainer>
-            <ComparativeStockSelect />
-            <TermSelect />
-          </GraphSlectContainer>
-          <Graph>
-            <Example></Example>
-          </Graph>
-        </GraphContainer>
+      <StyledDiv>
+        <QuantModelViewer {...{ models }} />
+        <QuantModelCreation {...{ setModelList }} />
+      </StyledDiv>
 
-        <ModelContainer>
-          <Container sx={{ px: "5%" }}>
-            <h3>Quant Lab</h3>
-            <RebalancingTermSlider />
-            <NumberOfStocks />
-          </Container>
-          <Box
-            sx={{
-              display: "grid",
-              gridTemplateColumns: "repeat(2, 1fr)",
-              p: 3,
-            }}
-          >
-            {/* 클릭시 modal 창 열리게 변경*/}
-            {/* <Button variant="contained" sx={{ m: 1 }}>
-              사업분야
-            </Button> */}
-            <Button variant="contained" sx={{ m: 1 }}>
-              재무상태
-            </Button>
-            <Button variant="contained" sx={{ m: 1 }}>
-              주식성향
-            </Button>
-            <Button variant="contained" sx={{ m: 1 }}>
-              차트정보
-            </Button>
-            <ModalBusinessAreas />
-          </Box>
-        </ModelContainer>
-      </MakeModelContainer>
-      <ShowQuantModelYieldContainer>
-        <Typography>모델</Typography>
-        <Typography>누적수익률</Typography>
-        <Typography>연평균수익</Typography>
-        <Typography>승률</Typography>
-        <Typography>최대손실률</Typography>
-        <Typography>편입종목수</Typography>
-      </ShowQuantModelYieldContainer>
+      <QuantModelTable
+        {...{ setSelectionModel, setModelList }}
+        rows={modelList.map((val) => {
+          const { chart_data, ...field } = val;
+          chart_data; // NOTE: 미사용 워닝 해결을 위해 이렇게 해놓았는데... 괜찮을까? 다른 방법이 있나?
+          return field;
+        })}
+      />
     </MainContainer>
   );
 };
+
+/*
+ * ANCHOR: models
+ */
+
+interface IChartElement {
+  start_date: string;
+  profit_kospi_data: number[];
+  profit_rate_data: number[];
+}
+
+export interface IModel {
+  id: number;
+  model_name: string; // NOTE: 변수명은 어떻게 할까?
+
+  cumulative_return: number; // NOTE: 구조 추후 논의 필요
+  annual_average_return: number;
+  winning_percentage: number;
+  max_loss_rate: number;
+  holdings_count: number;
+
+  chart_data: IChartElement;
+}
+
+/*
+ * ANCHOR: styles
+ */
+
+const MainContainer = styled.div`
+  width: 100vw;
+  height: 100%;
+
+  padding-left: 10%;
+  padding-right: 10%;
+`;
+
+const StyledDiv = styled.div`
+  height: 600px;
+
+  display: flex;
+  padding: 20px 0;
+  justify-content: space-between;
+`;
 
 export default QuantLabPage;

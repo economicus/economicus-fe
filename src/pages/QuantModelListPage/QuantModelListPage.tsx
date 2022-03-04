@@ -6,9 +6,9 @@ import ModelHeader from "../../components/ModelHeader";
 import { IModel } from "../QuantLabPage/QuantLabPage";
 import { tmpModel } from "../QuantLabPage/QuantModelViewer/QuantModelViewer";
 import ChartViewerSizeUp from "../QuantLabPage/QuantModelViewer/QuantModelViewerSizeUp";
-import ModelDescription from "./ModelDescription";
+import ModelList from "./ModelList";
 
-const QuantModelDetailsPage = () => {
+const QuantModelListPage = () => {
   const [modelList, setModelList] = useState<IModel[]>([]);
   const [selectionModel, setSelectionModel] = useState<GridSelectionModel>([]);
 
@@ -21,14 +21,13 @@ const QuantModelDetailsPage = () => {
 
   return (
     <MainContainer>
-      <ModelHeader state={true} />
-      <ChartViewerSizeUp {...{ models }} />
-      <ModelDescription />
+      <ModelHeader state={false} />
+      <ModelList />
     </MainContainer>
   );
 };
 
-export default QuantModelDetailsPage;
+export default QuantModelListPage;
 
 const MainContainer = styled.div`
   width: 100vw;

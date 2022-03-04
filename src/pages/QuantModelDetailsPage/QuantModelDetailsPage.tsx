@@ -4,7 +4,6 @@ import styled from "styled-components";
 
 import ModelHeader from "../../components/ModelHeader";
 import { IModel } from "../QuantLabPage/QuantLabPage";
-import { tmpModel } from "../QuantLabPage/QuantModelViewer/QuantModelViewer";
 import ChartViewerSizeUp from "../QuantLabPage/QuantModelViewer/QuantModelViewerSizeUp";
 import ModelDescription from "./ModelDescription";
 
@@ -12,7 +11,7 @@ const QuantModelDetailsPage = () => {
   const [modelList, setModelList] = useState<IModel[]>([]);
   const [selectionModel, setSelectionModel] = useState<GridSelectionModel>([]);
 
-  const models: tmpModel[] = modelList
+  const models = modelList
     .filter((val) => selectionModel.includes(val.id))
     .map((val) => {
       const { id, model_name, chart_data } = val;
@@ -22,7 +21,7 @@ const QuantModelDetailsPage = () => {
   return (
     <MainContainer>
       <ModelHeader state={true} />
-      <ChartViewerSizeUp {...{ models }} />
+      <ChartViewerSizeUp charts={models} />
       <ModelDescription />
     </MainContainer>
   );

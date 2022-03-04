@@ -13,7 +13,7 @@ export default function CheckedFinanceConditionCards({
 }: CheckedItemCardsProps) {
   return (
     <Grid container sx={{ mt: 1 }}>
-      {Object.keys(state).map((key) => {
+      {Object.keys(state).map((key, id) => {
         const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
         const handlePopoverOpen = (event: React.MouseEvent<HTMLElement>) => {

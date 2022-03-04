@@ -12,7 +12,7 @@ import { useCallback, useMemo } from "react";
 
 import { VariableNameTranslate } from "../constants";
 import { IModel } from "../QuantLabPage";
-import QuantLabSaveModal from "../QuantModelCreation/LabModal/LabSaveModal";
+import SaveModelModal from "./SaveModelModal";
 
 interface ModelListProps {
   rows: GridRowsProp;
@@ -38,6 +38,7 @@ export default function QuantModelTable({
     (id: GridRowId) => () => {
       setTimeout(() => {
         setModelList((prev) => prev.filter((model) => model.id !== id));
+        // TODO: 백엔드 완료시 삭제 api 추가 #11
       });
     },
     []
@@ -70,7 +71,7 @@ export default function QuantModelTable({
           //     label="Save"
           //     key={2}
           //   />,
-          <QuantLabSaveModal id={params.id} />,
+          <SaveModelModal id={params.id} />,
         ],
       },
     ],

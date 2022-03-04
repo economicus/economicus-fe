@@ -38,6 +38,7 @@ export default function QuantModelTable({
     (id: GridRowId) => () => {
       setTimeout(() => {
         setModelList((prev) => prev.filter((model) => model.id !== id));
+        // TODO: 백엔드 완료시 삭제 api 추가 #11
       });
     },
     []

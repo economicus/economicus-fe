@@ -17,23 +17,23 @@ export interface IChangedFinanceConditionName {
 }
 
 export const ChangedFinanceConditionName: IChangedFinanceConditionName = {
-  net_revenue: "매출액(?원)",
+  net_revenue: "매출액(억 원)",
   net_revenue_rate: "매출액 증가율(%)",
-  net_profit: "순이익(?원)",
+  net_profit: "순이익(억 원)",
   net_profit_rate: "순이익 증가율(%)",
   de_ratio: "부채 비율(%)",
-  per: "PER(?)",
-  psr: "PSR(?)",
-  pbr: "PBR(?)",
-  pcr: "PCR(?)",
-  dividend_yield: "현금배당수익률(?)",
-  dividend_payout_ratio: "현금배당성향(?)",
-  roa: "ROA(?)",
-  roe: "ROE(?)",
-  market_cap: "시가총액(?원)",
-  activities_operating: "영업현금흐름(?)",
-  activities_investing: "투자현금흐름(?)",
-  activities_financing: "재무현금흐름(?)",
+  per: "PER(배)",
+  psr: "PSR(배)",
+  pbr: "PBR(배)",
+  pcr: "PCR(배)",
+  dividend_yield: "현금배당수익률(%)",
+  dividend_payout_ratio: "현금배당성향(%)",
+  roa: "ROA(%)",
+  roe: "ROE(%)",
+  market_cap: "시가총액(억 원)",
+  activities_operating: "영업현금흐름(억 원)",
+  activities_investing: "투자현금흐름(억 원)",
+  activities_financing: "재무현금흐름(억 원)",
 };
 
 export default function LabModalWithSlider({

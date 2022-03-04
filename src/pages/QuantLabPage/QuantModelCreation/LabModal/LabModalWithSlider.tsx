@@ -5,6 +5,7 @@ import styled from "styled-components";
 import FormControlGroup from "../../../../components/FormControlGroup";
 import ModalWithButton from "../../../../components/ModalWithButton";
 import { IFinanceCondition } from "../QuantModelCreation";
+import CheckedFinanceConditionCards from "./CheckedFinanceConditionCards";
 
 interface QuantLabModalProps {
   btnName: string;
@@ -21,14 +22,14 @@ export const ChangedFinanceConditionName: IChangedFinanceConditionName = {
   net_profit: "순이익(?원)",
   net_profit_rate: "순이익 증가율(%)",
   de_ratio: "부채 비율(%)",
-  per: "PER",
-  psr: "PSR",
-  pbr: "PBR",
-  pcr: "PCR",
+  per: "PER(?)",
+  psr: "PSR(?)",
+  pbr: "PBR(?)",
+  pcr: "PCR(?)",
   dividend_yield: "현금배당수익률(?)",
   dividend_payout_ratio: "현금배당성향(?)",
-  roa: "ROA",
-  roe: "ROE",
+  roa: "ROA(?)",
+  roe: "ROE(?)",
   market_cap: "시가총액(?원)",
   activities_operating: "영업현금흐름(?)",
   activities_investing: "투자현금흐름(?)",
@@ -80,46 +81,49 @@ export default function LabModalWithSlider({
   };
 
   return (
-    <ModalWithButton btnName={btnName}>
-      <FormControlLabel
-        control={
-          <Checkbox checked={selecAll} onChange={selectAllHandleChange} />
-        }
-        label="Select all"
-      />
-      <FormControlGroup>
-        {Object.keys(state).map((key, idx) => {
-          return (
-            <Container key={idx}>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={state[key].checked}
-                    onChange={handleCheckboxChange}
-                    name={key}
-                  />
-                }
-                label={ChangedFinanceConditionName[key]}
-                sx={{ width: 500 }}
-              />
-              {state[key].checked && (
-                <CustomizedSlider
-                  value={[...state[key].values]}
-                  onChange={handleSliderChange}
-                  name={key}
-                  min={state[key].min}
-                  max={state[key].max}
-                  valueLabelDisplay="on"
-                  disabled={!state[key].checked}
-                  sx={{ width: 400 }}
-                  size="small"
+    <>
+      <ModalWithButton btnName={btnName} state={state}>
+        <FormControlLabel
+          control={
+            <Checkbox checked={selecAll} onChange={selectAllHandleChange} />
+          }
+          label="Select all"
+        />
+        <FormControlGroup>
+          {Object.keys(state).map((key, idx) => {
+            return (
+              <Container key={idx}>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={state[key].checked}
+                      onChange={handleCheckboxChange}
+                      name={key}
+                    />
+                  }
+                  label={ChangedFinanceConditionName[key]}
+                  sx={{ width: 500 }}
                 />
-              )}
-            </Container>
-          );
-        })}
-      </FormControlGroup>
-    </ModalWithButton>
+                {state[key].checked && (
+                  <CustomizedSlider
+                    value={[...state[key].values]}
+                    onChange={handleSliderChange}
+                    name={key}
+                    min={state[key].min}
+                    max={state[key].max}
+                    valueLabelDisplay="on"
+                    disabled={!state[key].checked}
+                    sx={{ width: 400 }}
+                    size="small"
+                  />
+                )}
+              </Container>
+            );
+          })}
+        </FormControlGroup>
+      </ModalWithButton>
+      <CheckedFinanceConditionCards state={state} />
+    </>
   );
 }
 

@@ -14,7 +14,6 @@ export default async function login(email: string, password: string) {
         "Content-Type": "application/json",
       },
     });
-    // NOTE: status 등은 어떻게 처리?
 
     return res.data;
   } catch (e) {

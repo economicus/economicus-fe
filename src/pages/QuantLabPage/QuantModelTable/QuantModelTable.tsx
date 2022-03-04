@@ -10,6 +10,7 @@ import {
 } from "@mui/x-data-grid";
 import { useCallback, useMemo } from "react";
 
+import { VariableNameTranslate } from "../constants";
 import { IModel } from "../QuantLabPage";
 import QuantLabSaveModal from "../QuantModelCreation/LabModal/LabSaveModal";
 
@@ -25,7 +26,12 @@ export default function QuantModelTable({
   setModelList,
 }: ModelListProps) {
   const columns: GridColDef[] = FIELDS.map((val) => {
-    return { field: val, headerName: val, width: 150 };
+    return {
+      field: val,
+      headerName:
+        VariableNameTranslate[`${val}` as keyof typeof VariableNameTranslate],
+      width: 150,
+    };
   });
 
   const deleteModel = useCallback(
@@ -87,7 +93,6 @@ export default function QuantModelTable({
             rows={rows}
             columns={columnsWithButton}
             onSelectionModelChange={(model) => {
-              // console.log("hi...", model);
               setSelectionModel(model);
             }}
           />
@@ -104,9 +109,4 @@ const FIELDS = [
   "winning_percentage",
   "max_loss_rate",
   "holdings_count",
-]; // NOTE: 적절한가? 잘 모르겠음
-/* TODO
- * 데이터 구조, 상수화 등에 대한 고민
- * 폭 개선 (디자인 개선)
- * 버튼 추가
- */
+];

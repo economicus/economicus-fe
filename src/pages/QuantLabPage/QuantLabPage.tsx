@@ -1,5 +1,5 @@
 import { GridSelectionModel } from "@mui/x-data-grid";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 
 import QuantModelCreation from "./QuantModelCreation";
@@ -7,9 +7,13 @@ import QuantModelTable from "./QuantModelTable";
 import QuantModelViewer from "./QuantModelViewer";
 
 const QuantLabPage = () => {
-  // const [modelList, setModelList] = useState<IModel[]>([]);
-  const [modelList, setModelList] = useState<IModel[]>(dummy);
+  const [modelList, setModelList] = useState<IModel[]>([]);
+  // const [modelList, setModelList] = useState<IModel[]>(dummy);
   const [selectionModel, setSelectionModel] = useState<GridSelectionModel>([]); // NOTE: 선택된 모델 id의 배열
+
+  useEffect(() => {
+    //
+  });
 
   const charts: IChart[] = modelList
     .filter((val) => selectionModel.includes(val.id))

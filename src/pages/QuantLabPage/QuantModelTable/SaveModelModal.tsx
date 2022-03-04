@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 interface QuantLabModalProps {
   id: GridRowId;
 }
-export default function QuantLabSaveModal({ id }: QuantLabModalProps) {
+export default function SaveModelModal({ id }: QuantLabModalProps) {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -52,7 +52,7 @@ export default function QuantLabSaveModal({ id }: QuantLabModalProps) {
       {createPortal(
         <Snackbar
           open={open}
-          autoHideDuration={2000}
+          autoHideDuration={5000}
           onClose={handleClose}
           message="모델을 저장했습니다."
           action={action}

@@ -12,7 +12,7 @@ import { useCallback, useMemo } from "react";
 
 import { VariableNameTranslate } from "../constants";
 import { IModel } from "../QuantLabPage";
-import QuantLabSaveModal from "../QuantModelCreation/LabModal/LabSaveModal";
+import SaveModelModal from "./SaveModelModal";
 
 interface ModelListProps {
   rows: GridRowsProp;
@@ -71,7 +71,7 @@ export default function QuantModelTable({
           //     label="Save"
           //     key={2}
           //   />,
-          <QuantLabSaveModal id={params.id} />,
+          <SaveModelModal id={params.id} />,
         ],
       },
     ],

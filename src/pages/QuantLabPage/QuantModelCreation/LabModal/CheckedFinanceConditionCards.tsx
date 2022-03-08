@@ -13,7 +13,7 @@ export default function CheckedFinanceConditionCards({
 }: CheckedItemCardsProps) {
   return (
     <Grid container sx={{ mt: 1 }}>
-      {Object.keys(state).map((key) => {
+      {Object.keys(state).map((key, idx) => {
         const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
         const handlePopoverOpen = (event: React.MouseEvent<HTMLElement>) => {
@@ -27,7 +27,7 @@ export default function CheckedFinanceConditionCards({
         const open = Boolean(anchorEl);
         if (state[key].checked) {
           return (
-            <>
+            <div key={idx}>
               <Card
                 aria-owns={open ? "mouse-over-popover" : undefined}
                 aria-haspopup="true"
@@ -66,7 +66,7 @@ export default function CheckedFinanceConditionCards({
                   {state[key].values[0] + " ~ " + state[key].values[1]}
                 </Typography>
               </Popover>
-            </>
+            </div>
           );
         }
       })}

@@ -46,7 +46,10 @@ export default function ModelCreation({ setModelList }: ModelCreationProps) {
 
     const notActivitiesValue = Object.fromEntries(
       Object.entries(financeCondition)
-        .filter(([key]) => !key.startsWith("activities_"))
+        .filter(
+          ([key]) =>
+            !key.startsWith("activities_") && financeCondition[key].checked
+        )
         .map(([key, value]) => [
           key,
           { min: value.values[0], max: value.values[1] },
@@ -55,7 +58,10 @@ export default function ModelCreation({ setModelList }: ModelCreationProps) {
 
     const activitiesValue = Object.fromEntries(
       Object.entries(financeCondition)
-        .filter(([key]) => key.startsWith("activities_"))
+        .filter(
+          ([key]) =>
+            key.startsWith("activities_") && financeCondition[key].checked
+        )
         .map(([key, value]) => [
           key.split("_")[1],
           { min: value.values[0], max: value.values[1] },
@@ -264,22 +270,42 @@ const initialBusinessArea: IBusinessArea = {
   유틸리티: true,
 };
 
+// const initialFinanceCondetion = {
+//   net_revenue: sliderStateCunstructor(-100, 100),
+//   net_revenue_rate: sliderStateCunstructor(-100, 100),
+//   net_profit: sliderStateCunstructor(-100, 100),
+//   net_profit_rate: sliderStateCunstructor(-100, 100),
+//   de_ratio: sliderStateCunstructor(-100, 100),
+//   per: sliderStateCunstructor(-100, 100),
+//   psr: sliderStateCunstructor(-100, 100),
+//   pbr: sliderStateCunstructor(-100, 100),
+//   pcr: sliderStateCunstructor(-100, 100),
+//   dividend_yield: sliderStateCunstructor(-100, 100),
+//   dividend_payout_ratio: sliderStateCunstructor(-100, 100),
+//   roa: sliderStateCunstructor(-100, 100),
+//   roe: sliderStateCunstructor(-100, 100),
+//   market_cap: sliderStateCunstructor(-100, 100),
+//   activities_operating: sliderStateCunstructor(-100, 100),
+//   activities_investing: sliderStateCunstructor(-100, 100),
+//   activities_financing: sliderStateCunstructor(-100, 100),
+// };
+
 const initialFinanceCondetion = {
-  net_revenue: sliderStateCunstructor(-100, 100),
-  net_revenue_rate: sliderStateCunstructor(-100, 100),
-  net_profit: sliderStateCunstructor(-100, 100),
-  net_profit_rate: sliderStateCunstructor(-100, 100),
-  de_ratio: sliderStateCunstructor(-100, 100),
-  per: sliderStateCunstructor(-100, 100),
-  psr: sliderStateCunstructor(-100, 100),
-  pbr: sliderStateCunstructor(-100, 100),
-  pcr: sliderStateCunstructor(-100, 100),
-  dividend_yield: sliderStateCunstructor(-100, 100),
-  dividend_payout_ratio: sliderStateCunstructor(-100, 100),
-  roa: sliderStateCunstructor(-100, 100),
-  roe: sliderStateCunstructor(-100, 100),
-  market_cap: sliderStateCunstructor(-100, 100),
-  activities_operating: sliderStateCunstructor(-100, 100),
-  activities_investing: sliderStateCunstructor(-100, 100),
-  activities_financing: sliderStateCunstructor(-100, 100),
+  net_revenue: sliderStateCunstructor(-36, 2437714),
+  net_revenue_rate: sliderStateCunstructor(-100, 79433),
+  net_profit: sliderStateCunstructor(-4000, 45000),
+  net_profit_rate: sliderStateCunstructor(-22400, 179900),
+  de_ratio: sliderStateCunstructor(0, 84510),
+  per: sliderStateCunstructor(-5, 167089),
+  psr: sliderStateCunstructor(-20, 240936),
+  pbr: sliderStateCunstructor(0, 573),
+  pcr: sliderStateCunstructor(0, 97906),
+  dividend_yield: sliderStateCunstructor(0, 50),
+  dividend_payout_ratio: sliderStateCunstructor(-7872, 65278),
+  roa: sliderStateCunstructor(-275, 154),
+  roe: sliderStateCunstructor(-4900, 1615),
+  market_cap: sliderStateCunstructor(0, 435000),
+  activities_operating: sliderStateCunstructor(-13000, 68000),
+  activities_investing: sliderStateCunstructor(-54000, 5000),
+  activities_financing: sliderStateCunstructor(-15000, 26000),
 };

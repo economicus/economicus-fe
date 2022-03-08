@@ -15,6 +15,10 @@ const EconomicusLogo = styled("img")({
   margin: 10,
 });
 
+const StyledTypography = styled(Typography)`
+  font-family: SongMyung;
+`;
+
 const MainNavigation = () => {
   return (
     // <nav>
@@ -25,7 +29,7 @@ const MainNavigation = () => {
           <EconomicusLogo src="https://avatars.githubusercontent.com/u/98199739?s=200&v=4" />
         </Link>
         <Box sx={{ flexGrow: 1 }}>
-          <Typography variant="h5">Economicus</Typography>
+          <StyledTypography variant="h5">Economicus</StyledTypography>
         </Box>
         <SearchTextField />
         <IconButton

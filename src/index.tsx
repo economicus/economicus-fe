@@ -1,17 +1,20 @@
-import { CssBaseline } from "@mui/material";
+import { CssBaseline, ThemeProvider } from "@mui/material";
 import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 
 import App from "./App";
 import { store } from "./stores/store";
+import { theme } from "./styles/muiTheme";
 
 ReactDOM.render(
   <React.StrictMode>
-    <CssBaseline />
-    <Provider store={store}>
-      <App />
-    </Provider>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </ThemeProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );

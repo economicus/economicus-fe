@@ -1,6 +1,6 @@
+import { styled } from "@mui/system";
 import { GridSelectionModel } from "@mui/x-data-grid";
 import { useEffect, useState } from "react";
-import styled from "styled-components";
 
 import QuantModelCreation from "./QuantModelCreation";
 import QuantModelTable from "./QuantModelTable";
@@ -106,7 +106,7 @@ const dummy = [
  * ANCHOR: styles
  */
 
-const MainContainer = styled.div`
+const MainContainer = styled("div")`
   width: 100vw;
   height: 100%;
 
@@ -114,7 +114,7 @@ const MainContainer = styled.div`
   padding-right: 10%;
 `;
 
-const StyledDiv = styled.div`
+const StyledDiv = styled("div")`
   height: 600px;
 
   display: flex;

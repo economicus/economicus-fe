@@ -1,9 +1,8 @@
 import { AppBar, Toolbar } from "@material-ui/core";
 import { ChatBubble, Home, Notifications, People } from "@material-ui/icons";
 import { IconButton, Typography } from "@mui/material";
-import { Box } from "@mui/system";
+import { Box, styled } from "@mui/system";
 import { Link } from "react-router-dom";
-import styled from "styled-components";
 
 import PositionedMenu from "../components/PositionedMenu";
 import SearchTextField from "../components/SearchTextField";
@@ -16,7 +15,7 @@ const EconomicusLogo = styled("img")({
 });
 
 const StyledTypography = styled(Typography)`
-  font-family: SongMyung;
+  font-family: "SongMyung";
 `;
 
 const MainNavigation = () => {

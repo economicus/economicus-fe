@@ -1,6 +1,6 @@
+import { styled } from "@mui/system";
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import styled from "styled-components";
 
 import Layout from "./layouts/Layout";
 import LoginPage from "./pages/LoginPage";
@@ -43,7 +43,7 @@ function App() {
   );
 }
 
-const StyledDiv = styled.div`
+const StyledDiv = styled("div")`
   /* font-family: "SongMyung"; */
 `;
 

@@ -21,6 +21,8 @@ export const theme = createTheme({
   components: {
     MuiCssBaseline: {
       styleOverrides: `
+      html { overflow-y:scroll; }
+
       @font-face {
         font-family: 'NOTO Sans KR Thin';
         src: url(${Noto}) format('woff');

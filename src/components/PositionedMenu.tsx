@@ -1,4 +1,5 @@
 import { AccountCircle } from "@material-ui/icons";
+import { IconButton } from "@mui/material";
 import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
@@ -23,22 +24,17 @@ const PositionedMenu = () => {
   };
 
   return (
-    <div>
-      <Button
+    <>
+      <IconButton
         id="demo-positioned-button"
         aria-controls={open ? "demo-positioned-menu" : undefined}
         aria-haspopup="true"
         aria-expanded={open ? "true" : undefined}
         onClick={handleClick}
         color="inherit"
-        sx={{
-          mr: 1,
-          ml: 1,
-          "&:hover": { backgroundColor: "transparent" },
-        }}
       >
         <AccountCircle />
-      </Button>
+      </IconButton>
       <Menu
         id="demo-positioned-menu"
         aria-labelledby="demo-positioned-button"
@@ -99,7 +95,7 @@ const PositionedMenu = () => {
           </MenuItem>
         )}
       </Menu>
-    </div>
+    </>
   );
 };
 

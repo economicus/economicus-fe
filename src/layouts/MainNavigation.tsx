@@ -7,89 +7,95 @@ import { Link } from "react-router-dom";
 import PositionedMenu from "../components/PositionedMenu";
 import SearchTextField from "../components/SearchTextField";
 
-const EconomicusLogo = styled("img")({
-  borderRadius: 5,
-  width: 50,
-  height: 50,
-  margin: 10,
-});
+const LogoImage = styled("img")`
+  border-radius: 5px;
+  width: 40px;
+  height: 40px;
+  margin: 10px;
+`;
 
-const StyledTypography = styled(Typography)`
+const LogoTypography = styled(Typography)`
   font-family: "SongMyung";
+`;
+
+const RowContainer = styled(Box)`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+`;
+
+const MainContainer = styled(Box)`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const StyledLink = styled(Link)`
+  display: flex; // NOTE: 하단 공백 제거
+
+  &,
+  &:visited,
+  &:hover,
+  &:active {
+    color: inherit;
+  }
+`;
+
+const IconContainer = styled(Box)`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 250px;
+  /* background-color: yellow; */
 `;
 
 const MainNavigation = () => {
   return (
-    // <nav>
-    // <Box sx={{ flexGrow: 1 }}>
-    <AppBar position="static" color="inherit">
-      <Toolbar>
-        <Link to="/">
-          <EconomicusLogo src="https://avatars.githubusercontent.com/u/98199739?s=200&v=4" />
-        </Link>
-        <Box sx={{ flexGrow: 1 }}>
-          <StyledTypography variant="h5">Economicus</StyledTypography>
-        </Box>
-        <SearchTextField />
-        <IconButton
-          size="large"
-          edge="start"
-          color="inherit"
-          aria-label="home"
-          sx={{
-            mr: 1,
-            ml: 1,
-            "&:hover": { backgroundColor: "transparent" },
-          }}
-        >
-          <Link to="/">
-            <Home />
-          </Link>
-        </IconButton>
-        <IconButton
-          size="large"
-          edge="start"
-          color="inherit"
-          aria-label="people"
-          sx={{
-            mr: 1,
-            ml: 1,
-            "&:hover": { backgroundColor: "transparent" },
-          }}
-        >
-          <People />
-        </IconButton>
-        <IconButton
-          size="large"
-          edge="start"
-          color="inherit"
-          aria-label="chatBubble"
-          sx={{
-            mr: 1,
-            ml: 1,
-            "&:hover": { backgroundColor: "transparent" },
-          }}
-        >
-          <ChatBubble />
-        </IconButton>
-        <IconButton
-          size="large"
-          edge="start"
-          color="inherit"
-          aria-label="notifications"
-          sx={{
-            mr: 1,
-            ml: 1,
-            "&:hover": { backgroundColor: "transparent" },
-          }}
-        >
-          <Notifications />
-        </IconButton>
-        <PositionedMenu />
-      </Toolbar>
-    </AppBar>
-    // </Box>
-    // </nav>
+    <div style={{ flexGrow: 1 }}>
+      <AppBar position="static" variant="outlined" color="inherit">
+        <Toolbar style={{ padding: "0 3px" }}>
+          <MainContainer>
+            <RowContainer>
+              <StyledLink to="/">
+                <LogoImage src="https://avatars.githubusercontent.com/u/98199739?s=200&v=4" />
+              </StyledLink>
+              <LogoTypography variant="h5">Economicus</LogoTypography>
+            </RowContainer>
+
+            <RowContainer>
+              <div style={{ margin: "0 20px" }}>
+                <SearchTextField />
+              </div>
+
+              <IconContainer>
+                <IconButton color="inherit" aria-label="home">
+                  <StyledLink to="/">
+                    <Home />
+                  </StyledLink>
+                </IconButton>
+
+                <IconButton color="inherit" aria-label="people">
+                  <People />
+                </IconButton>
+
+                <IconButton color="inherit" aria-label="chatBubble">
+                  <ChatBubble />
+                </IconButton>
+
+                <IconButton color="inherit" aria-label="notifications">
+                  <Notifications />
+                </IconButton>
+
+                <PositionedMenu />
+              </IconContainer>
+            </RowContainer>
+          </MainContainer>
+        </Toolbar>
+      </AppBar>
+    </div>
   );
 };
 

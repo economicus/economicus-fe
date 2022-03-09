@@ -1,6 +1,6 @@
+import { styled } from "@mui/system";
 import { GridSelectionModel } from "@mui/x-data-grid";
 import { useState } from "react";
-import styled from "styled-components";
 
 import ModelHeader from "../../components/ModelHeader";
 import { IModel } from "../QuantLabPage/QuantLabPage";
@@ -27,7 +27,7 @@ const QuantModelListPage = () => {
 
 export default QuantModelListPage;
 
-const MainContainer = styled.div`
+const MainContainer = styled("div")`
   width: 100vw;
   height: 100%;
 

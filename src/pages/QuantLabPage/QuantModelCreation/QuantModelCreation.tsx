@@ -1,9 +1,9 @@
 import { LoadingButton } from "@mui/lab";
 import { Alert, Paper, Snackbar, TextField, Typography } from "@mui/material";
+import { styled } from "@mui/system";
 import { AxiosError } from "axios";
 import { useRef, useState } from "react";
 import { useSelector } from "react-redux";
-import styled from "styled-components";
 
 import createQuantModel, {
   createQuantModelBody,
@@ -225,12 +225,12 @@ const MainContainer = styled(Paper)`
   flex-direction: column;
 `;
 
-const ConditionButtonsContainer = styled.div`
+const ConditionButtonsContainer = styled("div")`
   display: flex;
   flex-direction: column;
 `;
 
-const ButtonsContainer = styled.div`
+const ButtonsContainer = styled("div")`
   height: 100%;
   margin-top: 10px;
 

@@ -1,6 +1,6 @@
 import { Checkbox, FormControlLabel, Slider } from "@mui/material";
+import { styled } from "@mui/system";
 import React, { useState } from "react";
-import styled from "styled-components";
 
 import FormControlGroup from "../../../../components/FormControlGroup";
 import ModalWithButton from "../../../../components/ModalWithButton";
@@ -127,7 +127,7 @@ export default function LabModalWithSlider({
   );
 }
 
-const Container = styled.div`
+const Container = styled("div")`
   display: flex;
   height: 60px;
   width: 250px;

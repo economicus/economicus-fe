@@ -12,6 +12,8 @@ import { styled } from "@mui/system";
 import * as React from "react";
 import { Link } from "react-router-dom";
 
+import signUp from "../../apis/signUp";
+
 const theme = createTheme();
 
 const EconomicusLogo = styled("img")({
@@ -22,14 +24,39 @@ const EconomicusLogo = styled("img")({
 });
 
 export default function SignUpPage() {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    // 라우터가 정상적으로 동작할 수 있도록 기본 이벤트를 막는다.(버튼을 눌렀을때 팝업이 뜨면서 창이 새로고침되는것을 막도록)
     const data = new FormData(event.currentTarget);
-    // eslint-disable-next-line no-console
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+    // 현재 Target(여기서는 Box)의 데이터를 가지고온다.
+
+    // console.log({
+    //   email: data.get("email"),
+    //   password: data.get("password"),
+    //   nickname: data.get("nickname"),
+    // });
+    // 데이터를 정상적으로 가져왔는지 확인하기위해 콘솔에 데이터를 찍어본다.
+
+    const code = await signUp(
+      data.get("email") as string,
+      data.get("password") as string,
+      data.get("nickname") as string
+    );
+    // 회원가입 함수에 가져온 데이터를 보내고 상태를 가져온다
+    // console.log(code);
+
+    if (code == 201) {
+      alert("test 201");
+    } else if (code == "duplicated nickname") {
+      alert("test duplicated nickname");
+    } else if (code == "duplicated email") {
+      alert("test duplicated email");
+    } else {
+      alert("server error");
+    }
+    // 회원가입 함수에서 가져온 상태에 따라 분기한다
+    // TODO: 201일때 로그인 페이지로 이동(+ 이메일 정보 가져와서 로그인 정보에 미리 들어가있게 설정)
+    // TODO: 400일때 에러 메세지에 따라 해당 부분으로 커서 이동 및 빨간색으로 강조
   };
 
   return (

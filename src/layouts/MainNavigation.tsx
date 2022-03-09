@@ -40,6 +40,7 @@ const StyledLink = styled(Link)`
   &:hover,
   &:active {
     color: inherit;
+    text-decoration: none;
   }
 `;
 
@@ -58,12 +59,12 @@ const MainNavigation = () => {
       <AppBar position="static" variant="outlined" color="inherit">
         <Toolbar style={{ padding: "0 3px" }}>
           <MainContainer>
-            <RowContainer>
-              <StyledLink to="/">
+            <StyledLink to="/">
+              <RowContainer>
                 <LogoImage src="https://avatars.githubusercontent.com/u/98199739?s=200&v=4" />
-              </StyledLink>
-              <LogoTypography variant="h5">Economicus</LogoTypography>
-            </RowContainer>
+                <LogoTypography variant="h5">Economicus</LogoTypography>
+              </RowContainer>
+            </StyledLink>
 
             <RowContainer>
               <div style={{ margin: "0 20px" }}>

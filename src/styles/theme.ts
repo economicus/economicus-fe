@@ -12,6 +12,9 @@ export const theme = createTheme({
     secondary: {
       main: "#ffd740",
     },
+    info: {
+      main: "#8ca6da",
+    },
   },
   typography: {
     allVariants: {

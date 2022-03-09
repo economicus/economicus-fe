@@ -1,4 +1,4 @@
-import { Checkbox, FormControlLabel, Slider } from "@mui/material";
+import { Checkbox, FormControlLabel, Slider, TextField } from "@mui/material";
 import { styled } from "@mui/system";
 import React, { useState } from "react";
 
@@ -80,6 +80,32 @@ export default function LabModalWithSlider({
     });
   };
 
+  const handleInputchange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const targetId =
+      Number(event.target.id.substring(4)) % 2 ? "or over" : "or under";
+    let newValues;
+    if (targetId === "or over") {
+      const tmp =
+        Number(event.target.value) <= state[event.target.name].min
+          ? state[event.target.name].min
+          : event.target.value;
+      newValues = [tmp, state[event.target.name].values[1]];
+    } else {
+      const tmp =
+        Number(event.target.value) >= state[event.target.name].max
+          ? state[event.target.name].max
+          : event.target.value;
+      newValues = [state[event.target.name].values[0], tmp];
+    }
+    setState({
+      ...state,
+      [event.target.name]: {
+        ...state[event.target.name],
+        values: newValues as number[],
+      },
+    });
+  };
+
   return (
     <>
       <ModalWithButton btnName={btnName} state={state}>
@@ -102,20 +128,51 @@ export default function LabModalWithSlider({
                     />
                   }
                   label={ChangedFinanceConditionName[key]}
-                  sx={{ width: 500 }}
+                  sx={{ width: 300 }}
                 />
                 {state[key].checked && (
-                  <CustomizedSlider
-                    value={[...state[key].values]}
-                    onChange={handleSliderChange}
-                    name={key}
-                    min={state[key].min}
-                    max={state[key].max}
-                    valueLabelDisplay="on"
-                    disabled={!state[key].checked}
-                    sx={{ width: 400 }}
-                    size="small"
-                  />
+                  <>
+                    <CustomizedSlider
+                      value={[...state[key].values]}
+                      onChange={handleSliderChange}
+                      name={key}
+                      min={state[key].min}
+                      max={state[key].max}
+                      marks={[
+                        {
+                          value: state[key].min,
+                          label: state[key].values[0],
+                          //label: "min",
+                        },
+                        {
+                          value: state[key].max,
+                          label: state[key].values[1],
+                          //label: "max",
+                        },
+                      ]}
+                      //valueLabelDisplay="on"
+                      disabled={!state[key].checked}
+                      sx={{ width: 250, mr: 2 }}
+                      size="small"
+                    />
+                    <TextField
+                      type="Number"
+                      value={state[key].values[0]}
+                      label="or over"
+                      name={key}
+                      onChange={handleInputchange}
+                      size="small"
+                      sx={{ mx: 1 }}
+                    />
+                    <TextField
+                      type="Number"
+                      value={state[key].values[1]}
+                      label="or under"
+                      name={key}
+                      onChange={handleInputchange}
+                      size="small"
+                    />
+                  </>
                 )}
               </Container>
             );
@@ -130,7 +187,7 @@ export default function LabModalWithSlider({
 const Container = styled("div")`
   display: flex;
   height: 60px;
-  width: 250px;
+  width: 600px;
   padding-top: 20px;
   margin-right: 50px;
   align-items: center;

@@ -9,7 +9,10 @@ import {
   GridSelectionModel,
 } from "@mui/x-data-grid";
 import { useCallback, useMemo } from "react";
+import { useSelector } from "react-redux";
 
+import deleteQuantModel from "../../../apis/deleteQuantModel";
+import { RootState } from "../../../stores/store";
 import { VariableNameTranslate } from "../constants";
 import { IModel } from "../QuantLabPage";
 import SaveModelModal from "./SaveModelModal";
@@ -25,6 +28,8 @@ export default function QuantModelTable({
   setSelectionModel,
   setModelList,
 }: ModelListProps) {
+  const token = useSelector((state: RootState) => state.session.token);
+
   const columns: GridColDef[] = FIELDS.map((val) => {
     return {
       field: val,
@@ -36,9 +41,11 @@ export default function QuantModelTable({
 
   const deleteModel = useCallback(
     (id: GridRowId) => () => {
-      setTimeout(() => {
+      setTimeout(async () => {
         setModelList((prev) => prev.filter((model) => model.id !== id));
+
         // TODO: 백엔드 완료시 삭제 api 추가 #11
+        await deleteQuantModel(id as string, token);
       });
     },
     []

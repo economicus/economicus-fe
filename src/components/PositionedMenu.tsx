@@ -1,6 +1,5 @@
 import { AccountCircle } from "@material-ui/icons";
 import { IconButton } from "@mui/material";
-import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { useState } from "react";
@@ -12,7 +11,9 @@ import { RootState } from "../stores/store";
 
 const PositionedMenu = () => {
   const dispatch = useDispatch();
-  const { isLoggedin } = useSelector((state: RootState) => state.session); // TODO: 하나씩으로 개선
+  const isLoggedin = useSelector(
+    (state: RootState) => state.session.isLoggedin
+  );
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);

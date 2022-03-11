@@ -10,7 +10,7 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import { styled } from "@mui/system";
 import * as React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import signUp from "../../apis/signUp";
 
@@ -24,6 +24,7 @@ const EconomicusLogo = styled("img")({
 });
 
 export default function SignUpPage() {
+  const navigate = useNavigate();
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     // 라우터가 정상적으로 동작할 수 있도록 기본 이벤트를 막는다.(버튼을 눌렀을때 팝업이 뜨면서 창이 새로고침되는것을 막도록)
@@ -37,6 +38,8 @@ export default function SignUpPage() {
     // });
     // 데이터를 정상적으로 가져왔는지 확인하기위해 콘솔에 데이터를 찍어본다.
 
+    // TODO: 이메일 유효성 검사해서 정상적인 이메일인지 확인.
+
     const code = await signUp(
       data.get("email") as string,
       data.get("password") as string,
@@ -46,17 +49,19 @@ export default function SignUpPage() {
     // console.log(code);
 
     if (code == 201) {
-      alert("test 201");
+      // 201일때 로그인 페이지로 이동(+ 이메일 정보 가져와서 로그인 정보에 미리 들어가있게 설정)
+      alert("회원가입에 성공하였습니다!");
+      navigate("/LoginPage", { state: data.get("email") });
     } else if (code == "duplicated nickname") {
-      alert("test duplicated nickname");
+      // TODO: 400일때 에러 메세지에 따라 해당 부분으로 커서 이동 및 빨간색으로 강조
+      // alert("test duplicated nickname");
     } else if (code == "duplicated email") {
-      alert("test duplicated email");
+      // alert("test duplicated email");
     } else {
-      alert("server error");
+      // alert("server error");
     }
-    // 회원가입 함수에서 가져온 상태에 따라 분기한다
-    // TODO: 201일때 로그인 페이지로 이동(+ 이메일 정보 가져와서 로그인 정보에 미리 들어가있게 설정)
-    // TODO: 400일때 에러 메세지에 따라 해당 부분으로 커서 이동 및 빨간색으로 강조
+
+    // 회원가입 함수에서 가져온 상태에 따라 적절하게 분기한다
   };
 
   return (

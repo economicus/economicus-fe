@@ -68,6 +68,13 @@ export default function ModelCreation({ setModelList }: ModelCreationProps) {
         ])
     );
 
+    const formedFinanceCondition = Object.fromEntries(
+      Object.entries(financeCondition).map(([key, value]) => [
+        key,
+        { min: value.values[0], max: value.values[1] },
+      ])
+    );
+
     if (!token) {
       setError("로그인이 필요한 기능입니다.");
       return;
@@ -82,10 +89,15 @@ export default function ModelCreation({ setModelList }: ModelCreationProps) {
           main_sectors: Object.entries(businessArea)
             .filter(([, value]) => value === true)
             .map(([key]) => key),
-          ...notActivitiesValue,
-          activities: {
-            ...activitiesValue,
-          },
+
+          ...formedFinanceCondition,
+
+          // ...notActivitiesValue,
+          // activities: {
+          //   ...activitiesValue,
+          // },
+
+          // NOTE: 날짜는 어떻게?
           start_date: "2016-04-30T00:00:00.000Z",
           end_date: "2021-04-30T00:00:00.000Z",
         } as createQuantModelBody,
@@ -95,10 +107,18 @@ export default function ModelCreation({ setModelList }: ModelCreationProps) {
 
       if (responseData instanceof Error) throw responseData;
 
-      setModelList((prev) => [
-        ...prev,
-        { id: +new Date(), model_name: modelName, ...responseData },
-      ]);
+      setModelList((prev) => {
+        return [
+          ...prev,
+          // { id: +new Date(), model_name: modelName, ...responseData },
+          {
+            id: responseData["quant_id"],
+            model_name: modelName,
+            ...responseData,
+          },
+        ];
+      });
+
       setModelName(["", 1]);
     } catch (e) {
       setError((e as AxiosError).response?.data.message);
@@ -201,9 +221,11 @@ export interface IFinanceCondition {
   roa: ICheckboxWithSliderInfo;
   roe: ICheckboxWithSliderInfo;
   market_cap: ICheckboxWithSliderInfo;
-  activities_operating: ICheckboxWithSliderInfo;
-  activities_investing: ICheckboxWithSliderInfo;
-  activities_financing: ICheckboxWithSliderInfo;
+
+  // NOTE: activities
+  operating: ICheckboxWithSliderInfo;
+  investing: ICheckboxWithSliderInfo;
+  financing: ICheckboxWithSliderInfo;
 }
 
 export interface ICheckboxWithSliderInfo {
@@ -270,26 +292,6 @@ const initialBusinessArea: IBusinessArea = {
   유틸리티: true,
 };
 
-// const initialFinanceCondetion = {
-//   net_revenue: sliderStateCunstructor(-100, 100),
-//   net_revenue_rate: sliderStateCunstructor(-100, 100),
-//   net_profit: sliderStateCunstructor(-100, 100),
-//   net_profit_rate: sliderStateCunstructor(-100, 100),
-//   de_ratio: sliderStateCunstructor(-100, 100),
-//   per: sliderStateCunstructor(-100, 100),
-//   psr: sliderStateCunstructor(-100, 100),
-//   pbr: sliderStateCunstructor(-100, 100),
-//   pcr: sliderStateCunstructor(-100, 100),
-//   dividend_yield: sliderStateCunstructor(-100, 100),
-//   dividend_payout_ratio: sliderStateCunstructor(-100, 100),
-//   roa: sliderStateCunstructor(-100, 100),
-//   roe: sliderStateCunstructor(-100, 100),
-//   market_cap: sliderStateCunstructor(-100, 100),
-//   activities_operating: sliderStateCunstructor(-100, 100),
-//   activities_investing: sliderStateCunstructor(-100, 100),
-//   activities_financing: sliderStateCunstructor(-100, 100),
-// };
-
 const initialFinanceCondetion = {
   net_revenue: sliderStateCunstructor(-36, 2437714),
   net_revenue_rate: sliderStateCunstructor(-100, 79433),
@@ -305,7 +307,8 @@ const initialFinanceCondetion = {
   roa: sliderStateCunstructor(-275, 154),
   roe: sliderStateCunstructor(-4900, 1615),
   market_cap: sliderStateCunstructor(0, 435000),
-  activities_operating: sliderStateCunstructor(-13000, 68000),
-  activities_investing: sliderStateCunstructor(-54000, 5000),
-  activities_financing: sliderStateCunstructor(-15000, 26000),
+
+  operating: sliderStateCunstructor(-13000, 68000),
+  investing: sliderStateCunstructor(-54000, 5000),
+  financing: sliderStateCunstructor(-15000, 26000),
 };

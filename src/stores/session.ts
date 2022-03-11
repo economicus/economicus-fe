@@ -28,7 +28,7 @@ export const loginThunk = createAsyncThunk<
   },
   { email: string; password: string },
   { rejectValue: string }
->("user/login", async ({ email, password }, { rejectWithValue }) => {
+>("session/login", async ({ email, password }, { rejectWithValue }) => {
   try {
     const response = await login(email, password);
     if (response instanceof Error) throw response;

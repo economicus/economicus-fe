@@ -31,9 +31,14 @@ export const ChangedFinanceConditionName: IChangedFinanceConditionName = {
   roa: "ROA(%)",
   roe: "ROE(%)",
   market_cap: "시가총액(억 원)",
-  activities_operating: "영업현금흐름(억 원)",
-  activities_investing: "투자현금흐름(억 원)",
-  activities_financing: "재무현금흐름(억 원)",
+
+  // activities_operating: "영업현금흐름(억 원)",
+  // activities_investing: "투자현금흐름(억 원)",
+  // activities_financing: "재무현금흐름(억 원)",
+
+  operating: "영업현금흐름(억 원)",
+  investing: "투자현금흐름(억 원)",
+  financing: "재무현금흐름(억 원)",
 };
 
 export default function LabModalWithSlider({

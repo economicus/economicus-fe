@@ -23,6 +23,7 @@ const EconomicusLogo = styled("img")({
 
 const LoginPage = () => {
   const dispatch = useDispatch();
+
   const { isLoggedin, loading, error } = useSelector(
     (state: RootState) => state.session
   );
@@ -31,7 +32,7 @@ const LoginPage = () => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
 
-    const loginInfo = {
+    const loginInfo: { email: string; password: string } = {
       email: data.get("email") as string, // NOTE: 추후 개선 필요?
       password: data.get("password") as string,
     };

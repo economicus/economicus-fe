@@ -1,6 +1,5 @@
 import { AccountCircle } from "@material-ui/icons";
 import { IconButton } from "@mui/material";
-import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { useState } from "react";
@@ -12,7 +11,9 @@ import { RootState } from "../stores/store";
 
 const PositionedMenu = () => {
   const dispatch = useDispatch();
-  const { isLoggedin } = useSelector((state: RootState) => state.session); // TODO: 하나씩으로 개선
+  const isLoggedin = useSelector(
+    (state: RootState) => state.session.isLoggedin
+  );
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -50,30 +51,27 @@ const PositionedMenu = () => {
           horizontal: "left",
         }}
       >
-        <MenuItem onClick={handleClose}>
-          <Link
-            to={"/PersonalProfilePage"}
-            style={{ textDecoration: "none", color: "black" }}
-          >
-            Profile
-          </Link>
-        </MenuItem>
-        <MenuItem onClick={handleClose}>
-          <Link
-            to="/QuantLabPage"
-            style={{ textDecoration: "none", color: "black" }}
-          >
-            Quant Lab
-          </Link>
-        </MenuItem>
-        <MenuItem onClick={handleClose}>
-          <Link
-            to="/SettingsPage"
-            style={{ textDecoration: "none", color: "black" }}
-          >
-            Settings
-          </Link>
-        </MenuItem>
+        <Link
+          to={"/PersonalProfilePage"}
+          style={{ textDecoration: "none", color: "black" }}
+        >
+          <MenuItem onClick={handleClose}>Profile</MenuItem>
+        </Link>
+
+        <Link
+          to="/QuantLabPage"
+          style={{ textDecoration: "none", color: "black" }}
+        >
+          <MenuItem onClick={handleClose}>Quant Lab</MenuItem>
+        </Link>
+
+        <Link
+          to="/SettingsPage"
+          style={{ textDecoration: "none", color: "black" }}
+        >
+          <MenuItem onClick={handleClose}>Settings</MenuItem>
+        </Link>
+
         {isLoggedin ? (
           <MenuItem
             onClick={() => {
@@ -85,14 +83,12 @@ const PositionedMenu = () => {
             Logout
           </MenuItem>
         ) : (
-          <MenuItem onClick={handleClose}>
-            <Link
-              to="/LoginPage"
-              style={{ textDecoration: "none", color: "black" }}
-            >
-              Login
-            </Link>
-          </MenuItem>
+          <Link
+            to="/LoginPage"
+            style={{ textDecoration: "none", color: "black" }}
+          >
+            <MenuItem onClick={handleClose}>Login</MenuItem>
+          </Link>
         )}
       </Menu>
     </>

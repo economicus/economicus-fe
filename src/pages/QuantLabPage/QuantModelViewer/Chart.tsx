@@ -63,7 +63,7 @@ export default function Chart({ charts }: ChartProps) {
 
 interface IRechartData {
   name: string;
-  kospi: number;
+  // kospi: number;
   [key: string]: string | number;
 }
 
@@ -78,15 +78,17 @@ const formatToRechartData = (charts: IChart[]): IRechartData[] => {
 
   const ret: IRechartData[] = [];
 
-  const graphDate = new Date(charts[0].chart_data["start_date"].split("T")[0]);
+  // const graphDate = new Date(charts[0].chart_data["start_date"].split("T")[0]);
+  const graphDate = new Date("2016-03-31T00:00:00.000Z".split("T")[0]); // TODO: 날짜 어떻게 할건지 정해야
   graphDate.setDate(1);
 
   const normalizedData = charts.map((val) => {
     return {
       ...val,
       chart_data: {
-        profit_kospi_data: kospiToBalance(val),
-        profit_rate_data: profitToBalance(val),
+        // profit_kospi_data: kospiToBalance(val),
+        // profit_rate_data: profitToBalance(val),
+        profit_rate_data: val.chart_data.profit_rate_data,
       },
     };
   });
@@ -96,9 +98,10 @@ const formatToRechartData = (charts: IChart[]): IRechartData[] => {
     idx < normalizedData[0].chart_data["profit_rate_data"].length;
     idx++
   ) {
-    const context: IRechartData = { name: "", kospi: 0 };
+    // const context: IRechartData = { name: "", kospi: 0 };
+    const context: IRechartData = { name: "" };
     context.name = yearAndMonthToString(graphDate);
-    context.kospi = normalizedData[0].chart_data["profit_kospi_data"][idx];
+    // context.kospi = normalizedData[0].chart_data["profit_kospi_data"][idx];
 
     normalizedData.forEach((data) => {
       context[data["model_name"]] = data.chart_data.profit_rate_data[idx];
@@ -111,53 +114,53 @@ const formatToRechartData = (charts: IChart[]): IRechartData[] => {
   return ret; // {name: string, kospi: number, 모델명:..., 모델명:...,}
 };
 
-function kospiToBalance(data: IChart) {
-  const normalizedKospiData = [];
-  const kospi: number[] = data.chart_data.profit_kospi_data;
-  const seed = 1000;
+// function kospiToBalance(data: IChart) {
+//   const normalizedKospiData = [];
+//   const kospi: number[] = data.chart_data.profit_kospi_data;
+//   const seed = 1000;
 
-  normalizedKospiData[0] = seed;
+//   normalizedKospiData[0] = seed;
 
-  for (let index = 1; index < kospi.length; index++) {
-    const kospiPropit = (kospi[index] - kospi[index - 1]) / kospi[index - 1];
-    normalizedKospiData[index] =
-      normalizedKospiData[index - 1] +
-      normalizedKospiData[index - 1] * kospiPropit;
-  }
+//   for (let index = 1; index < kospi.length; index++) {
+//     const kospiPropit = (kospi[index] - kospi[index - 1]) / kospi[index - 1];
+//     normalizedKospiData[index] =
+//       normalizedKospiData[index - 1] +
+//       normalizedKospiData[index - 1] * kospiPropit;
+//   }
 
-  const kospiPropit =
-    (kospi[kospi.length] - kospi[kospi.length - 1]) / kospi[kospi.length - 1];
+//   const kospiPropit =
+//     (kospi[kospi.length] - kospi[kospi.length - 1]) / kospi[kospi.length - 1];
 
-  const tmpBalace =
-    kospi[kospi.length] + (kospi[kospi.length] * kospiPropit) / 100;
+//   const tmpBalace =
+//     kospi[kospi.length] + (kospi[kospi.length] * kospiPropit) / 100;
 
-  normalizedKospiData.push(tmpBalace);
+//   normalizedKospiData.push(tmpBalace);
 
-  return normalizedKospiData;
-}
+//   return normalizedKospiData;
+// }
 
-const profitToBalance = (data: IChart) => {
-  const normalizedProfitData = [];
-  const profit: number[] = data.chart_data.profit_rate_data;
-  const seed = 1000;
+// const profitToBalance = (data: IChart) => {
+//   const normalizedProfitData = [];
+//   const profit: number[] = data.chart_data.profit_rate_data;
+//   const seed = 1000;
 
-  normalizedProfitData[0] = seed;
+//   normalizedProfitData[0] = seed;
 
-  for (let index = 1; index < profit.length; index++) {
-    normalizedProfitData[index] =
-      normalizedProfitData[index - 1] +
-      (normalizedProfitData[index - 1] * profit[index - 1]) / 100;
-  }
+//   for (let index = 1; index < profit.length; index++) {
+//     normalizedProfitData[index] =
+//       normalizedProfitData[index - 1] +
+//       (normalizedProfitData[index - 1] * profit[index - 1]) / 100;
+//   }
 
-  // 수익률 60개 -> 실제값 61개
-  const tmpBalace =
-    normalizedProfitData[profit.length - 1] +
-    (normalizedProfitData[profit.length - 1] * profit[profit.length - 1]) / 100;
+//   // 수익률 60개 -> 실제값 61개
+//   const tmpBalace =
+//     normalizedProfitData[profit.length - 1] +
+//     (normalizedProfitData[profit.length - 1] * profit[profit.length - 1]) / 100;
 
-  normalizedProfitData.push(tmpBalace);
+//   normalizedProfitData.push(tmpBalace);
 
-  return normalizedProfitData;
-};
+//   return normalizedProfitData;
+// };
 
 function yearAndMonthToString(date: Date) {
   let tmp: string;

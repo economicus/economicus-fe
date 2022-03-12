@@ -1,21 +1,17 @@
 import { AppBar, Toolbar } from "@material-ui/core";
-import { ChatBubble, Home, Notifications, People } from "@material-ui/icons";
-import { IconButton, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import { Box, styled } from "@mui/system";
 import { Link } from "react-router-dom";
-
-import PositionedMenu from "../components/PositionedMenu";
-import SearchTextField from "../components/SearchTextField";
 
 const LogoImage = styled("img")`
   border-radius: 5px;
   width: 40px;
   height: 40px;
-  margin: 10px;
 `;
 
 const LogoTypography = styled(Typography)`
   font-family: "SongMyung";
+  margin-left: 10px;
 `;
 
 const RowContainer = styled(Box)`
@@ -34,6 +30,7 @@ const MainContainer = styled(Box)`
 
 const StyledLink = styled(Link)`
   display: flex; // NOTE: 하단 공백 제거
+  padding: 10px;
 
   &,
   &:visited,
@@ -44,55 +41,82 @@ const StyledLink = styled(Link)`
   }
 `;
 
-const IconContainer = styled(Box)`
+const LeftContainer = styled(Box)`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  width: 250px;
-  /* background-color: yellow; */
+`;
+
+const MenuContainer = styled(Box)`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 10px;
+`;
+
+const TextLink = styled(Link)`
+  margin: 10px;
+  display: inline-block;
+  color: black;
+  text-decoration: none;
+  transition: all 0.3s;
+  position: relative;
+
+  &:after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    height: 8px;
+    transition: all 0.2s;
+    background: rgba(144, 169, 219, 50%);
+  }
+
+  &:hover:after {
+    width: 100%;
+  }
+`;
+
+const RightContainer = styled(Box)`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 5px;
 `;
 
 const MainNavigation = () => {
   return (
     <div style={{ flexGrow: 1 }}>
-      <AppBar position="static" variant="outlined" color="inherit">
+      <AppBar
+        position="static"
+        variant="outlined"
+        color="inherit"
+        style={{ borderRight: "none" }}
+      >
         <Toolbar style={{ padding: "0 3px" }}>
           <MainContainer>
-            <StyledLink to="/">
-              <RowContainer>
-                <LogoImage src="https://avatars.githubusercontent.com/u/98199739?s=200&v=4" />
-                <LogoTypography variant="h5">Economicus</LogoTypography>
-              </RowContainer>
-            </StyledLink>
+            <LeftContainer>
+              <StyledLink to="/">
+                <RowContainer>
+                  <LogoImage src="https://avatars.githubusercontent.com/u/98199739?s=200&v=4" />
+                  <LogoTypography variant="h5">Economicus</LogoTypography>
+                </RowContainer>
+              </StyledLink>
 
-            <RowContainer>
-              <div style={{ margin: "0 20px" }}>
-                <SearchTextField />
-              </div>
+              <MenuContainer>
+                <TextLink to="/PersonalProfilePage">프로필</TextLink>
+                {/* NOTE: 프로필은 삭제 가능 (home 버튼과 겹치므로) */}
+                <TextLink to="/QuantLabPage">실험실</TextLink>
+              </MenuContainer>
+            </LeftContainer>
 
-              <IconContainer>
-                <IconButton color="inherit" aria-label="home">
-                  <StyledLink to="/">
-                    <Home />
-                  </StyledLink>
-                </IconButton>
-
-                <IconButton color="inherit" aria-label="people">
-                  <People />
-                </IconButton>
-
-                <IconButton color="inherit" aria-label="chatBubble">
-                  <ChatBubble />
-                </IconButton>
-
-                <IconButton color="inherit" aria-label="notifications">
-                  <Notifications />
-                </IconButton>
-
-                <PositionedMenu />
-              </IconContainer>
-            </RowContainer>
+            <RightContainer>
+              <TextLink to="/QuantLabPage">로그아웃</TextLink>
+            </RightContainer>
           </MainContainer>
         </Toolbar>
       </AppBar>

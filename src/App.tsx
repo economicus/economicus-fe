@@ -1,5 +1,6 @@
 import { styled } from "@mui/system";
 import React from "react";
+import { useSelector } from "react-redux";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import Layout from "./layouts/Layout";
@@ -11,14 +12,20 @@ import QuantModelDetailsPage from "./pages/QuantModelDetailsPage";
 import QuantModelListPage from "./pages/QuantModelListPage";
 import SettingsPage from "./pages/SettingsPage";
 import SignUpPage from "./pages/SignUpPage";
+import { RootState } from "./stores/store";
 
 function App() {
+  const isLoggedin = useSelector(
+    (state: RootState) => state.session.isLoggedin
+  );
+
   return (
     <StyledDiv>
       <BrowserRouter>
         <Layout>
           <Routes>
             <Route path="/" element={<MainPage />} />
+
             <Route
               path="/PersonalProfilePage"
               element={<PersonalProfilePage />}

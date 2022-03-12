@@ -10,8 +10,6 @@ import { styled } from "@mui/system";
 import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, Navigate, useLocation } from "react-router-dom";
-import styled from "styled-components";
-
 
 import { loginThunk } from "../../stores/session";
 import { RootState } from "../../stores/store";

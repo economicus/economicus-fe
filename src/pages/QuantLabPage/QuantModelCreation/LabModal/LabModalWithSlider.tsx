@@ -1,5 +1,5 @@
 import { Checkbox, FormControlLabel, Slider, TextField } from "@mui/material";
-import { styled } from "@mui/system";
+import { styled } from "@mui/material/styles";
 import React, { useState } from "react";
 
 import FormControlGroup from "../../../../components/FormControlGroup";

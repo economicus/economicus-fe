@@ -6,10 +6,9 @@ import Container from "@mui/material/Container";
 import CssBaseline from "@mui/material/CssBaseline";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Grid from "@mui/material/Grid";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { createTheme, styled, ThemeProvider } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import { styled } from "@mui/system";
 import * as React from "react";
 import { Link, useNavigate } from "react-router-dom";
 

@@ -1,4 +1,4 @@
-import { styled } from "@mui/system";
+import { styled } from "@mui/material/styles";
 import { GridSelectionModel } from "@mui/x-data-grid";
 import { useEffect, useState } from "react";
 

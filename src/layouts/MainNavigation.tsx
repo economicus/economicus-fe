@@ -1,5 +1,4 @@
-import { AppBar, Toolbar } from "@material-ui/core";
-import { Typography } from "@mui/material";
+import { AppBar, Toolbar, Typography } from "@mui/material";
 import { Box, styled } from "@mui/system";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";

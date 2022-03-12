@@ -8,7 +8,7 @@ interface ChartViewerProps {
   charts: IChart[];
 }
 
-export default function ChartViewer({ charts }: ChartViewerProps) {
+export default function ChartViewerSizeUp({ charts }: ChartViewerProps) {
   return (
     <MainContainer variant="outlined">
       <Chart charts={charts} />
@@ -17,6 +17,11 @@ export default function ChartViewer({ charts }: ChartViewerProps) {
 }
 
 const MainContainer = styled(Paper)`
-  width: 79%;
+  // border: 3px solid green;
+  width: 100%;
+  height: 40vw;
+
   padding: 20px;
 `;
+
+// TODO: 아직 상태 적용 X

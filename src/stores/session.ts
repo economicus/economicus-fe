@@ -2,9 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 import login from "../apis/login";
 
-export interface CounterState {
-  // value: number;
-
+export interface SessionState {
   loading: boolean;
   error: boolean;
 
@@ -12,16 +10,15 @@ export interface CounterState {
   token: string;
 }
 
-const initialState: CounterState = {
-  // value: 0,
-  // user: {
-
-  // } // NOTE: 아직 axios에서 links롤 통해 다른 요청을 받아오는 법을 모른다. 추후 추가 필요
+const initialState: SessionState = {
+  loading: false, // NOTE: 로딩이 여기에 필요할까?
+  error: false,
 
   isLoggedin: false,
   token: "",
-  loading: false, // NOTE: 로딩이 여기에 필요할까?
-  error: false,
+
+  // user: {
+  // } // NOTE: 아직 axios에서 links롤 통해 다른 요청을 받아오는 법을 모른다. 추후 추가 필요
 };
 
 export const loginThunk = createAsyncThunk<
@@ -31,8 +28,7 @@ export const loginThunk = createAsyncThunk<
   },
   { email: string; password: string },
   { rejectValue: string }
->("user/login", async ({ email, password }, { rejectWithValue }) => {
-  // NOTE: 추후 수정 필요
+>("session/login", async ({ email, password }, { rejectWithValue }) => {
   try {
     const response = await login(email, password);
     if (response instanceof Error) throw response;
@@ -42,11 +38,11 @@ export const loginThunk = createAsyncThunk<
   }
 });
 
-export const counterSlice = createSlice({
+export const sessionSlice = createSlice({
   name: "session",
   initialState,
   reducers: {
-    logout: () => initialState, // NOTE: 이렇게 자체를 바꿔도 되나? 안될것같은데...
+    logout: () => initialState, // NOTE: 이렇게 자체를 바꿔도 되나? 추후 확인 필요
   },
   extraReducers: (builder) => {
     builder
@@ -76,6 +72,6 @@ export const counterSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { logout } = counterSlice.actions;
+export const { logout } = sessionSlice.actions;
 
-export default counterSlice.reducer;
+export default sessionSlice.reducer;

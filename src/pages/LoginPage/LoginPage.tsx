@@ -6,10 +6,12 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
+import { styled } from "@mui/system";
 import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, Navigate, useLocation } from "react-router-dom";
 import styled from "styled-components";
+
 
 import { loginThunk } from "../../stores/session";
 import { RootState } from "../../stores/store";
@@ -24,6 +26,7 @@ const EconomicusLogo = styled("img")({
 const LoginPage = () => {
   const dispatch = useDispatch();
   const { state } = useLocation();
+
   const { isLoggedin, loading, error } = useSelector(
     (state: RootState) => state.session
   );
@@ -32,7 +35,7 @@ const LoginPage = () => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
 
-    const loginInfo = {
+    const loginInfo: { email: string; password: string } = {
       email: data.get("email") as string, // NOTE: 추후 개선 필요?
       password: data.get("password") as string,
     };

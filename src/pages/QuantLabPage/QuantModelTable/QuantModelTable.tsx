@@ -9,9 +9,13 @@ import {
   GridSelectionModel,
 } from "@mui/x-data-grid";
 import { useCallback, useMemo } from "react";
+import { useSelector } from "react-redux";
 
+import deleteQuantModel from "../../../apis/deleteQuantModel";
+import { RootState } from "../../../stores/store";
+import { VariableNameTranslate } from "../constants";
 import { IModel } from "../QuantLabPage";
-import QuantLabSaveModal from "../QuantModelCreation/LabModal/LabSaveModal";
+import SaveModelModal from "./SaveModelModal";
 
 interface ModelListProps {
   rows: GridRowsProp;
@@ -24,14 +28,24 @@ export default function QuantModelTable({
   setSelectionModel,
   setModelList,
 }: ModelListProps) {
+  const token = useSelector((state: RootState) => state.session.token);
+
   const columns: GridColDef[] = FIELDS.map((val) => {
-    return { field: val, headerName: val, width: 150 };
+    return {
+      field: val,
+      headerName:
+        VariableNameTranslate[`${val}` as keyof typeof VariableNameTranslate],
+      width: 150,
+    };
   });
 
   const deleteModel = useCallback(
     (id: GridRowId) => () => {
-      setTimeout(() => {
+      setTimeout(async () => {
         setModelList((prev) => prev.filter((model) => model.id !== id));
+
+        // TODO: 백엔드 완료시 삭제 api 추가 #11
+        await deleteQuantModel(id as string, token);
       });
     },
     []
@@ -64,7 +78,7 @@ export default function QuantModelTable({
           //     label="Save"
           //     key={2}
           //   />,
-          <QuantLabSaveModal id={params.id} />,
+          <SaveModelModal id={params.id} />,
         ],
       },
     ],
@@ -87,7 +101,6 @@ export default function QuantModelTable({
             rows={rows}
             columns={columnsWithButton}
             onSelectionModelChange={(model) => {
-              // console.log("hi...", model);
               setSelectionModel(model);
             }}
           />
@@ -104,9 +117,4 @@ const FIELDS = [
   "winning_percentage",
   "max_loss_rate",
   "holdings_count",
-]; // NOTE: 적절한가? 잘 모르겠음
-/* TODO
- * 데이터 구조, 상수화 등에 대한 고민
- * 폭 개선 (디자인 개선)
- * 버튼 추가
- */
+];

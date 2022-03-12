@@ -1,8 +1,8 @@
 import { Checkbox, FormControlLabel } from "@mui/material";
 import { useState } from "react";
 
-import TmpForm from "../../../../components/FormControlGroup/FormControlGroup";
-import ModalWithButton from "../../../../components/ModalWithButton/ModalWithButton";
+import FormControlGroup from "../../../../components/FormControlGroup";
+import ModalWithButton from "../../../../components/ModalWithButton";
 import { IBusinessArea } from "../QuantModelCreation";
 
 interface QuantLabModalProps {
@@ -28,6 +28,7 @@ export default function QuantLabModal({
     });
     setState(newState);
   };
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setState({
       ...state,
@@ -36,14 +37,14 @@ export default function QuantLabModal({
   };
 
   return (
-    <ModalWithButton btnName={btnName}>
+    <ModalWithButton btnName={btnName} state={state}>
       <FormControlLabel
         control={
           <Checkbox checked={selecAll} onChange={selectAllHandleChange} />
         }
         label="Select all"
       />
-      <TmpForm>
+      <FormControlGroup>
         {Object.keys(state).map((key, idx) => {
           return (
             <FormControlLabel
@@ -59,7 +60,7 @@ export default function QuantLabModal({
             />
           );
         })}
-      </TmpForm>
+      </FormControlGroup>
     </ModalWithButton>
   );
 }

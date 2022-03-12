@@ -2,21 +2,14 @@ import axios from "axios";
 
 import { endpoint } from "./endpoint";
 
-const sleep = (ms: number) => {
-  return new Promise((res) => setTimeout(res, ms));
-};
-
 interface MinAndMax {
   min: number;
   max: number;
 }
 
 interface IActivities {
-  // operating: MinAndMax;
-  // investing: MinAndMax;
-  // financing: MinAndMax;
   [key: string]: MinAndMax;
-}
+} // NOTE: 추후 request 형식 바뀌면 삭제 예정
 
 export interface createQuantModelBody {
   name: string;
@@ -38,12 +31,6 @@ export interface createQuantModelBody {
   roe: MinAndMax;
   market_cap: MinAndMax;
 
-  // activities: {
-  //   operating: MinAndMax;
-  //   investing: MinAndMax;
-  //   financing: MinAndMax;
-  // };
-
   activities: IActivities;
 
   start_date: string;
@@ -54,10 +41,7 @@ export default async function createQuantModel(
   body: createQuantModelBody,
   token: string
 ) {
-  // NOTE: useEffect 등의 테스트를 위해, setTimeout을 활용해 만든 임시 api 함수입니다.
-
-  // await setTimeout(() => console.log("data fetched!"), 3000);
-  // await sleep(1000);
+  console.log("test", body);
 
   try {
     const res = await axios.post(endpoint + "/quants/quant", body, {
@@ -69,6 +53,6 @@ export default async function createQuantModel(
 
     return res.data;
   } catch (e) {
-    return e; // TODO: 추후 에러 처리 필요
+    return e;
   }
 }

@@ -1,24 +1,23 @@
 import { Checkbox, Typography } from "@mui/material";
-import { Box } from "@mui/system";
-import styled from "styled-components";
+import { Box, styled } from "@mui/system";
 
 import ContentCard from "../../components/ContentCard";
-import OrderSelect from "../../components/selecter/OrderSelect";
-import TermSelect from "../../components/selecter/TermSelect";
+import OrderSelect from "./Selecter/OrderSelect";
+import TermSelect from "./Selecter/TermSelect";
 
-const ContentsContainer = styled.div`
+const ContentsContainer = styled("div")`
   width: 100%;
   height: 100%;
 `;
 
-const SubNavigation = styled.div`
+const SubNavigation = styled("div")`
   width: 100%;
   height: 80px;
   display: flex;
   align-items: center;
 `;
 
-const MainContainer = styled.div`
+const MainContainer = styled("div")`
   padding-left: 10%;
   padding-right: 10%;
   display: flex;

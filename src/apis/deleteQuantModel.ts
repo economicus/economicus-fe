@@ -2,16 +2,12 @@ import axios from "axios";
 
 import { endpoint } from "./endpoint";
 
-export default async function login(email: string, password: string) {
+export default async function deleteQuantModel(id: string, token: string) {
   try {
-    const body = {
-      email,
-      password,
-    };
-
-    const res = await axios.post(endpoint + "/login", body, {
+    const res = await axios.delete(endpoint + "/quants/quant/" + id, {
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
     });
 

@@ -1,14 +1,9 @@
-import {
-  Alert,
-  Button,
-  Paper,
-  Snackbar,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { LoadingButton } from "@mui/lab";
+import { Alert, Paper, Snackbar, TextField, Typography } from "@mui/material";
+import { styled } from "@mui/system";
+import { AxiosError } from "axios";
 import { useRef, useState } from "react";
 import { useSelector } from "react-redux";
-import styled from "styled-components";
 
 import createQuantModel, {
   createQuantModelBody,
@@ -27,17 +22,19 @@ export default function ModelCreation({ setModelList }: ModelCreationProps) {
 
   const [error, setError] = useState<string>("");
 
+  // NOTE: ModelName state
+  const [[modelName, firstTry], setModelName] = useState(["", 1]);
+  const modelNameInputRef = useRef<HTMLDivElement>(null);
+
   // NOTE: ButtonsContainer states
   const [businessArea, setBusinessArea] =
     useState<IBusinessArea>(initialBusinessArea);
   const [financeCondition, setFinanceCondetion] = useState<IFinanceCondition>(
     initialFinanceCondetion
   );
-  // NOTE: ModelName state
-  const [[modelName, firstTry], setModelName] = useState(["", 1]);
-  const modelNameInputRef = useRef<HTMLDivElement>(null);
 
-  // const [chartInfo, setChartInfo] = useState<IChartInfo>(initialChartInfo);
+  // NOTE: LodingButton states
+  const [isLoading, setIsLoading] = useState(false);
 
   // NOTE: handlers
   const onClickMakeButton = async () => {
@@ -49,7 +46,10 @@ export default function ModelCreation({ setModelList }: ModelCreationProps) {
 
     const notActivitiesValue = Object.fromEntries(
       Object.entries(financeCondition)
-        .filter(([key]) => !key.startsWith("activities_"))
+        .filter(
+          ([key]) =>
+            !key.startsWith("activities_") && financeCondition[key].checked
+        )
         .map(([key, value]) => [
           key,
           { min: value.values[0], max: value.values[1] },
@@ -58,19 +58,29 @@ export default function ModelCreation({ setModelList }: ModelCreationProps) {
 
     const activitiesValue = Object.fromEntries(
       Object.entries(financeCondition)
-        .filter(([key]) => key.startsWith("activities_"))
+        .filter(
+          ([key]) =>
+            key.startsWith("activities_") && financeCondition[key].checked
+        )
         .map(([key, value]) => [
           key.split("_")[1],
           { min: value.values[0], max: value.values[1] },
         ])
     );
 
-    // console.log(activities);
+    const formedFinanceCondition = Object.fromEntries(
+      Object.entries(financeCondition).map(([key, value]) => [
+        key,
+        { min: value.values[0], max: value.values[1] },
+      ])
+    );
 
     if (!token) {
       setError("로그인이 필요한 기능입니다.");
       return;
     }
+
+    setIsLoading(true);
 
     try {
       const responseData = await createQuantModel(
@@ -79,28 +89,39 @@ export default function ModelCreation({ setModelList }: ModelCreationProps) {
           main_sectors: Object.entries(businessArea)
             .filter(([, value]) => value === true)
             .map(([key]) => key),
-          ...notActivitiesValue,
-          activities: {
-            ...activitiesValue,
-          },
+
+          ...formedFinanceCondition,
+
+          // ...notActivitiesValue,
+          // activities: {
+          //   ...activitiesValue,
+          // },
+
+          // NOTE: 날짜는 어떻게?
           start_date: "2016-04-30T00:00:00.000Z",
           end_date: "2021-04-30T00:00:00.000Z",
         } as createQuantModelBody,
         token
       );
+      setIsLoading(false);
 
-      if (responseData instanceof Error)
-        throw Error((responseData as Error).message);
+      if (responseData instanceof Error) throw responseData;
 
-      console.log("hey!", responseData);
-      setModelList((prev) => [
-        ...prev,
-        { id: +new Date(), model_name: modelName, ...responseData },
-      ]);
+      setModelList((prev) => {
+        return [
+          ...prev,
+          // { id: +new Date(), model_name: modelName, ...responseData },
+          {
+            id: responseData["quant_id"],
+            model_name: modelName,
+            ...responseData,
+          },
+        ];
+      });
+
       setModelName(["", 1]);
     } catch (e) {
-      // console.error("QuantModelCreation:", e);
-      setError((e as Error).message);
+      setError((e as AxiosError).response?.data.message);
     }
   };
   const modelNameHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -147,16 +168,17 @@ export default function ModelCreation({ setModelList }: ModelCreationProps) {
               state={financeCondition}
               setState={setFinanceCondetion}
             />
-            {/* <LabModalWithSlider
-          btnName="차트정보"
-          state={chartInfo}
-          setState={setChartInfo}
-        /> */}
           </ConditionButtonsContainer>
 
-          <Button sx={{ m: 1 }} variant="outlined" onClick={onClickMakeButton}>
-            make model
-          </Button>
+          <LoadingButton
+            sx={{ m: 1 }}
+            loading={isLoading}
+            loadingPosition="start"
+            variant="outlined"
+            onClick={onClickMakeButton}
+          >
+            {isLoading ? "모델 생성중..." : "make model"}
+          </LoadingButton>
         </ButtonsContainer>
       </MainContainer>
     </>
@@ -199,25 +221,17 @@ export interface IFinanceCondition {
   roa: ICheckboxWithSliderInfo;
   roe: ICheckboxWithSliderInfo;
   market_cap: ICheckboxWithSliderInfo;
-  activities_operating: ICheckboxWithSliderInfo;
-  activities_investing: ICheckboxWithSliderInfo;
-  activities_financing: ICheckboxWithSliderInfo;
 
-  // acti: ICheckboxWithSliderInfo;
-  // ROA: ICheckboxWithSliderInfo;
-  // 부채비율: ICheckboxWithSliderInfo;
-} // TODO: chart info에 들어갈 항목들이 뭘까? 그리고 한글로는 뭐라고 나타내야 하나?(몰라서 api 변수명 그대로 함)
-
-// export interface IChartInfo {
-
-// }
+  // NOTE: activities
+  operating: ICheckboxWithSliderInfo;
+  investing: ICheckboxWithSliderInfo;
+  financing: ICheckboxWithSliderInfo;
+}
 
 export interface ICheckboxWithSliderInfo {
   checked: boolean;
   min: number;
   max: number;
-  // minValue: number;
-  // maxValue: number;
   values: number[];
 }
 
@@ -226,30 +240,19 @@ export interface ICheckboxWithSliderInfo {
  */
 
 const MainContainer = styled(Paper)`
-  /* width: 100%; */
   width: 20%;
   padding: 20px;
 
   display: flex;
   flex-direction: column;
-  /* justify-content: space-between; */
 `;
 
-const ConditionButtonsContainer = styled.div`
-  /* display: grid; */
-  /* grid-template-columns: repeat(2, 1fr); */
-  /* margin-top: 20px; */
-
+const ConditionButtonsContainer = styled("div")`
   display: flex;
   flex-direction: column;
 `;
 
-// const MakeModelButtonContainer = styled.div`
-//   display: grid;
-//   grid-template-columns: repeat(1, 1fr);
-// `;
-
-const ButtonsContainer = styled.div`
+const ButtonsContainer = styled("div")`
   height: 100%;
   margin-top: 10px;
 
@@ -272,8 +275,6 @@ const sliderStateCunstructor = (
     checked: false,
     min: min,
     max: max,
-    // minValue: min,
-    // maxValue: max,
     values: [min, max],
   };
 };
@@ -292,33 +293,22 @@ const initialBusinessArea: IBusinessArea = {
 };
 
 const initialFinanceCondetion = {
-  net_revenue: sliderStateCunstructor(-100, 100),
-  net_revenue_rate: sliderStateCunstructor(-100, 100),
-  net_profit: sliderStateCunstructor(-100, 100),
-  net_profit_rate: sliderStateCunstructor(-100, 100),
-  de_ratio: sliderStateCunstructor(-100, 100),
-  per: sliderStateCunstructor(-100, 100),
-  psr: sliderStateCunstructor(-100, 100),
-  pbr: sliderStateCunstructor(-100, 100),
-  pcr: sliderStateCunstructor(-100, 100),
-  dividend_yield: sliderStateCunstructor(-100, 100),
-  dividend_payout_ratio: sliderStateCunstructor(-100, 100),
-  roa: sliderStateCunstructor(-100, 100),
-  roe: sliderStateCunstructor(-100, 100),
-  market_cap: sliderStateCunstructor(-100, 100),
-  activities_operating: sliderStateCunstructor(-100, 100),
-  activities_investing: sliderStateCunstructor(-100, 100),
-  activities_financing: sliderStateCunstructor(-100, 100),
-};
+  net_revenue: sliderStateCunstructor(-36, 2437714),
+  net_revenue_rate: sliderStateCunstructor(-100, 79433),
+  net_profit: sliderStateCunstructor(-4000, 45000),
+  net_profit_rate: sliderStateCunstructor(-22400, 179900),
+  de_ratio: sliderStateCunstructor(0, 84510),
+  per: sliderStateCunstructor(-5, 167089),
+  psr: sliderStateCunstructor(-20, 240936),
+  pbr: sliderStateCunstructor(0, 573),
+  pcr: sliderStateCunstructor(0, 97906),
+  dividend_yield: sliderStateCunstructor(0, 50),
+  dividend_payout_ratio: sliderStateCunstructor(-7872, 65278),
+  roa: sliderStateCunstructor(-275, 154),
+  roe: sliderStateCunstructor(-4900, 1615),
+  market_cap: sliderStateCunstructor(0, 435000),
 
-// const initialChartInfo = {
-//   시가총액: true,
-//   "주가수익률(1개월)": false,
-//   "주가수익률(3개월)": false,
-//   "주가수익률(6개월)": false,
-//   "주가수익률(12개월)": false,
-//   "이동평균선(5일)": false,
-//   "이동평균선(20일)": false,
-//   "이동평균선(60일)": false,
-//   "이동평균선(120일)": false,
-// };
+  operating: sliderStateCunstructor(-13000, 68000),
+  investing: sliderStateCunstructor(-54000, 5000),
+  financing: sliderStateCunstructor(-15000, 26000),
+};

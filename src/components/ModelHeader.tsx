@@ -5,7 +5,6 @@ import ShareIcon from "@mui/icons-material/Share";
 import { IconButton, Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import Grid from "@mui/material/Grid";
 import * as React from "react";
 import { Link } from "react-router-dom";
 

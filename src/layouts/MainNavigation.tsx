@@ -1,7 +1,10 @@
 import { AppBar, Toolbar } from "@material-ui/core";
 import { Typography } from "@mui/material";
 import { Box, styled } from "@mui/system";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+
+import { logout } from "../stores/session";
 
 const LogoImage = styled("img")`
   border-radius: 5px;
@@ -80,6 +83,36 @@ const TextLink = styled(Link)`
   }
 `;
 
+const StyledButton = styled("button")`
+  border: none;
+  background-color: inherit;
+  font-size: 16px;
+  cursor: pointer;
+
+  margin: 10px;
+  padding: 0;
+  display: inline-block;
+  color: black;
+  text-decoration: none;
+  transition: all 0.3s;
+  position: relative;
+
+  &:after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    height: 8px;
+    transition: all 0.2s;
+    background: rgba(144, 169, 219, 50%);
+  }
+
+  &:hover:after {
+    width: 100%;
+  }
+`;
+
 const RightContainer = styled(Box)`
   display: flex;
   flex-direction: row;
@@ -89,6 +122,8 @@ const RightContainer = styled(Box)`
 `;
 
 const MainNavigation = () => {
+  const dispatch = useDispatch();
+
   return (
     <div style={{ flexGrow: 1 }}>
       <AppBar
@@ -115,7 +150,14 @@ const MainNavigation = () => {
             </LeftContainer>
 
             <RightContainer>
-              <TextLink to="/QuantLabPage">로그아웃</TextLink>
+              {/* <TextLink to="/QuantLabPage">로그아웃</TextLink> */}
+              <StyledButton
+                onClick={() => {
+                  dispatch(logout());
+                }}
+              >
+                로그아웃
+              </StyledButton>
             </RightContainer>
           </MainContainer>
         </Toolbar>

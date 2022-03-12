@@ -44,29 +44,29 @@ export default function ModelCreation({ setModelList }: ModelCreationProps) {
       return;
     }
 
-    const notActivitiesValue = Object.fromEntries(
-      Object.entries(financeCondition)
-        .filter(
-          ([key]) =>
-            !key.startsWith("activities_") && financeCondition[key].checked
-        )
-        .map(([key, value]) => [
-          key,
-          { min: value.values[0], max: value.values[1] },
-        ])
-    );
+    // const notActivitiesValue = Object.fromEntries(
+    //   Object.entries(financeCondition)
+    //     .filter(
+    //       ([key]) =>
+    //         !key.startsWith("activities_") && financeCondition[key].checked
+    //     )
+    //     .map(([key, value]) => [
+    //       key,
+    //       { min: value.values[0], max: value.values[1] },
+    //     ])
+    // );
 
-    const activitiesValue = Object.fromEntries(
-      Object.entries(financeCondition)
-        .filter(
-          ([key]) =>
-            key.startsWith("activities_") && financeCondition[key].checked
-        )
-        .map(([key, value]) => [
-          key.split("_")[1],
-          { min: value.values[0], max: value.values[1] },
-        ])
-    );
+    // const activitiesValue = Object.fromEntries(
+    //   Object.entries(financeCondition)
+    //     .filter(
+    //       ([key]) =>
+    //         key.startsWith("activities_") && financeCondition[key].checked
+    //     )
+    //     .map(([key, value]) => [
+    //       key.split("_")[1],
+    //       { min: value.values[0], max: value.values[1] },
+    //     ])
+    // );
 
     const formedFinanceCondition = Object.fromEntries(
       Object.entries(financeCondition).map(([key, value]) => [

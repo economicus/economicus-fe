@@ -63,44 +63,44 @@ export interface IModel extends IChart {
   holdings_count: number;
 }
 
-const dummy = [
-  {
-    id: 1,
-    model_name: "test1",
-    cumulative_return: 2.4,
-    annual_average_return: 2.1,
-    winning_percentage: 66.66,
-    max_loss_rate: -13.01,
-    holdings_count: 12,
-    chart_data: {
-      start_date: "2020-01-01T00:00:00Z",
-      profit_rate_data: [
-        33.12, 31.23, 32.19, 36.54, 38.18, 43.12, 41.12, 38.25, 39.63,
-      ],
-      profit_kospi_data: [
-        123.4, 136.4, 140.2, 146.8, 154.1, 160.9, 157.3, 154.3, 156.6,
-      ],
-    },
-  },
-  {
-    id: 2,
-    model_name: "test2",
-    cumulative_return: 2.4,
-    annual_average_return: 2.1,
-    winning_percentage: 66.66,
-    max_loss_rate: -13.01,
-    holdings_count: 12,
-    chart_data: {
-      start_date: "2020-01-01T00:00:00Z",
-      profit_rate_data: [
-        33.12, 31.23, 32.19, 36.54, 38.18, 43.12, 41.12, 38.25, 39.63,
-      ],
-      profit_kospi_data: [
-        123.4, 136.4, 140.2, 146.8, 154.1, 160.9, 157.3, 154.3, 156.6,
-      ],
-    },
-  },
-];
+// const dummy = [
+//   {
+//     id: 1,
+//     model_name: "test1",
+//     cumulative_return: 2.4,
+//     annual_average_return: 2.1,
+//     winning_percentage: 66.66,
+//     max_loss_rate: -13.01,
+//     holdings_count: 12,
+//     chart_data: {
+//       start_date: "2020-01-01T00:00:00Z",
+//       profit_rate_data: [
+//         33.12, 31.23, 32.19, 36.54, 38.18, 43.12, 41.12, 38.25, 39.63,
+//       ],
+//       profit_kospi_data: [
+//         123.4, 136.4, 140.2, 146.8, 154.1, 160.9, 157.3, 154.3, 156.6,
+//       ],
+//     },
+//   },
+//   {
+//     id: 2,
+//     model_name: "test2",
+//     cumulative_return: 2.4,
+//     annual_average_return: 2.1,
+//     winning_percentage: 66.66,
+//     max_loss_rate: -13.01,
+//     holdings_count: 12,
+//     chart_data: {
+//       start_date: "2020-01-01T00:00:00Z",
+//       profit_rate_data: [
+//         33.12, 31.23, 32.19, 36.54, 38.18, 43.12, 41.12, 38.25, 39.63,
+//       ],
+//       profit_kospi_data: [
+//         123.4, 136.4, 140.2, 146.8, 154.1, 160.9, 157.3, 154.3, 156.6,
+//       ],
+//     },
+//   },
+// ];
 
 /*
  * ANCHOR: styles

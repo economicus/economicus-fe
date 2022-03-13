@@ -1,6 +1,6 @@
 import { LoadingButton } from "@mui/lab";
 import { Alert, Paper, Snackbar, TextField, Typography } from "@mui/material";
-import { styled } from "@mui/system";
+import { styled } from "@mui/material/styles";
 import { AxiosError } from "axios";
 import { useRef, useState } from "react";
 import { useSelector } from "react-redux";

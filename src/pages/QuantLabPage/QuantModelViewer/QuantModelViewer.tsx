@@ -1,5 +1,5 @@
 import { Paper } from "@mui/material";
-import { styled } from "@mui/system";
+import { styled } from "@mui/material/styles";
 
 import { IChart } from "../QuantLabPage";
 import Chart from "./Chart";

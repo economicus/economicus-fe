@@ -1,5 +1,5 @@
-import { Checkbox, Typography } from "@mui/material";
-import { Box, styled } from "@mui/system";
+import { Box, Checkbox, Typography } from "@mui/material";
+import { styled } from "@mui/material/styles";
 
 import ContentCard from "../../components/ContentCard";
 import OrderSelect from "./Selecter/OrderSelect";

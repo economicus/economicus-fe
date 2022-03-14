@@ -1,4 +1,4 @@
-import { Delete } from "@material-ui/icons";
+import DeleteIcon from "@mui/icons-material/Delete";
 import {
   DataGrid,
   GridActionsCellItem,
@@ -68,7 +68,7 @@ export default function QuantModelTable({
         type: "actions",
         getActions: (params: GridRowParams) => [
           <GridActionsCellItem
-            icon={<Delete />}
+            icon={<DeleteIcon />}
             onClick={deleteModel(params.id)}
             label="Delete"
           />,

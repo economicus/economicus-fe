@@ -49,13 +49,6 @@ export default function SignUpPage() {
     const data = new FormData(event.currentTarget);
     // 현재 Target(여기서는 Box)의 데이터를 가지고온다.
 
-    // console.log({
-    //   email: data.get("email"),
-    //   password: data.get("password"),
-    //   nickname: data.get("nickname"),
-    // });
-    // 데이터를 정상적으로 가져왔는지 확인하기위해 콘솔에 데이터를 찍어본다.
-
     const emailRegex =
       /([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
     const emailCurrent = data.get("email") as string;
@@ -74,7 +67,6 @@ export default function SignUpPage() {
       data.get("nickname") as string
     );
     // 회원가입 함수에 가져온 데이터를 보내고 상태를 가져온다
-    // console.log(code);
 
     if (code == 201) {
       alert("회원가입에 성공하였습니다!");

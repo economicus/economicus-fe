@@ -162,7 +162,7 @@ const formatToRechartData = (charts: IChart[]): IRechartData[] => {
 //   return normalizedProfitData;
 // };
 
-function yearAndMonthToString(date: Date) {
+export function yearAndMonthToString(date: Date) {
   let tmp: string;
 
   tmp = date.getFullYear().toString();
@@ -170,7 +170,7 @@ function yearAndMonthToString(date: Date) {
   return tmp;
 }
 
-const generateColor = (name: string): string => {
+export const generateColor = (name: string): string => {
   const colors = [
     "#e51c23",
     "#e91e63",

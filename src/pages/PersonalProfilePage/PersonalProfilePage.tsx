@@ -69,7 +69,6 @@ const PersonalProfilePage = () => {
   }
 
   const getProfile = async (token: string, user_id: number) => {
-    setLoading(true);
     try {
       const response = (await axios.get(
         endpoint + "/users/profile/" + { user_id },
@@ -84,22 +83,21 @@ const PersonalProfilePage = () => {
       setUserData(response.user);
       return response;
     } catch (e) {
-      // TEST---------------------------------
-      const testres = JSON.parse(dummy1);
-      setQuantData(testres.quant);
-      setUserData(testres.user);
-      //--------------------------------------
+      // TEST dummy--------------------------
+      // const testres = JSON.parse(dummy1);
+      // setQuantData(testres.quant);
+      // setUserData(testres.user);
+      // ------------------------------------
 
-      // 에러 리턴해줘야함------------------------
-      //setError((e as AxiosError).message);
-      // return e;
-      //--------------------------------------
+      setError((e as AxiosError).message);
+      return e;
     }
-    setLoading(false);
   };
 
   useEffect(() => {
+    setLoading(true);
     getProfile(token, user_id);
+    setLoading(false);
   }, []);
 
   if (error !== "") {

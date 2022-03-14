@@ -9,7 +9,7 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, Navigate } from "react-router-dom";
+import { Link, Navigate, useLocation } from "react-router-dom";
 
 import { loginThunk } from "../../stores/session";
 import { RootState } from "../../stores/store";
@@ -23,10 +23,10 @@ const EconomicusLogo = styled("img")({
 
 const LoginPage = () => {
   const dispatch = useDispatch();
-  // const { state } = useLocation();
+  const { state } = useLocation();
 
   const { isLoggedin, loading, error } = useSelector(
-    (state: RootState) => state.session
+    (rootState: RootState) => rootState.session
   );
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -68,7 +68,7 @@ const LoginPage = () => {
             autoComplete="email"
             autoFocus
             error={error}
-            // defaultValue={state}
+            defaultValue={state}
           />
           <TextField
             margin="normal"

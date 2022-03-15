@@ -1,34 +1,34 @@
-import { Box, Checkbox, Typography } from "@mui/material";
-import { styled } from "@mui/material/styles";
+// import { Box, Checkbox, Typography } from "@mui/material";
+// import { styled } from "@mui/material/styles";
 
-import ContentCard from "../../components/ContentCard";
-import OrderSelect from "./Selecter/OrderSelect";
-import TermSelect from "./Selecter/TermSelect";
+// import OrderSelect from "./Selecter/OrderSelect";
+// import TermSelect from "./Selecter/TermSelect";
 
-const ContentsContainer = styled("div")`
-  width: 100%;
-  height: 100%;
-`;
+// const ContentsContainer = styled("div")`
+//   width: 100%;
+//   height: 100%;
+// `;
 
-const SubNavigation = styled("div")`
-  width: 100%;
-  height: 80px;
-  display: flex;
-  align-items: center;
-`;
+// const SubNavigation = styled("div")`
+//   width: 100%;
+//   height: 80px;
+//   display: flex;
+//   align-items: center;
+// `;
 
-const MainContainer = styled("div")`
-  padding-left: 10%;
-  padding-right: 10%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
+// const MainContainer = styled("div")`
+//   padding-left: 10%;
+//   padding-right: 10%;
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+// `;
 
 const MainPage = () => {
   return (
     <div>
-      <MainContainer>
+      메인 페이지
+      {/* <MainContainer>
         <div>
           <SubNavigation>
             <OrderSelect />
@@ -66,7 +66,7 @@ const MainPage = () => {
             </Box>
           </ContentsContainer>
         </div>
-      </MainContainer>
+      </MainContainer> */}
     </div>
   );
 };

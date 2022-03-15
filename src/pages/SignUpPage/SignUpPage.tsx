@@ -1,27 +1,16 @@
-import { Alert, Snackbar } from "@mui/material";
+import { ArrowLeft } from "@mui/icons-material";
+import { Alert, Paper, Snackbar } from "@mui/material";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import Checkbox from "@mui/material/Checkbox";
-import Container from "@mui/material/Container";
-import CssBaseline from "@mui/material/CssBaseline";
-import FormControlLabel from "@mui/material/FormControlLabel";
 import Grid from "@mui/material/Grid";
-import { createTheme, styled, ThemeProvider } from "@mui/material/styles";
+import { styled } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import signUp from "../../apis/signUp";
-
-const theme = createTheme();
-
-const EconomicusLogo = styled("img")({
-  borderRadius: 5,
-  width: 50,
-  height: 50,
-  margin: 10,
-});
+import { HighlightedTextLink } from "../../styles/myStyledComponents";
 
 export default function SignUpPage() {
   const navigate = useNavigate();
@@ -100,94 +89,114 @@ export default function SignUpPage() {
   };
 
   return (
-    <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
-        <Box
-          sx={{
-            marginTop: 8,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          <EconomicusLogo src="https://avatars.githubusercontent.com/u/98199739?s=200&v=4" />
-          <Typography component="h1" variant="h5">
+    <MainContainer>
+      <StyledPaper elevation={12}>
+        <EconomicusLogo src="https://avatars.githubusercontent.com/u/98199739?s=200&v=4" />
+
+        <Typography component="h1" variant="h5">
+          회원가입
+        </Typography>
+
+        <Box component="form" noValidate onSubmit={handleSubmit}>
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            id="email"
+            label="이메일"
+            name="email"
+            autoComplete="email"
+            autoFocus
+            inputRef={emailRef}
+            error={emailError}
+          />
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            name="password"
+            label="패스워드"
+            type="password"
+            id="password"
+            autoComplete="new-password"
+          />
+          <TextField
+            margin="normal"
+            autoComplete="nickname"
+            name="nickname"
+            required
+            fullWidth
+            id="nickname"
+            label="닉네임"
+            inputRef={nicknameRef}
+            error={nicknameError}
+          />
+          {/* <FormControlLabel
+                control={<Checkbox value="allowExtraEmails" color="primary" />}
+                label="I want to receive inspiration, marketing promotions and updates via email."
+              /> */}
+
+          <StyledButton type="submit" fullWidth variant="contained">
             회원가입
-          </Typography>
-          <Box
-            component="form"
-            noValidate
-            onSubmit={handleSubmit}
-            sx={{ mt: 3 }}
-          >
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="email"
-                  label="이메일"
-                  name="email"
-                  autoComplete="email"
-                  autoFocus
-                  inputRef={emailRef}
-                  error={emailError}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  name="password"
-                  label="패스워드"
-                  type="password"
-                  id="password"
-                  autoComplete="new-password"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  autoComplete="nickname"
-                  name="nickname"
-                  required
-                  fullWidth
-                  id="nickname"
-                  label="닉네임"
-                  inputRef={nicknameRef}
-                  error={nicknameError}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <FormControlLabel
-                  control={
-                    <Checkbox value="allowExtraEmails" color="primary" />
-                  }
-                  label="I want to receive inspiration, marketing promotions and updates via email."
-                />
-              </Grid>
+          </StyledButton>
+
+          <Grid container justifyContent="flex-start">
+            <Grid item>
+              <HighlightedTextLink to="/LoginPage">
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    marginLeft: "-10px",
+                  }}
+                >
+                  <ArrowLeft fontSize="small" />
+                  로그인 페이지로 돌아가기
+                </div>
+              </HighlightedTextLink>
             </Grid>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-            >
-              Sign Up
-            </Button>
-            <Grid container justifyContent="flex-end">
-              <Grid item>
-                <Link to="/LoginPage">로그인 페이지로 돌아가기</Link>
-              </Grid>
-            </Grid>
-          </Box>
+          </Grid>
         </Box>
-      </Container>
+      </StyledPaper>
+
       <Snackbar open={open} autoHideDuration={10000} onClose={handleClose}>
         <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
           {errorMessage}
         </Alert>
       </Snackbar>
-    </ThemeProvider>
+    </MainContainer>
   );
 }
+
+const MainContainer = styled(Box)`
+  width: 100vw;
+  height: 100vh;
+  max-width: 100%; // NOTE: https://stackoverflow.com/questions/23367345/100vw-causing-horizontal-overflow-but-only-if-more-than-one
+
+  background-color: rgba(140, 166, 218, 20%);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const StyledPaper = styled(Paper)`
+  width: 400px;
+  padding: 40px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const StyledButton = styled(Button)`
+  height: 56px;
+  margin: 11px 0;
+`;
+
+const EconomicusLogo = styled("img")({
+  borderRadius: 5,
+  width: 50,
+  height: 50,
+  margin: 10,
+});

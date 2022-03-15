@@ -4,6 +4,10 @@ import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 
 import { logout } from "../stores/session";
+import {
+  HighlightedTextButton,
+  HighlightedTextLink,
+} from "../styles/myStyledComponents";
 
 const LogoImage = styled("img")`
   border-radius: 5px;
@@ -58,60 +62,6 @@ const MenuContainer = styled(Box)`
   margin: 0 10px;
 `;
 
-const TextLink = styled(Link)`
-  margin: 10px;
-  display: inline-block;
-  color: black;
-  text-decoration: none;
-  transition: all 0.3s;
-  position: relative;
-
-  &:after {
-    content: "";
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: 0;
-    height: 8px;
-    transition: all 0.2s;
-    background: rgba(144, 169, 219, 50%);
-  }
-
-  &:hover:after {
-    width: 100%;
-  }
-`;
-
-const StyledButton = styled("button")`
-  border: none;
-  background-color: inherit;
-  font-size: 16px;
-  cursor: pointer;
-
-  margin: 10px;
-  padding: 0;
-  display: inline-block;
-  color: black;
-  text-decoration: none;
-  transition: all 0.3s;
-  position: relative;
-
-  &:after {
-    content: "";
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: 0;
-    height: 8px;
-    transition: all 0.2s;
-    background: rgba(144, 169, 219, 50%);
-  }
-
-  &:hover:after {
-    width: 100%;
-  }
-`;
-
 const RightContainer = styled(Box)`
   display: flex;
   flex-direction: row;
@@ -142,21 +92,25 @@ const MainNavigation = () => {
               </StyledLink>
 
               <MenuContainer>
-                <TextLink to="/PersonalProfilePage">프로필</TextLink>
+                <HighlightedTextLink to="/PersonalProfilePage">
+                  프로필
+                </HighlightedTextLink>
                 {/* NOTE: 프로필은 삭제 가능 (home 버튼과 겹치므로) */}
-                <TextLink to="/QuantLabPage">실험실</TextLink>
+                <HighlightedTextLink to="/QuantLabPage">
+                  실험실
+                </HighlightedTextLink>
               </MenuContainer>
             </LeftContainer>
 
             <RightContainer>
               {/* <TextLink to="/QuantLabPage">로그아웃</TextLink> */}
-              <StyledButton
+              <HighlightedTextButton
                 onClick={() => {
                   dispatch(logout());
                 }}
               >
                 로그아웃
-              </StyledButton>
+              </HighlightedTextButton>
             </RightContainer>
           </MainContainer>
         </Toolbar>

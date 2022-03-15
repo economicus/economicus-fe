@@ -1,4 +1,5 @@
-import { Close, Save } from "@material-ui/icons";
+import CloseIcon from "@mui/icons-material/Close";
+import SaveIcon from "@mui/icons-material/Save";
 import { Button, IconButton, Snackbar } from "@mui/material";
 import { GridActionsCellItem, GridRowId } from "@mui/x-data-grid";
 import { useState } from "react";
@@ -35,7 +36,7 @@ export default function SaveModelModal({ id }: QuantLabModalProps) {
         color="inherit"
         onClick={handleClose}
       >
-        <Close fontSize="small" />
+        <CloseIcon fontSize="small" />
       </IconButton>
     </>
   );
@@ -43,7 +44,7 @@ export default function SaveModelModal({ id }: QuantLabModalProps) {
   return (
     <>
       <GridActionsCellItem
-        icon={<Save />}
+        icon={<SaveIcon />}
         onClick={onClickSaveBtn}
         label="Save"
         key={2}

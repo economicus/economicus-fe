@@ -1,8 +1,8 @@
-import { Card, Typography } from "@mui/material";
+import { Button, Card, TextField, Typography } from "@mui/material";
 import { styled } from "@mui/system";
+import React, { useState } from "react";
 import {
   CartesianGrid,
-  Legend,
   Line,
   LineChart,
   Tooltip,
@@ -31,15 +31,67 @@ interface IRechartData {
 
 const ListViewCard: React.FC<IModelData> = (props) => {
   const graphData: IRechartData[] = formatToRechartData(props);
+
+  const [modelName, setModelName] = useState(props.quant.name);
+  const modelNameHandeler = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setModelName(event.target.value);
+  };
+  const [modelDescription, setModelDescription] = useState(
+    props.quant.description
+  );
+  const modelDescriptionHandeler = (
+    event: React.ChangeEvent<HTMLTextAreaElement>
+  ) => {
+    setModelDescription(event.target.value);
+  };
+
+  const submitHandeler = () => {
+    console.log(modelName); //test
+    console.log(modelDescription); //test
+    setEditting(!editting);
+  };
+
+  const [editting, setEditting] = useState(false);
+  const edittingHandeler = () => {
+    setEditting(!editting);
+  };
+
   return (
     <StyledCard>
       <ModelInfo>
-        <Typography variant="h5">{props.quant.name}</Typography>
-        <Typography>{props.quant.description}</Typography>
+        {editting && (
+          <>
+            <EdittingContainer>
+              <ModelNameTextFiled
+                required
+                id="name"
+                defaultValue={modelName}
+                variant="standard"
+                onChange={modelNameHandeler}
+              />
+              <StyledTextarea
+                id="description"
+                defaultValue={modelDescription}
+                onChange={modelDescriptionHandeler}
+              />
+            </EdittingContainer>
+            <Button onClick={submitHandeler}>save</Button>
+          </>
+        )}
+        {!editting && (
+          <>
+            <EdittingContainer>
+              <Typography variant="h5">{modelName}</Typography>
+              <Typography>{modelDescription}</Typography>
+            </EdittingContainer>
+            <Button onClick={edittingHandeler}>edit</Button>
+            <Button>share</Button>
+          </>
+        )}
       </ModelInfo>
       <LineChart
         width={500}
-        height={200}
+        height={250}
         data={graphData}
         margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
       >
@@ -47,7 +99,6 @@ const ListViewCard: React.FC<IModelData> = (props) => {
         <XAxis dataKey="name" />
         <YAxis />
         <Tooltip />
-        <Legend />
         <Line
           dataKey={props.quant.name}
           dot={false}
@@ -79,13 +130,31 @@ const formatToRechartData = (data: IModelData) => {
   return ret; // {name:..., 모델명:..., 모델명:...}
 };
 
-const ModelInfo = styled("div")`
-  width: 50%;
-  padding: 20px;
-`;
-
 const StyledCard = styled(Card)`
   display: flex;
-  height: 200px;
+  height: 250px;
   margin-bottom: 10px;
+`;
+
+const ModelInfo = styled("div")`
+  width: 50%;
+`;
+
+const EdittingContainer = styled("div")`
+  height: 200px;
+  display: flex;
+  flex-direction: column;
+  margin-right: 10px;
+  margin-left: 10px;
+`;
+
+const StyledTextarea = styled("textarea")`
+  resize: none;
+  width: 100%;
+  height: 100%;
+`;
+
+const ModelNameTextFiled = styled(TextField)`
+  width: 100%;
+  margin-bottom: 5px;
 `;

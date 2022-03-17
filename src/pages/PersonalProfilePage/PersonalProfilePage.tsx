@@ -1,4 +1,3 @@
-import { Typography } from "@mui/material";
 import { styled } from "@mui/system";
 import axios, { AxiosError } from "axios";
 import { useEffect, useState } from "react";
@@ -61,42 +60,38 @@ const PersonalProfilePage = () => {
   const [error, setError] = useState("");
 
   const token = useSelector((state: RootState) => state.session.token);
-  const user_id = 1; //user_id는 어디서 받아오지??
 
   //로그인 안된 상태에서는 어차피 못들어 오니까 빼도 되나?
   if (!token) {
     return <div>로그인이 필요한 페이지 입니다.</div>; // 개선 필요
   }
 
-  const getProfile = async (token: string, user_id: number) => {
+  const getProfile = async (token: string) => {
     try {
-      const response = (await axios.get(
-        endpoint + "/users/profile/" + { user_id },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )) as IProfileData;
+      const response = (await axios.get(endpoint + "/users/profile/", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      })) as IProfileData;
       setQuantData(response.quant);
       setUserData(response.user);
       return response;
     } catch (e) {
       // TEST dummy--------------------------
-      // const testres = JSON.parse(dummy1);
-      // setQuantData(testres.quant);
-      // setUserData(testres.user);
+      const testres = JSON.parse(dummy1);
+      setQuantData(testres.quant);
+      setUserData(testres.user);
       // ------------------------------------
 
-      setError((e as AxiosError).message);
-      return e;
+      // setError((e as AxiosError).message);
+      // return e;
     }
   };
 
   useEffect(() => {
     setLoading(true);
-    getProfile(token, user_id);
+    getProfile(token);
     setLoading(false);
   }, []);
 
@@ -110,22 +105,11 @@ const PersonalProfilePage = () => {
 
   return (
     <MainContainer>
-      <StyledDiv>
-        <PersonalInfoContainer>
-          <LogoImage src="https://avatars.githubusercontent.com/u/98199739?s=200&v=4" />
-          <StyledTypography variant="h6">
-            {userData.profile.nickname}
-          </StyledTypography>
-          <StyledTypography variant="h6">
-            모델수: {quantData.length}
-          </StyledTypography>
-        </PersonalInfoContainer>
-        <ListViewContainer>
-          {Object.keys(quantData).map((key, idx) => {
-            return <ListViewCard key={key} quant={quantData[idx]} />;
-          })}
-        </ListViewContainer>
-      </StyledDiv>
+      <ListViewContainer>
+        {Object.keys(quantData).map((key, idx) => {
+          return <ListViewCard key={key} quant={quantData[idx]} />;
+        })}
+      </ListViewContainer>
     </MainContainer>
   );
 };
@@ -139,30 +123,9 @@ const MainContainer = styled("div")`
   padding-right: 15%;
 `;
 
-const StyledDiv = styled("div")`
-  height: 100%;
-  display: flex;
-  padding: 50px 0;
-  justify-content: space-between;
-`;
-
-const PersonalInfoContainer = styled("div")`
-  width: 20%;
-`;
-
-const LogoImage = styled("img")`
-  border-radius: 5px;
-  width: 150px;
-  height: 150px;
-  margin: 10px;
-`;
-
-const StyledTypography = styled(Typography)`
-  margin: 10px;
-`;
-
 const ListViewContainer = styled("div")`
-  width: 80%;
+  width: 100%;
+  margin-top: 20px;
 `;
 
 const dummy1 = JSON.stringify({

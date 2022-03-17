@@ -1,3 +1,8 @@
+import { TextField } from "@mui/material";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { useAsync } from "react-async";
+import { useSelector } from "react-redux";
 import {
   CartesianGrid,
   Legend,
@@ -9,6 +14,8 @@ import {
   YAxis,
 } from "recharts";
 
+import { endpoint } from "../../../apis/endpoint";
+import { RootState } from "../../../stores/store";
 import { IChart } from "../QuantLabPage";
 
 interface ChartProps {
@@ -17,10 +24,34 @@ interface ChartProps {
 
 export default function Chart({ charts }: ChartProps) {
   // const graphData = graphDataParse([data1, data2]); // NOTE: 테스트용 더미 데이터
-  const graphData: IRechartData[] = formatToRechartData(charts);
+  const [graphData, setGraphData] = useState<IRechartData[]>([]);
+  const [kospiData, setKospiData] = useState<number[]>([]);
+  // setGraphData(formatToRechartData(charts, kospiData));
+
+  const token = useSelector((state: RootState) => state.session.token);
+  useEffect(() => {
+    async function getKospi() {
+      try {
+        const res = await axios.get(endpoint + "/lab/data/kospi", {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setKospiData(res.data);
+
+        return res;
+      } catch (e) {
+        return e;
+      }
+    }
+    getKospi();
+
+    setGraphData(formatToRechartData(charts, kospiData));
+  }, [charts]);
 
   if (!graphData.length) return <span>선택된 모델이 없습니다.</span>;
-
+  console.log(graphData.length);
   return (
     <ResponsiveContainer width="100%" height="100%">
       <LineChart
@@ -63,7 +94,7 @@ export default function Chart({ charts }: ChartProps) {
 
 interface IRechartData {
   name: string;
-  // kospi: number;
+  kospi: number;
   [key: string]: string | number;
 }
 
@@ -73,12 +104,13 @@ interface IRechartData {
 
 // TODO: 이러한 함수들을 useCallback 처리 하는건가?
 
-const formatToRechartData = (charts: IChart[]): IRechartData[] => {
+const formatToRechartData = (
+  charts: IChart[],
+  kospiData: number[]
+): IRechartData[] => {
   if (!charts.length) return [];
-
   const ret: IRechartData[] = [];
 
-  // const graphDate = new Date(charts[0].chart_data["start_date"].split("T")[0]);
   const graphDate = new Date("2016-03-31T00:00:00.000Z".split("T")[0]); // TODO: 날짜 어떻게 할건지 정해야
   graphDate.setDate(1);
 
@@ -86,9 +118,8 @@ const formatToRechartData = (charts: IChart[]): IRechartData[] => {
     return {
       ...val,
       chart_data: {
-        // profit_kospi_data: kospiToBalance(val),
-        profit_rate_data: profitToBalance(val),
-        // profit_rate_data: val.chart_data.profit_rate_data,
+        profit_kospi_data: kospiData,
+        profit_rate_data: val.chart_data.profit_rate_data,
       },
     };
   });
@@ -98,11 +129,9 @@ const formatToRechartData = (charts: IChart[]): IRechartData[] => {
     idx < normalizedData[0].chart_data["profit_rate_data"].length;
     idx++
   ) {
-    // const context: IRechartData = { name: "", kospi: 0 };
-    const context: IRechartData = { name: "" };
+    const context: IRechartData = { name: "", kospi: 0 };
     context.name = yearAndMonthToString(graphDate);
-    // context.kospi = normalizedData[0].chart_data["profit_kospi_data"][idx];
-
+    context.kospi = normalizedData[0].chart_data["profit_kospi_data"][idx];
     normalizedData.forEach((data) => {
       context[data["model_name"]] = data.chart_data.profit_rate_data[idx];
     });
@@ -111,12 +140,12 @@ const formatToRechartData = (charts: IChart[]): IRechartData[] => {
     ret.push(context);
   }
 
+  console.log("test", ret);
   return ret; // {name: string, kospi: number, 모델명:..., 모델명:...,}
 };
 
-// function kospiToBalance(data: IChart) {
+// function kospiToBalance(kospi: number[]) {
 //   const normalizedKospiData = [];
-//   const kospi: number[] = data.chart_data.profit_kospi_data;
 //   const seed = 1000;
 
 //   normalizedKospiData[0] = seed;
@@ -138,29 +167,6 @@ const formatToRechartData = (charts: IChart[]): IRechartData[] => {
 
 //   return normalizedKospiData;
 // }
-
-const profitToBalance = (data: IChart) => {
-  const normalizedProfitData = [];
-  const profit: number[] = data.chart_data.profit_rate_data;
-  const seed = 1000;
-
-  normalizedProfitData[0] = seed;
-
-  for (let index = 1; index < profit.length; index++) {
-    normalizedProfitData[index] =
-      normalizedProfitData[index - 1] +
-      (normalizedProfitData[index - 1] * profit[index - 1]) / 100;
-  }
-
-  // 수익률 60개 -> 실제값 61개
-  const tmpBalace =
-    normalizedProfitData[profit.length - 1] +
-    (normalizedProfitData[profit.length - 1] * profit[profit.length - 1]) / 100;
-
-  normalizedProfitData.push(tmpBalace);
-
-  return normalizedProfitData;
-};
 
 export function yearAndMonthToString(date: Date) {
   let tmp: string;

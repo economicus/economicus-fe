@@ -67,6 +67,7 @@ const PersonalProfilePage = () => {
   }
 
   const getProfile = async (token: string) => {
+    console.log(token);
     try {
       const response = (await axios.get(endpoint + "/users/profile", {
         headers: {

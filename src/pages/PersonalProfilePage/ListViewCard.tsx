@@ -126,8 +126,8 @@ const ListViewCard: React.FC<IModelData> = (props) => {
             <>
               <EdittingContainer>
                 <Typography variant="h5">{currentModelName}</Typography>
-                {currentDescription.split("\n").map((key, line) => {
-                  return <Typography key={key}>{line}</Typography>;
+                {currentDescription.split("\n").map((line) => {
+                  return <Typography key={line}>{line}</Typography>;
                 })}
               </EdittingContainer>
               <Button onClick={edittingHandeler}>edit</Button>

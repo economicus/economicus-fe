@@ -68,7 +68,7 @@ const PersonalProfilePage = () => {
 
   const getProfile = async (token: string) => {
     try {
-      const response = (await axios.get(endpoint + "/users/profile/", {
+      const response = (await axios.get(endpoint + "/users/profile", {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,

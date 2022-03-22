@@ -37,7 +37,7 @@ export default function Chart({ charts }: ChartProps) {
           },
         });
         setKospiData(res.data);
-
+        console.log("kospi data", res.data);
         return res;
       } catch (e) {
         return e;
@@ -122,6 +122,13 @@ const formatToRechartData = (
     };
   });
 
+  const diffLength =
+    normalizedData[0].chart_data.profit_kospi_data.length -
+    normalizedData[0].chart_data.profit_rate_data.length;
+
+  const referenceValueKospi =
+    normalizedData[0].chart_data["profit_kospi_data"][diffLength - 1];
+
   for (
     let idx = 0;
     idx < normalizedData[0].chart_data["profit_rate_data"].length;
@@ -129,7 +136,11 @@ const formatToRechartData = (
   ) {
     const context: IRechartData = { name: "", kospi: 0 };
     context.name = yearAndMonthToString(graphDate);
-    context.kospi = normalizedData[0].chart_data["profit_kospi_data"][idx];
+    context.kospi =
+      (normalizedData[0].chart_data["profit_kospi_data"][idx + diffLength - 1] /
+        referenceValueKospi -
+        1) *
+      100;
     normalizedData.forEach((data) => {
       context[data["model_name"]] = data.chart_data.profit_rate_data[idx];
     });
@@ -141,30 +152,6 @@ const formatToRechartData = (
   console.log("test", ret);
   return ret; // {name: string, kospi: number, 모델명:..., 모델명:...,}
 };
-
-// function kospiToBalance(kospi: number[]) {
-//   const normalizedKospiData = [];
-//   const seed = 1000;
-
-//   normalizedKospiData[0] = seed;
-
-//   for (let index = 1; index < kospi.length; index++) {
-//     const kospiPropit = (kospi[index] - kospi[index - 1]) / kospi[index - 1];
-//     normalizedKospiData[index] =
-//       normalizedKospiData[index - 1] +
-//       normalizedKospiData[index - 1] * kospiPropit;
-//   }
-
-//   const kospiPropit =
-//     (kospi[kospi.length] - kospi[kospi.length - 1]) / kospi[kospi.length - 1];
-
-//   const tmpBalace =
-//     kospi[kospi.length] + (kospi[kospi.length] * kospiPropit) / 100;
-
-//   normalizedKospiData.push(tmpBalace);
-
-//   return normalizedKospiData;
-// }
 
 export function yearAndMonthToString(date: Date) {
   let tmp: string;

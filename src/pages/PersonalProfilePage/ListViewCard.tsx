@@ -183,7 +183,7 @@ const formatToRechartData = (modelData: IModelData, kospiData: number[]) => {
     graphDate.setMonth(graphDate.getMonth() + 1);
     ret.push(tmp);
   }
-  return ret; // {name:..., 모델명:..., 모델명:...}
+  return ret; // [{name:date, kospi:value, 모델명:value,}, ...]
 };
 
 const StyledCard = styled(Card)`

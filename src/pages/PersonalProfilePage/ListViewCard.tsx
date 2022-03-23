@@ -169,13 +169,15 @@ const formatToRechartData = (modelData: IModelData, kospiData: number[]) => {
   const graphDate = new Date(start_date.split("T")[0]);
   graphDate.setDate(1);
 
-  // TODO: 데이터 정규화 과정 추가 해야함
-  // TODO: 날짜 증가 함수 추가 해야함
+  const diffLength = kospiData.length - modelData.chart.length;
+  const referenceValueKospi = kospiData[diffLength - 1];
+
+  // TODO: 원금 1000부터 시작하는 과정 추가해야함
 
   for (let idx = 0; idx < modelData.chart.length; idx++) {
     const tmp: IRechartData = {
       name: yearAndMonthToString(graphDate),
-      kospi: kospiData[idx],
+      kospi: (kospiData[idx + diffLength - 1] / referenceValueKospi - 1) * 100,
       [modelData.name]: modelData.chart[idx],
     };
     graphDate.setMonth(graphDate.getMonth() + 1);

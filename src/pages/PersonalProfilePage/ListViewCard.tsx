@@ -7,7 +7,9 @@ import {
   Typography,
 } from "@mui/material";
 import { styled } from "@mui/system";
-import React, { useState } from "react";
+import axios, { Axios } from "axios";
+import html2canvas from "html2canvas";
+import React, { useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import {
   CartesianGrid,
@@ -54,6 +56,8 @@ const ListViewCard: React.FC<IModelData> = (props) => {
   const [editting, setEditting] = useState(false);
   const [backDrop, setBackDrop] = React.useState(false);
 
+  const chartEl = useRef<HTMLDivElement>(null); // NOTE: 공유하기
+
   const modelNameHandeler = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNewModelName(event.target.value);
   };
@@ -91,6 +95,65 @@ const ListViewCard: React.FC<IModelData> = (props) => {
   };
 
   // TODO: 공유하기 기능 추가해야함
+  // const uploadImgur = (image: string) => {
+  //   const apiBase = "https://api.imgur.com/3/image";
+
+  //   console.log("key>?", process.env.REACT_APP_IMGUR_CLIENT_ID);
+  //   console.log(image);
+
+  //   axios
+  //     .post(
+  //       apiBase,
+  //       {
+  //         image,
+  //         type: "URL",
+  //       },
+  //       {
+  //         headers: {
+  //           Authorization: `Client-ID ${process.env.REACT_APP_IMGUR_CLIENT_ID}`,
+  //           Accept: "application/json",
+  //         },
+  //       }
+  //     )
+  //     .then((res) => {
+  //       console.log(res.data.data.link);
+  //     })
+  //     .catch((e) => {
+  //       console.log("error?", e, e.response, e.config, e.message, e.time);
+  //     });
+  // };
+
+  const getKakaoFriend = () => {
+    // const base = `https://kauth.kakao.com/oauth/authorize?client_id=${
+    //   process.env.REACT_APP_KAKAO_REST_API_KEY
+    // }&redirect_uri=${"https://economicus.pages.dev/"}&response_type=code`;
+    // axios.get(base);
+    // window.Kakao.
+  };
+
+  const exportAsImage = async () => {
+    if (!chartEl.current) return;
+    const canvas = await html2canvas(chartEl.current);
+    // const image = canvas.toDataURL("image/jpeg");
+    const image = canvas.toDataURL();
+
+    console.log(window.Kakao.isInitialized());
+
+    // window.Kakao.Auth.authorize({
+    //   redirectUri: "https://economicus.pages.dev/",
+    // });
+
+    // const fakeLink = window.document.createElement("a");
+    // fakeLink.download = "test";
+    // fakeLink.href = image;
+    // document.body.appendChild(fakeLink);
+    // fakeLink.click();
+    // fakeLink.remove();
+  };
+
+  const shareHandelrer = () => {
+    exportAsImage();
+  };
 
   return (
     <>
@@ -126,31 +189,34 @@ const ListViewCard: React.FC<IModelData> = (props) => {
             <>
               <EdittingContainer>
                 <Typography variant="h5">{currentModelName}</Typography>
-                {currentDescription.split("\n").map((line) => {
-                  return <Typography>{line}</Typography>;
+                {currentDescription.split("\n").map((line, idx) => {
+                  return <Typography key={idx}>{line}</Typography>;
                 })}
               </EdittingContainer>
               <Button onClick={edittingHandeler}>edit</Button>
-              <Button>share</Button>
+              <Button onClick={shareHandelrer}>share</Button>
             </>
           )}
         </ModelInfo>
-        <LineChart
-          width={500}
-          height={250}
-          data={graphData}
-          margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-        >
-          <CartesianGrid vertical={false} strokeDasharray="3 3" />
-          <XAxis dataKey="name" />
-          <YAxis />
-          <Tooltip />
-          <Line
-            dataKey={props.quant.name}
-            dot={false}
-            stroke={generateColor(props.quant.name)}
-          />
-        </LineChart>
+
+        <div ref={chartEl}>
+          <LineChart
+            width={500}
+            height={250}
+            data={graphData}
+            margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+          >
+            <CartesianGrid vertical={false} strokeDasharray="3 3" />
+            <XAxis dataKey="name" />
+            <YAxis />
+            <Tooltip />
+            <Line
+              dataKey={props.quant.name}
+              dot={false}
+              stroke={generateColor(props.quant.name)}
+            />
+          </LineChart>
+        </div>
       </StyledCard>
     </>
   );

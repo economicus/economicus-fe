@@ -8,8 +8,10 @@ import { RootState } from "../../stores/store";
 import ListViewCard from "./ListViewCard";
 
 interface IProfileData {
-  quant: IQuantData[];
-  user: IUserData;
+  data: {
+    quant: IQuantData[];
+    user: IUserData;
+  };
 }
 
 export interface IQuantData {
@@ -74,8 +76,9 @@ const PersonalProfilePage = () => {
           Authorization: `Bearer ${token}`,
         },
       })) as IProfileData;
-      setQuantData(response.quant);
-      setUserData(response.user);
+
+      setQuantData(response.data.quant);
+      setUserData(response.data.user);
       return response;
     } catch (e) {
       // TEST dummy--------------------------
@@ -106,9 +109,10 @@ const PersonalProfilePage = () => {
   return (
     <MainContainer>
       <ListViewContainer>
-        {Object.keys(quantData).map((key, idx) => {
-          return <ListViewCard key={key} quant={quantData[idx]} />;
-        })}
+        {quantData &&
+          Object.keys(quantData).map((key, idx) => {
+            return <ListViewCard key={key} quant={quantData[idx]} />;
+          })}
       </ListViewContainer>
     </MainContainer>
   );
@@ -118,7 +122,7 @@ export default PersonalProfilePage;
 
 const MainContainer = styled("div")`
   width: 100vw;
-  dispaly: flex;
+  display: flex;
   padding-left: 15%;
   padding-right: 15%;
 `;

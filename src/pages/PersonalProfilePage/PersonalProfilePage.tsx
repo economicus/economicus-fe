@@ -55,6 +55,7 @@ const userDataInit: IUserData = {
 
 const PersonalProfilePage = () => {
   const [quantData, setQuantData] = useState<IQuantData[]>([]);
+  const [kospiData, setKospiData] = useState<number[]>([]);
   const [userData, setUserData] = useState<IUserData>(userDataInit);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -96,6 +97,25 @@ const PersonalProfilePage = () => {
     setLoading(false);
   }, []);
 
+  useEffect(() => {
+    async function getKospi() {
+      try {
+        const res = await axios.get(endpoint + "/lab/data/kospi", {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setKospiData(res.data);
+        console.log("kospi data", res.data); //test
+        return res;
+      } catch (e) {
+        return e;
+      }
+    }
+    getKospi();
+  }, []);
+
   if (error !== "") {
     return <div>{error}</div>; //개선 필요
   }
@@ -108,7 +128,13 @@ const PersonalProfilePage = () => {
     <MainContainer>
       <ListViewContainer>
         {Object.keys(quantData).map((key, idx) => {
-          return <ListViewCard key={key} quant={quantData[idx]} />;
+          return (
+            <ListViewCard
+              key={key}
+              modelData={quantData[idx]}
+              kospiData={kospiData}
+            />
+          );
         })}
       </ListViewContainer>
     </MainContainer>

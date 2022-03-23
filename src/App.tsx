@@ -40,11 +40,7 @@ function App() {
         <Route path="/SignUpPage" element={<SignUpPage />} />
 
         <Route element={<PrivateWrapper />}>
-          <Route path="/" element={<MainPage />} />
-          <Route
-            path="/PersonalProfilePage"
-            element={<PersonalProfilePage />}
-          />
+          <Route path="/" element={<PersonalProfilePage />} />
           <Route
             path="/QuantModelDetailsPage/:id"
             element={<QuantModelDetailsPage />}

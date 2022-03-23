@@ -27,32 +27,37 @@ import {
   yearAndMonthToString,
 } from "../QuantLabPage/QuantModelViewer/Chart";
 
+interface IListViewCardProps {
+  modelData: IModelData;
+  kospiData: number[];
+}
+
 export interface IModelData {
-  quant: {
-    chart: number[];
-    description: string;
-    name: string;
-    quant_id: number;
-  };
+  chart: number[];
+  description: string;
+  name: string;
+  quant_id: number;
 }
 
 interface IRechartData {
   name: string;
+  kospi: number;
   [key: string]: string | number;
 }
 
-const ListViewCard: React.FC<IModelData> = (props) => {
-  const graphData: IRechartData[] = formatToRechartData(props);
-  const token = useSelector((state: RootState) => state.session.token);
+const ListViewCard = ({ modelData, kospiData }: IListViewCardProps) => {
+  const graphData: IRechartData[] = formatToRechartData(modelData, kospiData);
 
-  const [currentModelName, setCurrentModelName] = useState(props.quant.name);
+  const [currentModelName, setCurrentModelName] = useState(modelData.name);
   const [currentDescription, setCurrentDescription] = useState(
-    props.quant.name
+    modelData.description
   );
-  const [newModelName, setNewModelName] = useState(props.quant.name);
-  const [newDescription, setNewDescription] = useState(props.quant.description);
+  const [newModelName, setNewModelName] = useState(modelData.name);
+  const [newDescription, setNewDescription] = useState(modelData.description);
   const [editting, setEditting] = useState(false);
   const [backDrop, setBackDrop] = React.useState(false);
+
+  const token = useSelector((state: RootState) => state.session.token);
 
   const modelNameHandeler = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNewModelName(event.target.value);
@@ -76,13 +81,11 @@ const ListViewCard: React.FC<IModelData> = (props) => {
           name: newModelName,
         } as IChangeModelInfoBody,
         token,
-        props.quant.quant_id
+        modelData.quant_id
       );
       if (responseData instanceof Error) throw responseData;
-      else {
-        setCurrentModelName(newModelName);
-        setCurrentDescription(newDescription);
-      }
+      setCurrentModelName(newModelName);
+      setCurrentDescription(newDescription);
     } catch (e) {
       alert(e);
     }
@@ -108,13 +111,13 @@ const ListViewCard: React.FC<IModelData> = (props) => {
                 <ModelNameTextFiled
                   required
                   id="name"
-                  defaultValue={props.quant.name}
+                  defaultValue={currentModelName}
                   variant="standard"
                   onChange={modelNameHandeler}
                 />
                 <StyledTextarea
                   id="description"
-                  defaultValue={props.quant.description}
+                  defaultValue={currentDescription}
                   onChange={descriptionHandeler}
                 />
               </EdittingContainer>
@@ -124,10 +127,12 @@ const ListViewCard: React.FC<IModelData> = (props) => {
           )}
           {!editting && (
             <>
-              <EdittingContainer>
+              <EdittingContainer
+                style={{ maxHeight: "100%", overflow: "auto" }}
+              >
                 <Typography variant="h5">{currentModelName}</Typography>
                 {currentDescription.split("\n").map((line) => {
-                  return <Typography>{line}</Typography>;
+                  return <Typography key={line}>{line}</Typography>;
                 })}
               </EdittingContainer>
               <Button onClick={edittingHandeler}>edit</Button>
@@ -145,10 +150,11 @@ const ListViewCard: React.FC<IModelData> = (props) => {
           <XAxis dataKey="name" />
           <YAxis />
           <Tooltip />
+          <Line dataKey="kospi" dot={false} stroke={generateColor("kospi")} />
           <Line
-            dataKey={props.quant.name}
+            dataKey={modelData.name}
             dot={false}
-            stroke={generateColor(props.quant.name)}
+            stroke={generateColor(modelData.name)}
           />
         </LineChart>
       </StyledCard>
@@ -158,24 +164,28 @@ const ListViewCard: React.FC<IModelData> = (props) => {
 
 export default ListViewCard;
 
-const formatToRechartData = (data: IModelData) => {
-  if (!data.quant.chart) return [];
+const formatToRechartData = (modelData: IModelData, kospiData: number[]) => {
+  if (!modelData.chart) return [];
   const ret: IRechartData[] = [];
   const start_date = "2016-03-31T00:00:00.000Z"; //시작 날짜가 모두 같으면 전역변수로 빼야할듯?
   const graphDate = new Date(start_date.split("T")[0]);
   graphDate.setDate(1);
 
-  // TODO: 데이터 정규화 과정 추가 해야함
-  // TODO: 날짜 증가 함수 추가 해야함
+  const diffLength = kospiData.length - modelData.chart.length;
+  const referenceValueKospi = kospiData[diffLength - 1];
 
-  for (let idx = 0; idx < data.quant.chart.length; idx++) {
+  // TODO: 원금 1000부터 시작하는 과정 추가해야함
+
+  for (let idx = 0; idx < modelData.chart.length; idx++) {
     const tmp: IRechartData = {
       name: yearAndMonthToString(graphDate),
-      [data.quant.name]: data.quant.chart[idx],
+      kospi: (kospiData[idx + diffLength - 1] / referenceValueKospi - 1) * 100,
+      [modelData.name]: modelData.chart[idx],
     };
+    graphDate.setMonth(graphDate.getMonth() + 1);
     ret.push(tmp);
   }
-  return ret; // {name:..., 모델명:..., 모델명:...}
+  return ret; // [{name:date, kospi:value, 모델명:value,}, ...]
 };
 
 const StyledCard = styled(Card)`

@@ -49,7 +49,9 @@ const ListViewCard = ({ modelData, kospiData }: IListViewCardProps) => {
   const graphData: IRechartData[] = formatToRechartData(modelData, kospiData);
 
   const [currentModelName, setCurrentModelName] = useState(modelData.name);
-  const [currentDescription, setCurrentDescription] = useState(modelData.name);
+  const [currentDescription, setCurrentDescription] = useState(
+    modelData.description
+  );
   const [newModelName, setNewModelName] = useState(modelData.name);
   const [newDescription, setNewDescription] = useState(modelData.description);
   const [editting, setEditting] = useState(false);
@@ -82,10 +84,8 @@ const ListViewCard = ({ modelData, kospiData }: IListViewCardProps) => {
         modelData.quant_id
       );
       if (responseData instanceof Error) throw responseData;
-      else {
-        setCurrentModelName(newModelName);
-        setCurrentDescription(newDescription);
-      }
+      setCurrentModelName(newModelName);
+      setCurrentDescription(newDescription);
     } catch (e) {
       alert(e);
     }
@@ -111,13 +111,13 @@ const ListViewCard = ({ modelData, kospiData }: IListViewCardProps) => {
                 <ModelNameTextFiled
                   required
                   id="name"
-                  defaultValue={modelData.name}
+                  defaultValue={currentModelName}
                   variant="standard"
                   onChange={modelNameHandeler}
                 />
                 <StyledTextarea
                   id="description"
-                  defaultValue={modelData.description}
+                  defaultValue={currentDescription}
                   onChange={descriptionHandeler}
                 />
               </EdittingContainer>
@@ -127,7 +127,9 @@ const ListViewCard = ({ modelData, kospiData }: IListViewCardProps) => {
           )}
           {!editting && (
             <>
-              <EdittingContainer>
+              <EdittingContainer
+                style={{ maxHeight: "100%", overflow: "auto" }}
+              >
                 <Typography variant="h5">{currentModelName}</Typography>
                 {currentDescription.split("\n").map((line) => {
                   return <Typography key={line}>{line}</Typography>;

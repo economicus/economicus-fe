@@ -1,15 +1,19 @@
+import { Button, Paper, Typography } from "@mui/material";
 import { styled } from "@mui/system";
 import axios, { AxiosError } from "axios";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 import { endpoint } from "../../apis/endpoint";
 import { RootState } from "../../stores/store";
 import ListViewCard from "./ListViewCard";
 
 interface IProfileData {
-  quant: IQuantData[];
-  user: IUserData;
+  data: {
+    quant: IQuantData[];
+    user: IUserData;
+  };
 }
 
 export interface IQuantData {
@@ -59,6 +63,7 @@ const PersonalProfilePage = () => {
   const [userData, setUserData] = useState<IUserData>(userDataInit);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   const token = useSelector((state: RootState) => state.session.token);
 
@@ -76,18 +81,12 @@ const PersonalProfilePage = () => {
           Authorization: `Bearer ${token}`,
         },
       })) as IProfileData;
-      setQuantData(response.quant);
-      setUserData(response.user);
+      setQuantData(response.data.quant);
+      setUserData(response.data.user);
       return response;
     } catch (e) {
-      // TEST dummy--------------------------
-      const testres = JSON.parse(dummy1);
-      setQuantData(testres.quant);
-      setUserData(testres.user);
-      // ------------------------------------
-
-      // setError((e as AxiosError).message);
-      // return e;
+      setError((e as AxiosError).message);
+      return e;
     }
   };
 
@@ -116,8 +115,30 @@ const PersonalProfilePage = () => {
     getKospi();
   }, []);
 
-  if (error !== "") {
-    return <div>{error}</div>; //개선 필요
+  if (
+    error === "Request failed with status code 500" &&
+    quantData.length === 0
+  ) {
+    //개선필요
+    return (
+      <ErrorContainer>
+        <StyledPaper>
+          <Typography component="h1" variant="h5">
+            생성된 모델이 없습니다...
+          </Typography>
+          <StyledButton
+            fullWidth
+            onClick={() => {
+              navigate("/QuantLabPage");
+            }}
+          >
+            실험실 가기
+          </StyledButton>
+        </StyledPaper>
+      </ErrorContainer>
+    );
+  } else if (error !== "") {
+    return <div>{error}</div>;
   }
 
   if (loading) {
@@ -153,6 +174,26 @@ const MainContainer = styled("div")`
 const ListViewContainer = styled("div")`
   width: 100%;
   margin-top: 20px;
+`;
+
+const ErrorContainer = styled("div")`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10%;
+`;
+const StyledPaper = styled("div")`
+  width: 400px;
+  padding: 40px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const StyledButton = styled(Button)`
+  height: 56px;
+  margin: 20px 0;
 `;
 
 const dummy1 = JSON.stringify({

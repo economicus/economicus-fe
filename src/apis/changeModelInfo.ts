@@ -14,12 +14,16 @@ export default async function changeModelInfo(
   quant_id: number
 ) {
   try {
-    const res = await axios.patch(endpoint + "/quants/quant" + quant_id, body, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const res = await axios.patch(
+      endpoint + "/quants/quant/" + quant_id,
+      body,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
     return res.data;
   } catch (e) {

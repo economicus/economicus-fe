@@ -50,7 +50,7 @@ export interface IChart {
   model_name: string;
   chart_data: {
     // start_date: string;
-    // profit_kospi_data: number[];
+    profit_kospi_data: number[];
     profit_rate_data: number[];
   };
 }

@@ -2,10 +2,15 @@ import CloseIcon from "@mui/icons-material/Close";
 import SaveIcon from "@mui/icons-material/Save";
 import { Button, IconButton, Snackbar } from "@mui/material";
 import { GridActionsCellItem, GridRowId } from "@mui/x-data-grid";
+import axios from "axios";
 import { useState } from "react";
 import * as React from "react";
 import { createPortal } from "react-dom";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+
+import { endpoint } from "../../../apis/endpoint";
+import { RootState } from "../../../stores/store";
 
 interface QuantLabModalProps {
   id: GridRowId;
@@ -15,14 +20,39 @@ export default function SaveModelModal({ id }: QuantLabModalProps) {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const navigate = useNavigate();
+  const token = useSelector((state: RootState) => state.session.token);
 
+  async function saveModel(id: GridRowId) {
+    try {
+      const res = await axios.patch(
+        endpoint + "/quants/quant/" + id,
+        {
+          body: {
+            active: true,
+          },
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(res);
+      return res;
+    } catch (e) {
+      console.log(e);
+      return e;
+    }
+  }
   const onClickSaveBtn = () => {
+    saveModel(id);
     handleOpen();
   };
 
   const onClickMoveBtn = () => {
     handleClose();
-    navigate(`/QuantModelDetailsPage/${id}`); // NOTE: 동적 라우팅
+    navigate(`/PersonalProfilePage`); // NOTE: 동적 라우팅
   };
 
   const action = (

@@ -44,30 +44,6 @@ export default function ModelCreation({ setModelList }: ModelCreationProps) {
       return;
     }
 
-    // const notActivitiesValue = Object.fromEntries(
-    //   Object.entries(financeCondition)
-    //     .filter(
-    //       ([key]) =>
-    //         !key.startsWith("activities_") && financeCondition[key].checked
-    //     )
-    //     .map(([key, value]) => [
-    //       key,
-    //       { min: value.values[0], max: value.values[1] },
-    //     ])
-    // );
-
-    // const activitiesValue = Object.fromEntries(
-    //   Object.entries(financeCondition)
-    //     .filter(
-    //       ([key]) =>
-    //         key.startsWith("activities_") && financeCondition[key].checked
-    //     )
-    //     .map(([key, value]) => [
-    //       key.split("_")[1],
-    //       { min: value.values[0], max: value.values[1] },
-    //     ])
-    // );
-
     const formedFinanceCondition = Object.fromEntries(
       Object.entries(financeCondition).map(([key, value]) => [
         key,
@@ -293,22 +269,22 @@ const initialBusinessArea: IBusinessArea = {
 };
 
 const initialFinanceCondetion = {
-  net_revenue: sliderStateCunstructor(-36, 2437714),
-  net_revenue_rate: sliderStateCunstructor(-100, 79433),
-  net_profit: sliderStateCunstructor(-4000, 45000),
+  net_revenue: sliderStateCunstructor(-67232388, 243771415000),
+  net_revenue_rate: sliderStateCunstructor(-100, 79444),
+  net_profit: sliderStateCunstructor(-3292997000, 44344857000),
   net_profit_rate: sliderStateCunstructor(-22400, 179900),
-  de_ratio: sliderStateCunstructor(0, 84510),
-  per: sliderStateCunstructor(-5, 167089),
-  psr: sliderStateCunstructor(-20, 240936),
-  pbr: sliderStateCunstructor(0, 573),
-  pcr: sliderStateCunstructor(0, 97906),
+  de_ratio: sliderStateCunstructor(0, 84511),
+  per: sliderStateCunstructor(0, 84511),
+  psr: sliderStateCunstructor(-20, 167089),
+  pbr: sliderStateCunstructor(0, 255),
+  pcr: sliderStateCunstructor(0, 97907),
   dividend_yield: sliderStateCunstructor(0, 50),
-  dividend_payout_ratio: sliderStateCunstructor(-7872, 65278),
-  roa: sliderStateCunstructor(-275, 154),
-  roe: sliderStateCunstructor(-4900, 1615),
+  dividend_payout_ratio: sliderStateCunstructor(-7872, 11677),
+  roa: sliderStateCunstructor(-534, 253),
+  roe: sliderStateCunstructor(-3640, 755),
   market_cap: sliderStateCunstructor(0, 435000),
 
-  operating: sliderStateCunstructor(-13000, 68000),
-  investing: sliderStateCunstructor(-54000, 5000),
-  financing: sliderStateCunstructor(-15000, 26000),
+  operating: sliderStateCunstructor(-12224149000, 67031863000),
+  investing: sliderStateCunstructor(-52240453000, 4329910000),
+  financing: sliderStateCunstructor(-15090222000, 16196958000),
 };

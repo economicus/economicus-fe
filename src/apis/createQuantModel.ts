@@ -41,7 +41,7 @@ export default async function createQuantModel(
   body: createQuantModelBody,
   token: string
 ) {
-  console.log("test", body);
+  //   console.log("test", body);
 
   try {
     const res = await axios.post(endpoint + "/quants/quant", body, {

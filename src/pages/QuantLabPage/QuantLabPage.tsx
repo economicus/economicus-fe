@@ -1,7 +1,11 @@
 import { styled } from "@mui/material/styles";
 import { GridSelectionModel } from "@mui/x-data-grid";
+import axios from "axios";
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
+import { endpoint } from "../../apis/endpoint";
+import { RootState } from "../../stores/store";
 import QuantModelCreation from "./QuantModelCreation";
 import QuantModelTable from "./QuantModelTable";
 import QuantModelViewer from "./QuantModelViewer";
@@ -16,15 +20,31 @@ const QuantLabPage = () => {
   // const [modelList, setModelList] = useState<IModel[]>(dummy);
   const [selectionModel, setSelectionModel] = useState<GridSelectionModel>([]); // NOTE: 선택된 모델 id의 배열
 
+  const token = useSelector((state: RootState) => state.session.token);
   useEffect(() => {
-    //
-  });
+    async function getExModels() {
+      try {
+        const res = await axios.get(endpoint + "/lab/list", {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        console.log(res);
+        setModelList(res.data);
+        return res;
+      } catch (e) {
+        return e;
+      }
+    }
+    getExModels();
+  }, []);
 
   const charts: IChart[] = modelList
     .filter((val) => selectionModel.includes(val.id))
     .map((val) => {
-      const { id, model_name, chart_data } = val;
-      return { id, model_name, chart_data };
+      const { id, name, chart_data } = val;
+      return { id, name, chart_data };
     });
 
   return (
@@ -56,7 +76,7 @@ const QuantLabPage = () => {
 
 export interface IChart {
   id: number;
-  model_name: string;
+  name: string;
   chart_data: {
     // start_date: string;
     profit_kospi_data: number[];

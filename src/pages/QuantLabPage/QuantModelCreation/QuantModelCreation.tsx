@@ -89,7 +89,7 @@ export default function ModelCreation({ setModelList }: ModelCreationProps) {
           // { id: +new Date(), model_name: modelName, ...responseData },
           {
             id: responseData["quant_id"],
-            model_name: modelName,
+            name: modelName,
             ...responseData,
           },
         ];

@@ -37,7 +37,6 @@ export default function Chart({ charts }: ChartProps) {
           },
         });
         setKospiData(res.data);
-        console.log("kospi data", res.data);
         return res;
       } catch (e) {
         return e;
@@ -49,7 +48,6 @@ export default function Chart({ charts }: ChartProps) {
   }, [charts]);
 
   if (!graphData.length) return <span>선택된 모델이 없습니다.</span>;
-  console.log(graphData.length);
   return (
     <ResponsiveContainer width="100%" height="100%">
       <LineChart
@@ -144,16 +142,12 @@ const formatToRechartData = (
         100
     );
     normalizedData.forEach((data) => {
-      context[data["model_name"]] = roundNum(
-        data.chart_data.profit_rate_data[idx]
-      );
+      context[data["name"]] = roundNum(data.chart_data.profit_rate_data[idx]);
     });
 
     graphDate.setMonth(graphDate.getMonth() + 1);
     ret.push(context);
   }
-
-  console.log("test", ret);
   return ret; // {name: string, kospi: number, 모델명:..., 모델명:...,}
 };
 

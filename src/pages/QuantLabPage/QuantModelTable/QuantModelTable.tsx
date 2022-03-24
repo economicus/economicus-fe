@@ -103,7 +103,7 @@ export default function QuantModelTable({
 }
 
 const FIELDS = [
-  "model_name",
+  "name",
   "cumulative_return",
   "annual_average_return",
   "winning_percentage",

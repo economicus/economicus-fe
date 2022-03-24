@@ -78,6 +78,7 @@ export default function Chart({ charts }: ChartProps) {
                   activeDot={{ r: 8 }}
                   dot={false}
                   key={idx}
+                  unit="%"
                 />
               );
             })}

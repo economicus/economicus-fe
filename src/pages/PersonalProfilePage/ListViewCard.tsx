@@ -127,14 +127,14 @@ const ListViewCard = ({ modelData, kospiData }: IListViewCardProps) => {
           )}
           {!editting && (
             <>
-              <EdittingContainer
-                style={{ maxHeight: "100%", overflow: "auto" }}
-              >
+              <ViewContainer>
                 <Typography variant="h5">{currentModelName}</Typography>
-                {currentDescription.split("\n").map((line) => {
-                  return <Typography key={line}>{line}</Typography>;
-                })}
-              </EdittingContainer>
+                <DiscriptionContainer>
+                  {currentDescription.split("\n").map((line) => {
+                    return <Typography key={line}>{line}</Typography>;
+                  })}
+                </DiscriptionContainer>
+              </ViewContainer>
               <Button onClick={edittingHandeler}>edit</Button>
               <Button>share</Button>
             </>
@@ -202,8 +202,22 @@ const EdittingContainer = styled("div")`
   height: 200px;
   display: flex;
   flex-direction: column;
-  margin-right: 10px;
-  margin-left: 10px;
+  margin-right: 15px;
+  margin-left: 15px;
+`;
+
+const ViewContainer = styled("div")`
+  height: 200px;
+  display: flex;
+  flex-direction: column;
+  margin-right: 15px;
+  margin-left: 15px;
+  padding-top: 5px;
+`;
+
+const DiscriptionContainer = styled("div")`
+  maxheight: "100%";
+  overflow: auto;
 `;
 
 const StyledTextarea = styled("textarea")`

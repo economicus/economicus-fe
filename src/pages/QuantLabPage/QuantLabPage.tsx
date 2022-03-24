@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 
 import { endpoint } from "../../apis/endpoint";
 import { RootState } from "../../stores/store";
+import ModelList from "../QuantModelListPage/ModelList";
 import QuantModelCreation from "./QuantModelCreation";
 import QuantModelTable from "./QuantModelTable";
 import QuantModelViewer from "./QuantModelViewer";
@@ -30,8 +31,22 @@ const QuantLabPage = () => {
             Authorization: `Bearer ${token}`,
           },
         });
-        console.log(res);
-        setModelList(res.data);
+        const modelData: IModel[] = [];
+        for (let index = 0; index < res.data.length; index++) {
+          const element = res.data[index];
+          const tmpCharts = await axios.get(
+            endpoint + "/lab/data/" + res.data[0].id,
+            {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+          element.chart_data = tmpCharts.data.chart;
+          modelData.push(element);
+        }
+        setModelList(modelData);
         return res;
       } catch (e) {
         return e;

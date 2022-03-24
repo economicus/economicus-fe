@@ -1,25 +1,65 @@
 import { styled } from "@mui/material/styles";
 import { GridSelectionModel } from "@mui/x-data-grid";
+import axios from "axios";
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
+import { endpoint } from "../../apis/endpoint";
+import { RootState } from "../../stores/store";
+import ModelList from "../QuantModelListPage/ModelList";
 import QuantModelCreation from "./QuantModelCreation";
 import QuantModelTable from "./QuantModelTable";
 import QuantModelViewer from "./QuantModelViewer";
+
+export function roundNum(num: number) {
+  const m = Number((Math.abs(num) * 100).toPrecision(15));
+  return (Math.round(m) / 100) * Math.sign(num);
+}
 
 const QuantLabPage = () => {
   const [modelList, setModelList] = useState<IModel[]>([]);
   // const [modelList, setModelList] = useState<IModel[]>(dummy);
   const [selectionModel, setSelectionModel] = useState<GridSelectionModel>([]); // NOTE: 선택된 모델 id의 배열
 
+  const token = useSelector((state: RootState) => state.session.token);
   useEffect(() => {
-    //
-  });
+    async function getExModels() {
+      try {
+        const res = await axios.get(endpoint + "/lab/list", {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const modelData: IModel[] = [];
+        for (let index = 0; index < res.data.length; index++) {
+          const element = res.data[index];
+          const tmpCharts = await axios.get(
+            endpoint + "/lab/data/" + res.data[0].id,
+            {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+          element.chart_data = tmpCharts.data.chart;
+          modelData.push(element);
+        }
+        setModelList(modelData);
+        return res;
+      } catch (e) {
+        return e;
+      }
+    }
+    getExModels();
+  }, []);
 
   const charts: IChart[] = modelList
     .filter((val) => selectionModel.includes(val.id))
     .map((val) => {
-      const { id, model_name, chart_data } = val;
-      return { id, model_name, chart_data };
+      const { id, name, chart_data } = val;
+      return { id, name, chart_data };
     });
 
   return (
@@ -34,6 +74,10 @@ const QuantLabPage = () => {
         rows={modelList.map((val) => {
           const { chart_data, ...field } = val;
           chart_data; // NOTE: 미사용 워닝 해결을 위해
+          val.annual_average_return = roundNum(val.annual_average_return);
+          val.cumulative_return = roundNum(val.cumulative_return);
+          val.max_loss_rate = roundNum(val.max_loss_rate);
+          val.winning_percentage = roundNum(val.winning_percentage);
           return field;
         })}
       />
@@ -47,7 +91,7 @@ const QuantLabPage = () => {
 
 export interface IChart {
   id: number;
-  model_name: string;
+  name: string;
   chart_data: {
     // start_date: string;
     profit_kospi_data: number[];

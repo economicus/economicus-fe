@@ -13,8 +13,8 @@ const QuantModelListPage = () => {
   const models = modelList
     .filter((val) => selectionModel.includes(val.id))
     .map((val) => {
-      const { id, model_name, chart_data } = val;
-      return { id, model_name, chart_data };
+      const { id, name, chart_data } = val;
+      return { id, name, chart_data };
     });
 
   return (

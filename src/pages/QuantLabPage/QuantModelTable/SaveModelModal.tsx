@@ -23,21 +23,18 @@ export default function SaveModelModal({ id }: QuantLabModalProps) {
   const token = useSelector((state: RootState) => state.session.token);
 
   async function saveModel(id: GridRowId) {
+    const body = {
+      active: true,
+      description: "New model description",
+      name: "New model name",
+    };
     try {
-      const res = await axios.patch(
-        endpoint + "/quants/quant/" + id,
-        {
-          body: {
-            active: true,
-          },
+      const res = await axios.patch(endpoint + "/quants/quant/" + id, body, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      });
       console.log(res);
       return res;
     } catch (e) {
@@ -52,7 +49,7 @@ export default function SaveModelModal({ id }: QuantLabModalProps) {
 
   const onClickMoveBtn = () => {
     handleClose();
-    navigate(`/PersonalProfilePage`); // NOTE: 동적 라우팅
+    navigate(`/`); // NOTE: 동적 라우팅
   };
 
   const action = (

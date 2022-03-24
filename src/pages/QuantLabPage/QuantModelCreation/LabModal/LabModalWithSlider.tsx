@@ -184,7 +184,6 @@ export default function LabModalWithSlider({
           })}
         </FormControlGroup>
       </ModalWithButton>
-      <CheckedFinanceConditionCards state={state} />
     </>
   );
 }

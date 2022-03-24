@@ -106,7 +106,7 @@ const PersonalProfilePage = () => {
           },
         });
         setKospiData(res.data);
-        console.log("kospi data", res.data); //test
+        // console.log("kospi data", res.data); // NOTE: test
         return res;
       } catch (e) {
         return e;

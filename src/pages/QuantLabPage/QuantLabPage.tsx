@@ -6,7 +6,6 @@ import { useSelector } from "react-redux";
 
 import { endpoint } from "../../apis/endpoint";
 import { RootState } from "../../stores/store";
-import ModelList from "../QuantModelListPage/ModelList";
 import QuantModelCreation from "./QuantModelCreation";
 import QuantModelTable from "./QuantModelTable";
 import QuantModelViewer from "./QuantModelViewer";
@@ -64,23 +63,25 @@ const QuantLabPage = () => {
 
   return (
     <MainContainer>
-      <StyledDiv>
-        <QuantModelViewer {...{ charts }} />
+      <LeftContainer>
         <QuantModelCreation {...{ setModelList }} />
-      </StyledDiv>
+      </LeftContainer>
 
-      <QuantModelTable
-        {...{ setSelectionModel, setModelList }}
-        rows={modelList.map((val) => {
-          const { chart_data, ...field } = val;
-          chart_data; // NOTE: 미사용 워닝 해결을 위해
-          val.annual_average_return = roundNum(val.annual_average_return);
-          val.cumulative_return = roundNum(val.cumulative_return);
-          val.max_loss_rate = roundNum(val.max_loss_rate);
-          val.winning_percentage = roundNum(val.winning_percentage);
-          return field;
-        })}
-      />
+      <RightContainer>
+        <QuantModelViewer {...{ charts }} />
+        <QuantModelTable
+          {...{ setSelectionModel, setModelList }}
+          rows={modelList.map((val) => {
+            const { chart_data, ...field } = val;
+            chart_data; // NOTE: 미사용 워닝 해결을 위해
+            val.annual_average_return = roundNum(val.annual_average_return);
+            val.cumulative_return = roundNum(val.cumulative_return);
+            val.max_loss_rate = roundNum(val.max_loss_rate);
+            val.winning_percentage = roundNum(val.winning_percentage);
+            return field;
+          })}
+        />
+      </RightContainer>
     </MainContainer>
   );
 };
@@ -151,18 +152,30 @@ export interface IModel extends IChart {
  */
 
 const MainContainer = styled("div")`
-  width: 100vw;
+  width: 100%;
   height: 100%;
 
-  padding-left: 10%;
-  padding-right: 10%;
+  display: flex;
+  justify-content: center;
 `;
 
-const StyledDiv = styled("div")`
-  height: 600px;
+const LeftContainer = styled("div")`
+  /* width: calc(20% - 10px); */
+  width: 300px;
+  margin-right: 10px;
 
   display: flex;
-  padding: 20px 0;
+  flex-direction: column;
+  justify-content: space-between;
+`;
+
+const RightContainer = styled("div")`
+  /* width: calc(80% - 10px); */
+  width: 1000px;
+  margin-left: 10px;
+
+  display: flex;
+  flex-direction: column;
   justify-content: space-between;
 `;
 

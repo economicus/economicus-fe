@@ -6,6 +6,11 @@ import QuantModelCreation from "./QuantModelCreation";
 import QuantModelTable from "./QuantModelTable";
 import QuantModelViewer from "./QuantModelViewer";
 
+export function roundNum(num: number) {
+  const m = Number((Math.abs(num) * 100).toPrecision(15));
+  return (Math.round(m) / 100) * Math.sign(num);
+}
+
 const QuantLabPage = () => {
   const [modelList, setModelList] = useState<IModel[]>([]);
   // const [modelList, setModelList] = useState<IModel[]>(dummy);
@@ -34,6 +39,10 @@ const QuantLabPage = () => {
         rows={modelList.map((val) => {
           const { chart_data, ...field } = val;
           chart_data; // NOTE: 미사용 워닝 해결을 위해
+          val.annual_average_return = roundNum(val.annual_average_return);
+          val.cumulative_return = roundNum(val.cumulative_return);
+          val.max_loss_rate = roundNum(val.max_loss_rate);
+          val.winning_percentage = roundNum(val.winning_percentage);
           return field;
         })}
       />

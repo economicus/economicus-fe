@@ -14,7 +14,7 @@ import {
 
 import { endpoint } from "../../../apis/endpoint";
 import { RootState } from "../../../stores/store";
-import { IChart } from "../QuantLabPage";
+import { IChart, roundNum } from "../QuantLabPage";
 
 interface ChartProps {
   charts: IChart[];
@@ -92,7 +92,7 @@ export default function Chart({ charts }: ChartProps) {
 
 interface IRechartData {
   name: string;
-  kospi: number;
+  kospi: string | number;
   [key: string]: string | number;
 }
 
@@ -136,13 +136,16 @@ const formatToRechartData = (
   ) {
     const context: IRechartData = { name: "", kospi: 0 };
     context.name = yearAndMonthToString(graphDate);
-    context.kospi =
+    context.kospi = roundNum(
       (normalizedData[0].chart_data["profit_kospi_data"][idx + diffLength - 1] /
         referenceValueKospi -
         1) *
-      100;
+        100
+    );
     normalizedData.forEach((data) => {
-      context[data["model_name"]] = data.chart_data.profit_rate_data[idx];
+      context[data["model_name"]] = roundNum(
+        data.chart_data.profit_rate_data[idx]
+      );
     });
 
     graphDate.setMonth(graphDate.getMonth() + 1);

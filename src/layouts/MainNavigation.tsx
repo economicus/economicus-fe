@@ -87,16 +87,12 @@ const MainNavigation = () => {
             <LeftContainer>
               <StyledLink to="/">
                 <RowContainer>
-                  <LogoImage src="https://avatars.githubusercontent.com/u/98199739?s=200&v=4" />
+                  <LogoImage src="img/economicusLogo.png" />
                   <LogoTypography variant="h5">Economicus</LogoTypography>
                 </RowContainer>
               </StyledLink>
 
               <MenuContainer>
-                <HighlightedTextLink to="/PersonalProfilePage">
-                  프로필
-                </HighlightedTextLink>
-                {/* NOTE: 프로필은 삭제 가능 (home 버튼과 겹치므로) */}
                 <HighlightedTextLink to="/QuantLabPage">
                   실험실
                 </HighlightedTextLink>

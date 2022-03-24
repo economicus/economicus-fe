@@ -14,7 +14,7 @@ import {
 
 import { endpoint } from "../../../apis/endpoint";
 import { RootState } from "../../../stores/store";
-import { IChart } from "../QuantLabPage";
+import { IChart, roundNum } from "../QuantLabPage";
 
 interface ChartProps {
   charts: IChart[];
@@ -37,7 +37,6 @@ export default function Chart({ charts }: ChartProps) {
           },
         });
         setKospiData(res.data);
-        console.log("kospi data", res.data);
         return res;
       } catch (e) {
         return e;
@@ -49,7 +48,6 @@ export default function Chart({ charts }: ChartProps) {
   }, [charts]);
 
   if (!graphData.length) return <span>선택된 모델이 없습니다.</span>;
-  console.log(graphData.length);
   return (
     <ResponsiveContainer width="100%" height="100%">
       <LineChart
@@ -78,6 +76,7 @@ export default function Chart({ charts }: ChartProps) {
                   activeDot={{ r: 8 }}
                   dot={false}
                   key={idx}
+                  unit="%"
                 />
               );
             })}
@@ -92,7 +91,7 @@ export default function Chart({ charts }: ChartProps) {
 
 interface IRechartData {
   name: string;
-  kospi: number;
+  kospi: string | number;
   [key: string]: string | number;
 }
 
@@ -136,20 +135,19 @@ const formatToRechartData = (
   ) {
     const context: IRechartData = { name: "", kospi: 0 };
     context.name = yearAndMonthToString(graphDate);
-    context.kospi =
+    context.kospi = roundNum(
       (normalizedData[0].chart_data["profit_kospi_data"][idx + diffLength - 1] /
         referenceValueKospi -
         1) *
-      100;
+        100
+    );
     normalizedData.forEach((data) => {
-      context[data["model_name"]] = data.chart_data.profit_rate_data[idx];
+      context[data["name"]] = roundNum(data.chart_data.profit_rate_data[idx]);
     });
 
     graphDate.setMonth(graphDate.getMonth() + 1);
     ret.push(context);
   }
-
-  console.log("test", ret);
   return ret; // {name: string, kospi: number, 모델명:..., 모델명:...,}
 };
 

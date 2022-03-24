@@ -43,8 +43,6 @@ export default function QuantModelTable({
     (id: GridRowId) => () => {
       setTimeout(async () => {
         setModelList((prev) => prev.filter((model) => model.id !== id));
-
-        // TODO: 백엔드 완료시 삭제 api 추가 #11
         await deleteQuantModel(id as string, token);
       });
     },
@@ -72,12 +70,6 @@ export default function QuantModelTable({
             onClick={deleteModel(params.id)}
             label="Delete"
           />,
-          //   <GridActionsCellItem
-          //     icon={<Save />}
-          //     onClick={saveModel(params.id)}
-          //     label="Save"
-          //     key={2}
-          //   />,
           <SaveModelModal id={params.id} />,
         ],
       },
@@ -111,7 +103,7 @@ export default function QuantModelTable({
 }
 
 const FIELDS = [
-  "model_name",
+  "name",
   "cumulative_return",
   "annual_average_return",
   "winning_percentage",

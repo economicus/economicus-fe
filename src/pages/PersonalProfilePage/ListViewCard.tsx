@@ -139,9 +139,7 @@ const ListViewCard: React.FC<IModelData> = (props) => {
 
     console.log(window.Kakao.isInitialized());
 
-    // window.Kakao.Auth.authorize({
-    //   redirectUri: "https://economicus.pages.dev/",
-    // });
+    window.Kakao.Auth.authorize();
 
     // const fakeLink = window.document.createElement("a");
     // fakeLink.download = "test";

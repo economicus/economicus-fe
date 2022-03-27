@@ -162,6 +162,7 @@ const MainContainer = styled("div")`
 const LeftContainer = styled("div")`
   /* width: calc(20% - 10px); */
   width: 300px;
+  min-width: 300px;
   margin-right: 10px;
 
   display: flex;

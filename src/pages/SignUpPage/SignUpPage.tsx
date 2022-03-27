@@ -165,7 +165,7 @@ const MainContainer = styled(Box)`
   height: 100vh;
   max-width: 100%; // NOTE: https://stackoverflow.com/questions/23367345/100vw-causing-horizontal-overflow-but-only-if-more-than-one
 
-  background-color: rgba(140, 166, 218, 20%);
+  background-color: #d6dff2;
 
   display: flex;
   align-items: center;

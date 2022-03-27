@@ -7,7 +7,6 @@ import {
   Typography,
 } from "@mui/material";
 import { styled } from "@mui/system";
-import axios, { Axios } from "axios";
 import html2canvas from "html2canvas";
 import React, { useRef, useState } from "react";
 import { useSelector } from "react-redux";
@@ -96,63 +95,56 @@ const ListViewCard = ({ modelData, kospiData }: IListViewCardProps) => {
     setEditting(!editting);
   };
 
-  // TODO: 공유하기 기능 추가해야함
-  // const uploadImgur = (image: string) => {
-  //   const apiBase = "https://api.imgur.com/3/image";
+  // NOTE: 공유하기
 
-  //   console.log("key>?", process.env.REACT_APP_IMGUR_CLIENT_ID);
-  //   console.log(image);
-
-  //   axios
-  //     .post(
-  //       apiBase,
-  //       {
-  //         image,
-  //         type: "URL",
-  //       },
-  //       {
-  //         headers: {
-  //           Authorization: `Client-ID ${process.env.REACT_APP_IMGUR_CLIENT_ID}`,
-  //           Accept: "application/json",
-  //         },
-  //       }
-  //     )
-  //     .then((res) => {
-  //       console.log(res.data.data.link);
-  //     })
-  //     .catch((e) => {
-  //       console.log("error?", e, e.response, e.config, e.message, e.time);
-  //     });
-  // };
-
-  const getKakaoFriend = () => {
-    // const base = `https://kauth.kakao.com/oauth/authorize?client_id=${
-    //   process.env.REACT_APP_KAKAO_REST_API_KEY
-    // }&redirect_uri=${"https://economicus.pages.dev/"}&response_type=code`;
-    // axios.get(base);
-    // window.Kakao.
-  };
-
-  const exportAsImage = async () => {
+  const shareHandelrer = async () => {
     if (!chartEl.current) return;
-    const canvas = await html2canvas(chartEl.current);
-    // const image = canvas.toDataURL("image/jpeg");
-    const image = canvas.toDataURL();
 
-    console.log(window.Kakao.isInitialized());
+    const canvas = await html2canvas(chartEl.current, {
+      x: 20,
+      y: -125,
+      height: 500,
+      scrollY: -window.scrollY,
+    });
 
-    window.Kakao.Auth.authorize();
+    // NOTE: 이미지 출력 테스트용
+    // const image = canvas.toDataURL("image/jpeg", 0.5);
+    // console.log(image);
 
-    // const fakeLink = window.document.createElement("a");
-    // fakeLink.download = "test";
-    // fakeLink.href = image;
-    // document.body.appendChild(fakeLink);
-    // fakeLink.click();
-    // fakeLink.remove();
-  };
+    canvas.toBlob(async (blob) => {
+      if (!window.Kakao.isInitialized()) return;
 
-  const shareHandelrer = () => {
-    exportAsImage();
+      const uploadedImage = await window.Kakao.Link.uploadImage({
+        file: [blob],
+      });
+
+      window.Kakao.Link.sendDefault({
+        objectType: "feed",
+        content: {
+          title: modelData.name,
+          description: modelData.description,
+          imageUrl: uploadedImage.infos.original.url,
+          link: {
+            webUrl: uploadedImage.infos.original.url,
+            mobileWebUrl: uploadedImage.infos.original.url,
+          },
+        },
+        // social: {
+        //   likeCount: 286,
+        //   commentCount: 45,
+        //   sharedCount: 845,
+        // },
+        buttons: [
+          {
+            title: "이코노미쿠스 바로가기",
+            link: {
+              mobileWebUrl: "https://developers.kakao.com",
+              webUrl: "https://developers.kakao.com",
+            },
+          },
+        ],
+      });
+    });
   };
 
   return (
@@ -212,7 +204,7 @@ const ListViewCard = ({ modelData, kospiData }: IListViewCardProps) => {
             <XAxis dataKey="name" />
             <YAxis />
             <Tooltip />
-            <Line dataKey="kospi" dot={false} stroke={generateColor("kospi")} />
+            {/* <Line dataKey="kospi" dot={false} stroke={generateColor("kospi")} /> */}
             <Line
               dataKey={modelData.name}
               dot={false}

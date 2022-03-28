@@ -56,11 +56,16 @@ export default function LabModalWithSlider({
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setSelectAll(event.target.checked);
-    const newState = state;
-    Object.keys(newState).forEach((key) => {
-      newState[key].checked = event.target.checked;
+    Object.keys(state).forEach((key) => {
+      state[key].checked = event.target.checked;
+      setState({
+        ...state,
+        [key]: {
+          ...state[key],
+          checked: event.target.checked,
+        },
+      });
     });
-    setState(newState);
   };
 
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -99,13 +104,13 @@ export default function LabModalWithSlider({
         Number(event.target.value) <= state[event.target.name].min
           ? state[event.target.name].min
           : event.target.value;
-      newValues = [tmp, state[event.target.name].values[1]];
+      newValues = [Number(tmp), Number(state[event.target.name].values[1])];
     } else {
       const tmp =
         Number(event.target.value) >= state[event.target.name].max
           ? state[event.target.name].max
           : event.target.value;
-      newValues = [state[event.target.name].values[0], tmp];
+      newValues = [Number(state[event.target.name].values[0]), Number(tmp)];
     }
     setState({
       ...state,

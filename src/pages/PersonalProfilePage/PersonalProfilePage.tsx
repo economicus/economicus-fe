@@ -81,10 +81,10 @@ const PersonalProfilePage = () => {
       return response;
     } catch (e) {
       // TEST dummy--------------------------
-      const testres = JSON.parse(dummy1);
+      // const testres = JSON.parse(dummy1);
 
-      setQuantData(testres.quant);
-      setUserData(testres.user);
+      // setQuantData(testres.quant);
+      // setUserData(testres.user);
       // ------------------------------------
 
       setError((e as AxiosError).message);

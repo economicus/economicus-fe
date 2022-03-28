@@ -17,6 +17,7 @@ export default function ChartViewer({ charts }: ChartViewerProps) {
 }
 
 const MainContainer = styled(Paper)`
-  width: 79%;
+  /* width: 79%; */
+  height: calc(65% - 10px);
   padding: 20px;
 `;

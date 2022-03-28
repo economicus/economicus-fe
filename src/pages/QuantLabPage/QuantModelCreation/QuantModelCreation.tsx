@@ -10,6 +10,7 @@ import createQuantModel, {
 } from "../../../apis/createQuantModel";
 import { RootState } from "../../../stores/store";
 import { IModel } from "../QuantLabPage";
+import CheckedFinanceConditionCards from "./LabModal/CheckedFinanceConditionCards";
 import LabModal from "./LabModal/LabModal";
 import LabModalWithSlider from "./LabModal/LabModalWithSlider";
 
@@ -106,56 +107,65 @@ export default function ModelCreation({ setModelList }: ModelCreationProps) {
 
   return (
     <>
+      {error && (
+        <Snackbar
+          open={!!error}
+          autoHideDuration={6000}
+          onClose={() => {
+            setError("");
+          }}
+        >
+          <Alert severity="error">{error}</Alert>
+        </Snackbar>
+      )}
+
       <MainContainer variant="outlined">
-        {error && (
-          <Snackbar
-            open={!!error}
-            autoHideDuration={6000}
-            onClose={() => {
-              setError("");
-            }}
-          >
-            <Alert severity="error">{error}</Alert>
-          </Snackbar>
-        )}
+        <Typography variant="h5">실험실</Typography>
 
-        <Typography variant="h5">Quant Lab</Typography>
-        <TextField
-          id="model-name"
-          label="모델명"
-          variant="outlined"
-          size="small"
-          value={modelName}
-          onChange={modelNameHandler}
-          sx={{ mx: 1, mt: 1 }}
-          error={modelName === "" && firstTry === 0}
-          inputRef={modelNameInputRef}
-        />
+        <FirstContainer>
+          <TextField
+            id="model-name"
+            label="모델 이름"
+            variant="outlined"
+            size="small"
+            value={modelName}
+            onChange={modelNameHandler}
+            sx={{ m: 1 }}
+            error={modelName === "" && firstTry === 0}
+            inputRef={modelNameInputRef}
+          />
+          <LabModal
+            btnName="사업 분야"
+            state={businessArea}
+            setState={setBusinessArea}
+          />
+          <LabModalWithSlider
+            btnName="재무상태"
+            state={financeCondition}
+            setState={setFinanceCondetion}
+          />
+          <CheckedFinanceConditionCards state={financeCondition} />
+        </FirstContainer>
 
-        <ButtonsContainer>
-          <ConditionButtonsContainer>
-            <LabModal
-              btnName="사업분야"
-              state={businessArea}
-              setState={setBusinessArea}
-            />
-            <LabModalWithSlider
-              btnName="재무상태"
-              state={financeCondition}
-              setState={setFinanceCondetion}
-            />
-          </ConditionButtonsContainer>
+        <SecondContainer>
+          <WarningPaper variant="outlined" sx={{ m: 1, p: 1 }}>
+            <Typography variant="body2">🛠 안내를 위한 문구</Typography>
+            <Typography variant="body2">
+              안녕하세요. 현재 이 기능은...
+            </Typography>
+          </WarningPaper>
 
           <LoadingButton
             sx={{ m: 1 }}
             loading={isLoading}
             loadingPosition="start"
-            variant="outlined"
+            startIcon={<></>}
+            variant="contained"
             onClick={onClickMakeButton}
           >
-            {isLoading ? "모델 생성중..." : "make model"}
+            {isLoading ? "모델 생성중..." : "모델 만들기"}
           </LoadingButton>
-        </ButtonsContainer>
+        </SecondContainer>
       </MainContainer>
     </>
   );
@@ -216,25 +226,36 @@ export interface ICheckboxWithSliderInfo {
  */
 
 const MainContainer = styled(Paper)`
-  width: 20%;
+  width: 100%;
+  height: 100%;
   padding: 20px;
 
   display: flex;
   flex-direction: column;
 `;
 
-const ConditionButtonsContainer = styled("div")`
+const FirstContainer = styled("div")`
+  height: 100%;
+
+  margin-top: 10px;
+
   display: flex;
   flex-direction: column;
+
+  /* background-color: yellow; */
 `;
 
-const ButtonsContainer = styled("div")`
-  height: 100%;
+const SecondContainer = styled("div")`
   margin-top: 10px;
 
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+`;
+
+const WarningPaper = styled(Paper)`
+  font-size: smaller;
+  background-color: rgba(256, 230, 120, 30%);
 `;
 
 /*

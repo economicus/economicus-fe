@@ -1,4 +1,5 @@
 import DeleteIcon from "@mui/icons-material/Delete";
+import { Paper } from "@mui/material";
 import {
   DataGrid,
   GridActionsCellItem,
@@ -35,7 +36,7 @@ export default function QuantModelTable({
       field: val,
       headerName:
         VariableNameTranslate[`${val}` as keyof typeof VariableNameTranslate],
-      width: 150,
+      flex: 1,
     };
   });
 
@@ -77,27 +78,25 @@ export default function QuantModelTable({
     [deleteModel, saveModel]
   );
 
-  // TODO: 추후 mui와 styled-components 사용으로 개선 필요
   return (
-    <div style={{ height: 275, width: "100%" }}>
-      <div style={{ display: "flex", height: "100%" }}>
-        <div style={{ flexGrow: 1 }}>
-          <DataGrid
-            initialState={{
-              pagination: {
-                pageSize: 3,
-              },
-            }}
-            checkboxSelection
-            disableSelectionOnClick
-            rows={rows}
-            columns={columnsWithButton}
-            onSelectionModelChange={(model) => {
-              setSelectionModel(model);
-            }}
-          />
-        </div>
-      </div>
+    <div
+      style={{
+        height: "calc(35% - 10px)",
+        width: "100%",
+        backgroundColor: "white",
+        display: "flex",
+      }}
+    >
+      <DataGrid
+        checkboxSelection
+        disableSelectionOnClick
+        rows={rows}
+        columns={columnsWithButton}
+        onSelectionModelChange={(model) => {
+          setSelectionModel(model);
+        }}
+        density="compact"
+      />
     </div>
   );
 }

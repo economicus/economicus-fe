@@ -1,8 +1,7 @@
-import { Card, Grid, Popover, Typography } from "@mui/material";
-import { useState } from "react";
+import { Grid, Paper, Typography } from "@mui/material";
 
 import { IFinanceCondition } from "../QuantModelCreation";
-import { ChangedFinanceConditionName } from "./LabModalWithSlider";
+import OptionTag from "./OptionTag";
 
 interface CheckedItemCardsProps {
   state: IFinanceCondition;
@@ -11,65 +10,24 @@ interface CheckedItemCardsProps {
 export default function CheckedFinanceConditionCards({
   state,
 }: CheckedItemCardsProps) {
+  const checkedArr = Object.entries(state).filter(([, value]) => value.checked);
+
+  if (!checkedArr.length) return <></>;
+
   return (
-    <Grid container sx={{ mt: 1 }}>
-      {Object.keys(state).map((key, idx) => {
-        const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+    <Paper
+      variant="outlined"
+      sx={{ m: 1, p: 1, backgroundColor: "rgba(140, 166, 218, 20%)" }}
+    >
+      <Typography variant="body2" sx={{ mb: 1 }}>
+        선택한 재무상태 옵션
+      </Typography>
 
-        const handlePopoverOpen = (event: React.MouseEvent<HTMLElement>) => {
-          setAnchorEl(event.currentTarget);
-        };
-
-        const handlePopoverClose = () => {
-          setAnchorEl(null);
-        };
-
-        const open = Boolean(anchorEl);
-        if (state[key].checked) {
-          return (
-            <div key={idx}>
-              <Card
-                aria-owns={open ? "mouse-over-popover" : undefined}
-                aria-haspopup="true"
-                onMouseEnter={handlePopoverOpen}
-                onMouseLeave={handlePopoverClose}
-                sx={{
-                  px: 1,
-                  m: 0.3,
-                  fontSize: "small",
-                }}
-              >
-                {ChangedFinanceConditionName[key].substring(
-                  0,
-                  ChangedFinanceConditionName[key].indexOf("(")
-                )}
-              </Card>
-              <Popover
-                id="mouse-over-popover"
-                sx={{
-                  pointerEvents: "none",
-                }}
-                open={open}
-                anchorEl={anchorEl}
-                anchorOrigin={{
-                  vertical: "bottom",
-                  horizontal: "left",
-                }}
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "left",
-                }}
-                onClose={handlePopoverClose}
-                disableRestoreFocus
-              >
-                <Typography sx={{ p: 1 }}>
-                  {state[key].values[0] + " ~ " + state[key].values[1]}
-                </Typography>
-              </Popover>
-            </div>
-          );
-        }
-      })}
-    </Grid>
+      <Grid container>
+        {checkedArr.map(([objectKey, objectValue], idx) => (
+          <OptionTag key={idx} {...{ objectKey, objectValue }} />
+        ))}
+      </Grid>
+    </Paper>
   );
 }

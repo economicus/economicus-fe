@@ -80,6 +80,7 @@ const MainNavigation = () => {
         variant="outlined"
         color="inherit"
         style={{ borderRight: "none" }}
+        elevation={0}
       >
         <Toolbar style={{ padding: "0 3px" }}>
           <MainContainer>

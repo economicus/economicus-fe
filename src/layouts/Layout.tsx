@@ -15,5 +15,5 @@ export default Layout;
 
 const StyledDiv = styled("div")`
   padding: 20px;
-  /* background-color: yellow; */
+  height: calc(100vh - 66px); // NOTE: 66px은 네비게이션의 높이
 `;

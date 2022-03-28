@@ -3,11 +3,14 @@ import {
   Button,
   Card,
   CircularProgress,
+  Paper,
+  Stack,
   TextField,
   Typography,
 } from "@mui/material";
 import { styled } from "@mui/system";
-import React, { useState } from "react";
+import html2canvas from "html2canvas";
+import React, { useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import {
   CartesianGrid,
@@ -57,9 +60,11 @@ const ListViewCard = ({ modelData, kospiData }: IListViewCardProps) => {
   const [editting, setEditting] = useState(false);
   const [backDrop, setBackDrop] = React.useState(false);
 
+  const chartEl = useRef<HTMLDivElement>(null); // NOTE: 공유하기
   const token = useSelector((state: RootState) => state.session.token);
 
-  const modelNameHandeler = (event: React.ChangeEvent<HTMLInputElement>) => {
+  // const modelNameHandeler = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const modelNameHandeler = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setNewModelName(event.target.value);
   };
   const descriptionHandeler = (
@@ -93,7 +98,57 @@ const ListViewCard = ({ modelData, kospiData }: IListViewCardProps) => {
     setEditting(!editting);
   };
 
-  // TODO: 공유하기 기능 추가해야함
+  // NOTE: 공유하기
+
+  const shareHandelrer = async () => {
+    if (!chartEl.current) return;
+
+    const canvas = await html2canvas(chartEl.current, {
+      x: 20,
+      y: -125,
+      height: 500,
+      scrollY: -window.scrollY,
+    });
+
+    // NOTE: 이미지 출력 테스트용
+    // const image = canvas.toDataURL("image/jpeg", 0.5);
+    // console.log(image);
+
+    canvas.toBlob(async (blob) => {
+      if (!window.Kakao.isInitialized()) return;
+
+      const uploadedImage = await window.Kakao.Link.uploadImage({
+        file: [blob],
+      });
+
+      window.Kakao.Link.sendDefault({
+        objectType: "feed",
+        content: {
+          title: modelData.name,
+          description: modelData.description,
+          imageUrl: uploadedImage.infos.original.url,
+          link: {
+            webUrl: uploadedImage.infos.original.url,
+            mobileWebUrl: uploadedImage.infos.original.url,
+          },
+        },
+        // social: {
+        //   likeCount: 286,
+        //   commentCount: 45,
+        //   sharedCount: 845,
+        // },
+        buttons: [
+          {
+            title: "이코노미쿠스 바로가기",
+            link: {
+              mobileWebUrl: "https://developers.kakao.com",
+              webUrl: "https://developers.kakao.com",
+            },
+          },
+        ],
+      });
+    });
+  };
 
   return (
     <>
@@ -103,26 +158,55 @@ const ListViewCard = ({ modelData, kospiData }: IListViewCardProps) => {
       >
         <CircularProgress color="inherit" />
       </Backdrop>
-      <StyledCard>
+
+      <StyledCard variant="outlined">
         <ModelInfo>
           {editting && (
             <>
               <EdittingContainer>
-                <ModelNameTextFiled
+                {/* <ModelNameTextFiled */}
+
+                <TextField
                   required
-                  id="name"
+                  label="모델명"
                   defaultValue={currentModelName}
-                  variant="standard"
                   onChange={modelNameHandeler}
+                  size="small"
                 />
-                <StyledTextarea
+
+                <TextField
+                  label="모델 설명"
+                  defaultValue={currentDescription}
+                  onChange={descriptionHandeler}
+                  multiline
+                  size="small"
+                  rows={6}
+                  style={{ margin: "13px 0" }}
+                />
+
+                {/* <StyledTextarea
                   id="description"
                   defaultValue={currentDescription}
                   onChange={descriptionHandeler}
-                />
+                /> */}
               </EdittingContainer>
-              <Button onClick={submitHandeler}>save</Button>
-              <Button onClick={edittingHandeler}>cancel</Button>
+
+              <div style={{ display: "flex" }}>
+                <Button
+                  onClick={submitHandeler}
+                  variant="outlined"
+                  sx={{ m: 1 }}
+                >
+                  저장
+                </Button>
+                <Button
+                  onClick={edittingHandeler}
+                  variant="outlined"
+                  sx={{ m: 1 }}
+                >
+                  취소
+                </Button>
+              </div>
             </>
           )}
           {!editting && (
@@ -130,33 +214,54 @@ const ListViewCard = ({ modelData, kospiData }: IListViewCardProps) => {
               <EdittingContainer
                 style={{ maxHeight: "100%", overflow: "auto" }}
               >
-                <Typography variant="h5">{currentModelName}</Typography>
-                {currentDescription.split("\n").map((line) => {
-                  return <Typography key={line}>{line}</Typography>;
+                <Typography variant="h5" mb={1}>
+                  {currentModelName}
+                </Typography>
+
+                {currentDescription.split("\n").map((line, idx) => {
+                  return <Typography key={idx}>{line}</Typography>;
                 })}
               </EdittingContainer>
-              <Button onClick={edittingHandeler}>edit</Button>
-              <Button>share</Button>
+
+              <div style={{ display: "flex" }}>
+                <Button
+                  onClick={edittingHandeler}
+                  variant="outlined"
+                  sx={{ m: 1 }}
+                >
+                  수정
+                </Button>
+                <Button
+                  onClick={shareHandelrer}
+                  variant="outlined"
+                  sx={{ m: 1 }}
+                >
+                  공유하기
+                </Button>
+              </div>
             </>
           )}
         </ModelInfo>
-        <LineChart
-          width={500}
-          height={250}
-          data={graphData}
-          margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-        >
-          <CartesianGrid vertical={false} strokeDasharray="3 3" />
-          <XAxis dataKey="name" />
-          <YAxis />
-          <Tooltip />
-          <Line dataKey="kospi" dot={false} stroke={generateColor("kospi")} />
-          <Line
-            dataKey={modelData.name}
-            dot={false}
-            stroke={generateColor(modelData.name)}
-          />
-        </LineChart>
+
+        <ChartContainer ref={chartEl} variant="outlined">
+          <LineChart
+            width={500}
+            height={250}
+            data={graphData}
+            margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+          >
+            <CartesianGrid vertical={false} strokeDasharray="3 3" />
+            <XAxis dataKey="name" />
+            <YAxis />
+            <Tooltip />
+            {/* <Line dataKey="kospi" dot={false} stroke={generateColor("kospi")} /> */}
+            <Line
+              dataKey={modelData.name}
+              dot={false}
+              stroke={generateColor(modelData.name)}
+            />
+          </LineChart>
+        </ChartContainer>
       </StyledCard>
     </>
   );
@@ -190,20 +295,26 @@ const formatToRechartData = (modelData: IModelData, kospiData: number[]) => {
 
 const StyledCard = styled(Card)`
   display: flex;
-  height: 250px;
+  /* height: 250px; */
+  padding: 10px;
   margin-bottom: 10px;
+
+  justify-content: space-between;
 `;
 
 const ModelInfo = styled("div")`
   width: 50%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 `;
 
 const EdittingContainer = styled("div")`
   height: 200px;
   display: flex;
   flex-direction: column;
-  margin-right: 10px;
-  margin-left: 10px;
+  margin: 10px;
 `;
 
 const StyledTextarea = styled("textarea")`
@@ -215,4 +326,10 @@ const StyledTextarea = styled("textarea")`
 const ModelNameTextFiled = styled(TextField)`
   width: 100%;
   margin-bottom: 5px;
+`;
+
+const ChartContainer = styled(Paper)`
+  padding: 10px;
+  /* margin-left: -20px; */
+  /* padding-left: -15px; */
 `;

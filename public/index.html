@@ -23,6 +23,17 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
+
+    <!-- NOTE: kakao 다운로드 -->
+    <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+    <script>
+      // SDK를 초기화 합니다. 사용할 앱의 JavaScript 키를 설정해 주세요.
+      Kakao.init("%REACT_APP_KAKAO_JAVASCRIPT_KEY%");
+
+      // SDK 초기화 여부를 판단합니다.
+      // console.log(Kakao.isInitialized());
+    </script>
+
     <title>Economicus</title>
   </head>
   <body>

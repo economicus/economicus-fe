@@ -45,7 +45,7 @@ export default function ModalWithButton({
 
   return (
     <>
-      <Button variant="contained" onClick={handleOpen} sx={{ m: 1 }}>
+      <Button variant="outlined" onClick={handleOpen} sx={{ m: 1 }}>
         {btnName}
         <CountBadge badgeContent={getBadgeCoount(state)} color="info" />
       </Button>
@@ -94,6 +94,8 @@ const StyledPaper = styled(Paper)`
   padding: 30px;
   display: flex;
   flex-direction: column;
+
+  background-color: #e8edf7;
 `;
 
 const ButtonContainer = styled("div")`

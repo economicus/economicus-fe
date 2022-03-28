@@ -1,11 +1,16 @@
-import { Checkbox, FormControlLabel, Slider, TextField } from "@mui/material";
+import {
+  Checkbox,
+  FormControlLabel,
+  Paper,
+  Slider,
+  TextField,
+} from "@mui/material";
 import { styled } from "@mui/material/styles";
 import React, { useState } from "react";
 
 import FormControlGroup from "../../../../components/FormControlGroup";
 import ModalWithButton from "../../../../components/ModalWithButton";
 import { IFinanceCondition } from "../QuantModelCreation";
-import CheckedFinanceConditionCards from "./CheckedFinanceConditionCards";
 
 interface QuantLabModalProps {
   btnName: string;
@@ -118,71 +123,77 @@ export default function LabModalWithSlider({
           control={
             <Checkbox checked={selecAll} onChange={selectAllHandleChange} />
           }
-          label="Select all"
+          label="전체 선택"
         />
-        <FormControlGroup>
-          {Object.keys(state).map((key, idx) => {
-            return (
-              <Container key={idx}>
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={state[key].checked}
-                      onChange={handleCheckboxChange}
-                      name={key}
-                    />
-                  }
-                  label={ChangedFinanceConditionName[key]}
-                  sx={{ width: 300 }}
-                />
-                {state[key].checked && (
-                  <>
-                    <CustomizedSlider
-                      value={[...state[key].values]}
-                      onChange={handleSliderChange}
-                      name={key}
-                      min={state[key].min}
-                      max={state[key].max}
-                      marks={[
-                        {
-                          value: state[key].min,
-                          label: state[key].values[0],
-                          //label: "min",
-                        },
-                        {
-                          value: state[key].max,
-                          label: state[key].values[1],
-                          //label: "max",
-                        },
-                      ]}
-                      //valueLabelDisplay="on"
-                      disabled={!state[key].checked}
-                      sx={{ width: 250, mr: 2 }}
-                      size="small"
-                    />
-                    <TextField
-                      type="Number"
-                      value={state[key].values[0]}
-                      label="or over"
-                      name={key}
-                      onChange={handleInputchange}
-                      size="small"
-                      sx={{ mx: 1 }}
-                    />
-                    <TextField
-                      type="Number"
-                      value={state[key].values[1]}
-                      label="or under"
-                      name={key}
-                      onChange={handleInputchange}
-                      size="small"
-                    />
-                  </>
-                )}
-              </Container>
-            );
-          })}
-        </FormControlGroup>
+
+        <FormControlGroupContainer variant="outlined">
+          <FormControlGroup>
+            {Object.keys(state).map((key, idx) => {
+              return (
+                <Container key={idx}>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={state[key].checked}
+                        onChange={handleCheckboxChange}
+                        name={key}
+                      />
+                    }
+                    label={ChangedFinanceConditionName[key]}
+                    sx={{ width: 300 }}
+                  />
+                  {/* {state[key].checked && ( */}
+                  {true && (
+                    <>
+                      <CustomizedSlider
+                        value={[...state[key].values]}
+                        onChange={handleSliderChange}
+                        name={key}
+                        min={state[key].min}
+                        max={state[key].max}
+                        marks={[
+                          {
+                            value: state[key].min,
+                            label: state[key].values[0],
+                            //label: "min",
+                          },
+                          {
+                            value: state[key].max,
+                            label: state[key].values[1],
+                            //label: "max",
+                          },
+                        ]}
+                        //valueLabelDisplay="on"
+                        disabled={!state[key].checked}
+                        sx={{ width: 250, mr: 2 }}
+                        size="small"
+                      />
+                      <TextField
+                        disabled={!state[key].checked}
+                        type="Number"
+                        value={state[key].values[0]}
+                        label="or over"
+                        name={key}
+                        onChange={handleInputchange}
+                        size="small"
+                        sx={{ mx: 1 }}
+                      />
+                      <TextField
+                        disabled={!state[key].checked}
+                        type="Number"
+                        value={state[key].values[1]}
+                        label="or under"
+                        name={key}
+                        onChange={handleInputchange}
+                        size="small"
+                      />
+                    </>
+                  )}
+                </Container>
+              );
+            })}
+          </FormControlGroup>
+        </FormControlGroupContainer>
       </ModalWithButton>
     </>
   );
@@ -205,4 +216,10 @@ const CustomizedSlider = styled(Slider)`
   & .MuiSlider-valueLabelLabel {
     color: #000000;
   }
+`;
+
+const FormControlGroupContainer = styled(Paper)`
+  margin: 20px 0;
+  /* background-color: rgba(140, 166, 218, 20%); */
+  background-color: white;
 `;

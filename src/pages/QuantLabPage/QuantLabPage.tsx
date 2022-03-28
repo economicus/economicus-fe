@@ -160,8 +160,8 @@ const MainContainer = styled("div")`
 `;
 
 const LeftContainer = styled("div")`
-  /* width: calc(20% - 10px); */
-  width: 300px;
+  width: calc(20% - 10px);
+  /* width: 300px; */
   min-width: 300px;
   margin-right: 10px;
 
@@ -171,8 +171,8 @@ const LeftContainer = styled("div")`
 `;
 
 const RightContainer = styled("div")`
-  /* width: calc(80% - 10px); */
-  width: 1000px;
+  width: calc(80% - 10px);
+  min-width: 1000px;
   margin-left: 10px;
 
   display: flex;

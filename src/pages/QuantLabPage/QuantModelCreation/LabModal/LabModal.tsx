@@ -1,4 +1,4 @@
-import { Checkbox, FormControlLabel } from "@mui/material";
+import { Checkbox, FormControlLabel, Paper, styled } from "@mui/material";
 import { useState } from "react";
 
 import FormControlGroup from "../../../../components/FormControlGroup";
@@ -42,25 +42,33 @@ export default function QuantLabModal({
         control={
           <Checkbox checked={selecAll} onChange={selectAllHandleChange} />
         }
-        label="Select all"
+        label="전체 선택"
       />
-      <FormControlGroup>
-        {Object.keys(state).map((key, idx) => {
-          return (
-            <FormControlLabel
-              key={idx}
-              control={
-                <Checkbox
-                  checked={state[key]}
-                  onChange={handleChange}
-                  name={key}
-                />
-              }
-              label={key}
-            />
-          );
-        })}
-      </FormControlGroup>
+      <FormControlGroupContainer variant="outlined">
+        <FormControlGroup>
+          {Object.keys(state).map((key, idx) => {
+            return (
+              <FormControlLabel
+                key={idx}
+                control={
+                  <Checkbox
+                    checked={state[key]}
+                    onChange={handleChange}
+                    name={key}
+                  />
+                }
+                label={key}
+              />
+            );
+          })}
+        </FormControlGroup>
+      </FormControlGroupContainer>
     </ModalWithButton>
   );
 }
+
+const FormControlGroupContainer = styled(Paper)`
+  margin: 20px 0;
+  /* background-color: rgba(140, 166, 218, 20%); */
+  background-color: white;
+`;

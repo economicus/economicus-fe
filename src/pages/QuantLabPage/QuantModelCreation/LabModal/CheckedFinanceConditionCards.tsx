@@ -1,8 +1,6 @@
-import { Card, Grid, Paper, Popover, styled, Typography } from "@mui/material";
-import { useState } from "react";
+import { Grid, Paper, Typography } from "@mui/material";
 
 import { IFinanceCondition } from "../QuantModelCreation";
-import { ChangedFinanceConditionName } from "./LabModalWithSlider";
 import OptionTag from "./OptionTag";
 
 interface CheckedItemCardsProps {

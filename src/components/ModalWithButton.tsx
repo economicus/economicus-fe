@@ -94,6 +94,8 @@ const StyledPaper = styled(Paper)`
   padding: 30px;
   display: flex;
   flex-direction: column;
+
+  background-color: #e8edf7;
 `;
 
 const ButtonContainer = styled("div")`

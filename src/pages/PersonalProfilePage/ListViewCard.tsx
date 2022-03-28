@@ -254,7 +254,7 @@ const ListViewCard = ({ modelData, kospiData }: IListViewCardProps) => {
             <XAxis dataKey="name" />
             <YAxis />
             <Tooltip />
-            {/* <Line dataKey="kospi" dot={false} stroke={generateColor("kospi")} /> */}
+            <Line dataKey="kospi" dot={false} stroke={generateColor("kospi")} />
             <Line
               dataKey={modelData.name}
               dot={false}

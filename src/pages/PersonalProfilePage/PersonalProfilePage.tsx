@@ -1,4 +1,4 @@
-import { Button, Paper, Typography } from "@mui/material";
+import { Button } from "@mui/material";
 import { styled } from "@mui/system";
 import axios, { AxiosError } from "axios";
 import { useEffect, useState } from "react";
@@ -149,18 +149,16 @@ const PersonalProfilePage = () => {
 
   return (
     <MainContainer>
-      <ListViewContainer>
-        {quantData &&
-          Object.keys(quantData).map((key, idx) => {
-            return (
-              <ListViewCard
-                key={key}
-                modelData={quantData[idx]}
-                kospiData={kospiData}
-              />
-            );
-          })}
-      </ListViewContainer>
+      {quantData &&
+        Object.keys(quantData).map((key, idx) => {
+          return (
+            <ListViewCard
+              key={key}
+              modelData={quantData[idx]}
+              kospiData={kospiData}
+            />
+          );
+        })}
     </MainContainer>
   );
 };
@@ -168,15 +166,16 @@ const PersonalProfilePage = () => {
 export default PersonalProfilePage;
 
 const MainContainer = styled("div")`
-  width: 100vw;
+  /* width: 100vw; */
+  width: 100%;
   display: flex;
+  flex-direction: column;
   padding-left: 15%;
   padding-right: 15%;
 `;
 
 const ListViewContainer = styled("div")`
   width: 100%;
-  margin-top: 20px;
 `;
 
 const ErrorContainer = styled("div")`

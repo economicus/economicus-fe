@@ -1,5 +1,4 @@
 import DeleteIcon from "@mui/icons-material/Delete";
-import { Paper } from "@mui/material";
 import {
   DataGrid,
   GridActionsCellItem,
@@ -44,16 +43,7 @@ export default function QuantModelTable({
     (id: GridRowId) => () => {
       setTimeout(async () => {
         setModelList((prev) => prev.filter((model) => model.id !== id));
-        await deleteQuantModel(id as string, token);
-      });
-    },
-    []
-  );
-
-  const saveModel = useCallback(
-    (id: GridRowId) => () => {
-      setTimeout(() => {
-        console.log("asdf", id);
+        await deleteQuantModel(id as number, token);
       });
     },
     []
@@ -65,17 +55,21 @@ export default function QuantModelTable({
       {
         field: "actions",
         type: "actions",
-        getActions: (params: GridRowParams) => [
-          <GridActionsCellItem
-            icon={<DeleteIcon />}
-            onClick={deleteModel(params.id)}
-            label="Delete"
-          />,
-          <SaveModelModal id={params.id} />,
-        ],
+        getActions: (params: GridRowParams) => {
+          console.log(params);
+
+          return [
+            <GridActionsCellItem
+              icon={<DeleteIcon />}
+              onClick={deleteModel(params.id)}
+              label="Delete"
+            />,
+            // <SaveModelModal id={params.id} name={params.row.name} />,
+          ];
+        },
       },
     ],
-    [deleteModel, saveModel]
+    [deleteModel]
   );
 
   return (

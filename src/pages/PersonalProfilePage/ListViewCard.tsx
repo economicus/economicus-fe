@@ -24,6 +24,7 @@ import {
 import changeModelInfo, {
   IChangeModelInfoBody,
 } from "../../apis/changeModelInfo";
+import deleteQuantModel from "../../apis/deleteQuantModel";
 import { RootState } from "../../stores/store";
 import {
   generateColor,
@@ -33,6 +34,8 @@ import {
 interface IListViewCardProps {
   modelData: IModelData;
   kospiData: number[];
+  setter: (id: number) => void;
+  index: number;
 }
 
 export interface IModelData {
@@ -48,7 +51,12 @@ interface IRechartData {
   [key: string]: string | number;
 }
 
-const ListViewCard = ({ modelData, kospiData }: IListViewCardProps) => {
+const ListViewCard = ({
+  modelData,
+  kospiData,
+  setter,
+  index,
+}: IListViewCardProps) => {
   const graphData: IRechartData[] = formatToRechartData(modelData, kospiData);
 
   const [currentModelName, setCurrentModelName] = useState(modelData.name);
@@ -81,7 +89,7 @@ const ListViewCard = ({ modelData, kospiData }: IListViewCardProps) => {
     try {
       const responseData = await changeModelInfo(
         {
-          active: true,
+          active: false,
           description: newDescription,
           name: newModelName,
         } as IChangeModelInfoBody,
@@ -98,9 +106,20 @@ const ListViewCard = ({ modelData, kospiData }: IListViewCardProps) => {
     setEditting(!editting);
   };
 
+  const deleteHandeler = async () => {
+    setBackDrop(true);
+    try {
+      deleteQuantModel(modelData.quant_id, token);
+      setter(index);
+    } catch (e) {
+      alert(e);
+    }
+    setBackDrop(false);
+  };
+
   // NOTE: 공유하기
 
-  const shareHandelrer = async () => {
+  const shareHandeler = async () => {
     if (!chartEl.current) return;
 
     const canvas = await html2canvas(chartEl.current, {
@@ -232,11 +251,18 @@ const ListViewCard = ({ modelData, kospiData }: IListViewCardProps) => {
                   수정
                 </Button>
                 <Button
-                  onClick={shareHandelrer}
+                  onClick={shareHandeler}
                   variant="outlined"
                   sx={{ m: 1 }}
                 >
                   공유하기
+                </Button>
+                <Button
+                  onClick={deleteHandeler}
+                  variant="outlined"
+                  sx={{ m: 1 }}
+                >
+                  삭제
                 </Button>
               </div>
             </>

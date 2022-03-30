@@ -14,8 +14,9 @@ import { RootState } from "../../../stores/store";
 
 interface QuantLabModalProps {
   id: GridRowId;
+  name: string;
 }
-export default function SaveModelModal({ id }: QuantLabModalProps) {
+export default function SaveModelModal({ id, name }: QuantLabModalProps) {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -26,8 +27,9 @@ export default function SaveModelModal({ id }: QuantLabModalProps) {
     const body = {
       active: true,
       description: "New model description",
-      name: "New model name",
+      name,
     };
+
     try {
       const res = await axios.patch(endpoint + "/quants/quant/" + id, body, {
         headers: {

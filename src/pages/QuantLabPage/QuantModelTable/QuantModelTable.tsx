@@ -56,13 +56,15 @@ export default function QuantModelTable({
         field: "actions",
         type: "actions",
         getActions: (params: GridRowParams) => {
+          console.log(params);
+
           return [
             <GridActionsCellItem
               icon={<DeleteIcon />}
               onClick={deleteModel(params.id)}
               label="Delete"
             />,
-            <SaveModelModal id={params.id} name={params.row.name} />,
+            // <SaveModelModal id={params.id} name={params.row.name} />,
           ];
         },
       },

@@ -1,4 +1,4 @@
-import { Button } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import { styled } from "@mui/system";
 import axios, { AxiosError } from "axios";
 import { useEffect, useState } from "react";
@@ -117,31 +117,26 @@ const PersonalProfilePage = () => {
     getKospi();
   }, []);
 
-  // if (
-  //   error === "Request failed with status code 500" &&
-  //   quantData.length === 0
-  // ) {
-  //   //개선필요
-  //   return (
-  //     <ErrorContainer>
-  //       <StyledPaper>
-  //         <Typography component="h1" variant="h5">
-  //           생성된 모델이 없습니다...
-  //         </Typography>
-  //         <StyledButton
-  //           fullWidth
-  //           onClick={() => {
-  //             navigate("/QuantLabPage");
-  //           }}
-  //         >
-  //           실험실 가기
-  //         </StyledButton>
-  //       </StyledPaper>
-  //     </ErrorContainer>
-  //   );
-  // } else if (error !== "") {
-  //   return <div>{error}</div>;
-  // }
+  if (
+    // error === "Request failed with status code 500" &&
+    quantData.length === 0
+  ) {
+    //개선필요
+    return (
+      <ErrorContainer>
+        <Typography variant="h5">생성된 모델이 없습니다...</Typography>
+        <StyledButton
+          onClick={() => {
+            navigate("/QuantLabPage");
+          }}
+        >
+          실험실 가기
+        </StyledButton>
+      </ErrorContainer>
+    );
+  } else if (error !== "") {
+    return <div>{error}</div>;
+  }
 
   if (loading) {
     return <div>로딩중</div>; //개선 필요
@@ -179,18 +174,11 @@ const ListViewContainer = styled("div")`
 `;
 
 const ErrorContainer = styled("div")`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: 10%;
-`;
-const StyledPaper = styled("div")`
-  width: 400px;
-  padding: 40px;
-
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
 `;
 
 const StyledButton = styled(Button)`

@@ -27,8 +27,9 @@ export default function SaveModelModal({ id, name }: QuantLabModalProps) {
     const body = {
       active: true,
       description: "New model description",
-      name: name,
+      name,
     };
+
     try {
       const res = await axios.patch(endpoint + "/quants/quant/" + id, body, {
         headers: {

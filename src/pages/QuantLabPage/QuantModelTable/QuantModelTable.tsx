@@ -1,5 +1,4 @@
 import DeleteIcon from "@mui/icons-material/Delete";
-import { Paper } from "@mui/material";
 import {
   DataGrid,
   GridActionsCellItem,
@@ -50,32 +49,25 @@ export default function QuantModelTable({
     []
   );
 
-  const saveModel = useCallback(
-    (id: GridRowId) => () => {
-      setTimeout(() => {
-        console.log("asdf", id);
-      });
-    },
-    []
-  );
-
   const columnsWithButton = useMemo(
     () => [
       ...columns,
       {
         field: "actions",
         type: "actions",
-        getActions: (params: GridRowParams) => [
-          <GridActionsCellItem
-            icon={<DeleteIcon />}
-            onClick={deleteModel(params.id)}
-            label="Delete"
-          />,
-          <SaveModelModal id={params.id} name={} />,
-        ],
+        getActions: (params: GridRowParams) => {
+          return [
+            <GridActionsCellItem
+              icon={<DeleteIcon />}
+              onClick={deleteModel(params.id)}
+              label="Delete"
+            />,
+            <SaveModelModal id={params.id} name={params.row.name} />,
+          ];
+        },
       },
     ],
-    [deleteModel, saveModel]
+    [deleteModel]
   );
 
   return (

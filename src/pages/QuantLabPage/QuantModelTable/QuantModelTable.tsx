@@ -43,7 +43,7 @@ export default function QuantModelTable({
     (id: GridRowId) => () => {
       setTimeout(async () => {
         setModelList((prev) => prev.filter((model) => model.id !== id));
-        await deleteQuantModel(id as string, token);
+        await deleteQuantModel(id as number, token);
       });
     },
     []

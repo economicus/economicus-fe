@@ -67,6 +67,11 @@ const PersonalProfilePage = () => {
 
   const token = useSelector((state: RootState) => state.session.token);
 
+  const resetQuantData = (index: number) => {
+    const newData = quantData.splice(index);
+    setQuantData(newData);
+  };
+
   const getProfile = async (token: string) => {
     console.log(token);
     try {
@@ -96,7 +101,7 @@ const PersonalProfilePage = () => {
     setLoading(true);
     getProfile(token);
     setLoading(false);
-  }, []);
+  }, [quantData]);
 
   useEffect(() => {
     async function getKospi() {
@@ -151,6 +156,8 @@ const PersonalProfilePage = () => {
               key={key}
               modelData={quantData[idx]}
               kospiData={kospiData}
+              setter={resetQuantData}
+              index={idx}
             />
           );
         })}

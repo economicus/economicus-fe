@@ -81,7 +81,7 @@ const ListViewCard = ({ modelData, kospiData }: IListViewCardProps) => {
     try {
       const responseData = await changeModelInfo(
         {
-          active: true,
+          active: false,
           description: newDescription,
           name: newModelName,
         } as IChangeModelInfoBody,

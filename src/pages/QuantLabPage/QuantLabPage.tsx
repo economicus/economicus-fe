@@ -34,7 +34,7 @@ const QuantLabPage = () => {
         for (let index = 0; index < res.data.length; index++) {
           const element = res.data[index];
           const tmpCharts = await axios.get(
-            endpoint + "/lab/data/" + res.data[0].id,
+            endpoint + "/lab/data/" + res.data[index].id,
             {
               headers: {
                 "Content-Type": "application/json",

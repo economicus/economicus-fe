@@ -71,7 +71,7 @@ export default function QuantModelTable({
             onClick={deleteModel(params.id)}
             label="Delete"
           />,
-          <SaveModelModal id={params.id} />,
+          <SaveModelModal id={params.id} name={} />,
         ],
       },
     ],

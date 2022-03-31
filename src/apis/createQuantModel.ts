@@ -41,7 +41,9 @@ export default async function createQuantModel(
   body: createQuantModelBody,
   token: string
 ) {
-  //   console.log("test", body);
+  body["pcr"] = { min: 0, max: 97907 };
+  body["psr"] = { min: -20, max: 240937 };
+  console.log("test", body);
 
   try {
     const res = await axios.post(endpoint + "/quants/quant", body, {
@@ -50,7 +52,6 @@ export default async function createQuantModel(
         Authorization: `Bearer ${token}`,
       },
     });
-
     return res.data;
   } catch (e) {
     return e;

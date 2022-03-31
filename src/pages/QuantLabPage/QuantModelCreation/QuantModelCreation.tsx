@@ -199,9 +199,7 @@ export interface IFinanceCondition {
   net_profit_rate: ICheckboxWithSliderInfo;
   de_ratio: ICheckboxWithSliderInfo;
   per: ICheckboxWithSliderInfo;
-  psr: ICheckboxWithSliderInfo;
   pbr: ICheckboxWithSliderInfo;
-  pcr: ICheckboxWithSliderInfo;
   dividend_yield: ICheckboxWithSliderInfo;
   dividend_payout_ratio: ICheckboxWithSliderInfo;
   roa: ICheckboxWithSliderInfo;
@@ -296,9 +294,7 @@ const initialFinanceCondetion = {
   net_profit_rate: sliderStateCunstructor(-22400, 179900),
   de_ratio: sliderStateCunstructor(0, 84511),
   per: sliderStateCunstructor(0, 84511),
-  psr: sliderStateCunstructor(-20, 167089),
   pbr: sliderStateCunstructor(0, 255),
-  pcr: sliderStateCunstructor(0, 97907),
   dividend_yield: sliderStateCunstructor(0, 50),
   dividend_payout_ratio: sliderStateCunstructor(-7872, 11677),
   roa: sliderStateCunstructor(-534, 253),

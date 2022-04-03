@@ -1,12 +1,4 @@
-import BorderColorIcon from "@mui/icons-material/BorderColor";
-import {
-  Box,
-  Card,
-  CardActions,
-  CardContent,
-  IconButton,
-  Typography,
-} from "@mui/material";
+import { Box, Card, CardContent, Typography } from "@mui/material";
 import React from "react";
 
 const card = (

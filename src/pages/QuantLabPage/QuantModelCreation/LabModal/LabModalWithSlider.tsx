@@ -35,10 +35,6 @@ export const ChangedFinanceConditionName: IChangedFinanceConditionName = {
   roe: "ROE(%)",
   market_cap: "시가총액(억 원)",
 
-  // activities_operating: "영업현금흐름(억 원)",
-  // activities_investing: "투자현금흐름(억 원)",
-  // activities_financing: "재무현금흐름(억 원)",
-
   operating: "영업현금흐름(억 원)",
   investing: "투자현금흐름(억 원)",
   financing: "재무현금흐름(억 원)",
@@ -88,7 +84,6 @@ export default function LabModalWithSlider({
       [target.name]: {
         ...state[target.name],
         values: newValue as number[],
-        // checked: event.target.checked,
       },
     });
   };
@@ -145,7 +140,6 @@ export default function LabModalWithSlider({
                     label={ChangedFinanceConditionName[key]}
                     sx={{ width: 300 }}
                   />
-                  {/* {state[key].checked && ( */}
                   {true && (
                     <>
                       <CustomizedSlider
@@ -158,15 +152,12 @@ export default function LabModalWithSlider({
                           {
                             value: state[key].min,
                             label: state[key].values[0],
-                            //label: "min",
                           },
                           {
                             value: state[key].max,
                             label: state[key].values[1],
-                            //label: "max",
                           },
                         ]}
-                        //valueLabelDisplay="on"
                         disabled={!state[key].checked}
                         sx={{ width: 250, mr: 2 }}
                         size="small"

@@ -9,7 +9,7 @@ interface MinAndMax {
 
 interface IActivities {
   [key: string]: MinAndMax;
-} // NOTE: 추후 request 형식 바뀌면 삭제 예정
+}
 
 export interface createQuantModelBody {
   name: string;
@@ -43,7 +43,7 @@ export default async function createQuantModel(
 ) {
   body["pcr"] = { min: 0, max: 97907 };
   body["psr"] = { min: -20, max: 240937 };
-  console.log("test", body);
+  // pcr, psr 백엔드 에러로 인해 슬라이더에서 삭제 후 따로 추가 전송
 
   try {
     const res = await axios.post(endpoint + "/quants/quant", body, {

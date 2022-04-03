@@ -15,7 +15,6 @@ import deleteQuantModel from "../../../apis/deleteQuantModel";
 import { RootState } from "../../../stores/store";
 import { VariableNameTranslate } from "../constants";
 import { IModel } from "../QuantLabPage";
-import SaveModelModal from "./SaveModelModal";
 
 interface ModelListProps {
   rows: GridRowsProp;
@@ -56,15 +55,12 @@ export default function QuantModelTable({
         field: "actions",
         type: "actions",
         getActions: (params: GridRowParams) => {
-          console.log(params);
-
           return [
             <GridActionsCellItem
               icon={<DeleteIcon />}
               onClick={deleteModel(params.id)}
               label="Delete"
             />,
-            // <SaveModelModal id={params.id} name={params.row.name} />,
           ];
         },
       },

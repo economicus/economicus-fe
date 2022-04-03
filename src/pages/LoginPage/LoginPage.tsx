@@ -34,11 +34,11 @@ const LoginPage = () => {
     const data = new FormData(event.currentTarget);
 
     const loginInfo: { email: string; password: string } = {
-      email: data.get("email") as string, // NOTE: 추후 개선 필요?
+      email: data.get("email") as string,
       password: data.get("password") as string,
     };
 
-    await dispatch(loginThunk(loginInfo));
+    dispatch(loginThunk(loginInfo));
   };
 
   if (isLoggedin) return <Navigate to="/" />;
@@ -77,11 +77,6 @@ const LoginPage = () => {
             error={error}
           />
 
-          {/* <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="로그인 상태 유지"
-          /> */}
-
           <StyledButton
             type="submit"
             fullWidth
@@ -90,15 +85,6 @@ const LoginPage = () => {
           >
             로그인
           </StyledButton>
-          {/* <StyledButton
-            fullWidth
-            variant="outlined"
-            onClick={() => {
-              navigate("/SignUpPage");
-            }}
-          >
-            회원가입
-          </StyledButton> */}
 
           <Grid container justifyContent="flex-end">
             <Grid item>
@@ -120,15 +106,6 @@ const LoginPage = () => {
               </HighlightedTextButton>
             </Grid>
           </Grid>
-
-          {/* <Grid container>
-            <Grid item xs>
-              <Link to="#">비밀번호 찾기</Link>
-            </Grid>
-            <Grid item>
-              <Link to="/SignUpPage">회원가입 하기</Link>
-            </Grid>
-          </Grid> */}
         </Box>
       </StyledPaper>
     </MainContainer>

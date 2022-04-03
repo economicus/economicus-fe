@@ -8,7 +8,7 @@ import { IBusinessArea } from "../QuantModelCreation";
 interface QuantLabModalProps {
   btnName: string;
   state: IBusinessArea;
-  setState: React.Dispatch<React.SetStateAction<IBusinessArea>>; // NOTE: 추후 추가되면 IBusinessArea | xxx 이런 식으로? 그냥 any가 낫나?
+  setState: React.Dispatch<React.SetStateAction<IBusinessArea>>;
 }
 
 export default function QuantLabModal({

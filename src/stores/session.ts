@@ -11,14 +11,11 @@ export interface SessionState {
 }
 
 const initialState: SessionState = {
-  loading: false, // NOTE: 로딩이 여기에 필요할까?
+  loading: false,
   error: false,
 
   isLoggedin: false,
   token: "",
-
-  // user: {
-  // } // NOTE: 아직 axios에서 links롤 통해 다른 요청을 받아오는 법을 모른다. 추후 추가 필요
 };
 
 export const loginThunk = createAsyncThunk<

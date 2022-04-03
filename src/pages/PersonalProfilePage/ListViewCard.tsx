@@ -4,7 +4,6 @@ import {
   Card,
   CircularProgress,
   Paper,
-  Stack,
   TextField,
   Typography,
 } from "@mui/material";
@@ -70,8 +69,6 @@ const ListViewCard = ({
 
   const chartEl = useRef<HTMLDivElement>(null); // NOTE: 공유하기
   const token = useSelector((state: RootState) => state.session.token);
-
-  // const modelNameHandeler = (event: React.ChangeEvent<HTMLInputElement>) => {
   const modelNameHandeler = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setNewModelName(event.target.value);
   };
@@ -129,10 +126,6 @@ const ListViewCard = ({
       scrollY: -window.scrollY,
     });
 
-    // NOTE: 이미지 출력 테스트용
-    // const image = canvas.toDataURL("image/jpeg", 0.5);
-    // console.log(image);
-
     canvas.toBlob(async (blob) => {
       if (!window.Kakao.isInitialized()) return;
 
@@ -151,11 +144,6 @@ const ListViewCard = ({
             mobileWebUrl: uploadedImage.infos.original.url,
           },
         },
-        // social: {
-        //   likeCount: 286,
-        //   commentCount: 45,
-        //   sharedCount: 845,
-        // },
         buttons: [
           {
             title: "이코노미쿠스 바로가기",
@@ -183,8 +171,6 @@ const ListViewCard = ({
           {editting && (
             <>
               <EdittingContainer>
-                {/* <ModelNameTextFiled */}
-
                 <TextField
                   required
                   label="모델명"
@@ -202,12 +188,6 @@ const ListViewCard = ({
                   rows={6}
                   style={{ margin: "13px 0" }}
                 />
-
-                {/* <StyledTextarea
-                  id="description"
-                  defaultValue={currentDescription}
-                  onChange={descriptionHandeler}
-                /> */}
               </EdittingContainer>
 
               <div style={{ display: "flex" }}>
@@ -298,14 +278,12 @@ export default ListViewCard;
 const formatToRechartData = (modelData: IModelData, kospiData: number[]) => {
   if (!modelData.chart) return [];
   const ret: IRechartData[] = [];
-  const start_date = "2016-03-31T00:00:00.000Z"; //시작 날짜가 모두 같으면 전역변수로 빼야할듯?
+  const start_date = "2016-03-31T00:00:00.000Z";
   const graphDate = new Date(start_date.split("T")[0]);
   graphDate.setDate(1);
 
   const diffLength = kospiData.length - modelData.chart.length;
   const referenceValueKospi = kospiData[diffLength - 1];
-
-  // TODO: 원금 1000부터 시작하는 과정 추가해야함
 
   for (let idx = 0; idx < modelData.chart.length; idx++) {
     const tmp: IRechartData = {
@@ -341,17 +319,6 @@ const EdittingContainer = styled("div")`
   display: flex;
   flex-direction: column;
   margin: 10px;
-`;
-
-const StyledTextarea = styled("textarea")`
-  resize: none;
-  width: 100%;
-  height: 100%;
-`;
-
-const ModelNameTextFiled = styled(TextField)`
-  width: 100%;
-  margin-bottom: 5px;
 `;
 
 const ChartContainer = styled(Paper)`

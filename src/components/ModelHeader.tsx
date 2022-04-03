@@ -63,7 +63,6 @@ export default function ModelHeader(props: any) {
             </Typography>
           </Button>
         )}
-        {/* TODO:현재 화면에 따라 변경해야함 */}
         <IconButton
           size="large"
           edge="start"

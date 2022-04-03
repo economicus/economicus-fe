@@ -24,19 +24,15 @@ export default async function signUp(
       })
       .then(function (response) {
         const res = response.status.toString();
-        // console.log(response.status);
         return res;
       })
       .catch(function (error) {
         const res = JSON.parse(error.request.response).message.toString();
-        // console.log(JSON.parse(error.request.response).message);
         return res;
       });
     // res 안에 201 혹은 에러메세지를 담아서 상위 페이지에 전송한다.
-    // console.log("res 의 내용", res);
     return res;
   } catch (e) {
-    console.log("e 의 내용", e as string);
     return e as string;
   }
 }

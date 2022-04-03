@@ -123,10 +123,6 @@ export default function SignUpPage() {
             inputRef={nicknameRef}
             error={nicknameError}
           />
-          {/* <FormControlLabel
-                control={<Checkbox value="allowExtraEmails" color="primary" />}
-                label="I want to receive inspiration, marketing promotions and updates via email."
-              /> */}
 
           <StyledButton type="submit" fullWidth variant="contained">
             회원가입

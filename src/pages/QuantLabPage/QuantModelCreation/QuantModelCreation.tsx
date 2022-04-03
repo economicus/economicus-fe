@@ -69,12 +69,6 @@ export default function ModelCreation({ setModelList }: ModelCreationProps) {
 
           ...formedFinanceCondition,
 
-          // ...notActivitiesValue,
-          // activities: {
-          //   ...activitiesValue,
-          // },
-
-          // NOTE: 날짜는 어떻게?
           start_date: "2016-04-30T00:00:00.000Z",
           end_date: "2021-04-30T00:00:00.000Z",
         } as createQuantModelBody,
@@ -87,7 +81,6 @@ export default function ModelCreation({ setModelList }: ModelCreationProps) {
       setModelList((prev) => {
         return [
           ...prev,
-          // { id: +new Date(), model_name: modelName, ...responseData },
           {
             id: responseData["quant_id"],
             name: modelName,
@@ -259,8 +252,6 @@ const WarningPaper = styled(Paper)`
 /*
  * ANCHOR: constants
  */
-
-// NOTE: 여기에 함수를 선언하는 것이 적절한가? useMemo 등을 이때 쓰는건가?
 
 const sliderStateCunstructor = (
   min: number,

@@ -23,5 +23,3 @@ const MainContainer = styled(Paper)`
 
   padding: 20px;
 `;
-
-// TODO: 아직 상태 적용 X

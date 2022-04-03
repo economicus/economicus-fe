@@ -21,10 +21,8 @@ interface ChartProps {
 }
 
 export default function Chart({ charts }: ChartProps) {
-  // const graphData = graphDataParse([data1, data2]); // NOTE: 테스트용 더미 데이터
   const [graphData, setGraphData] = useState<IRechartData[]>([]);
   const [kospiData, setKospiData] = useState<number[]>([]);
-  // setGraphData(formatToRechartData(charts, kospiData));
 
   const token = useSelector((state: RootState) => state.session.token);
   useEffect(() => {
@@ -99,8 +97,6 @@ interface IRechartData {
  * ANCHOR: functions
  */
 
-// TODO: 이러한 함수들을 useCallback 처리 하는건가?
-
 const formatToRechartData = (
   charts: IChart[],
   kospiData: number[]
@@ -108,7 +104,7 @@ const formatToRechartData = (
   if (!charts.length) return [];
   const ret: IRechartData[] = [];
 
-  const graphDate = new Date("2016-03-31T00:00:00.000Z".split("T")[0]); // TODO: 날짜 어떻게 할건지 정해야
+  const graphDate = new Date("2016-03-31T00:00:00.000Z".split("T")[0]);
   graphDate.setDate(1);
 
   const normalizedData = charts.map((val) => {
@@ -179,7 +175,6 @@ export const generateColor = (name: string): string => {
     "#607d8b",
   ];
   let hash = 0;
-  //if (name.length === 0) return hash;
   for (let i = 0; i < name.length; i++) {
     hash = name.charCodeAt(i) + ((hash << 5) - hash);
     hash = hash & hash;

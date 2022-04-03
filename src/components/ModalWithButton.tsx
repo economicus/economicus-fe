@@ -20,8 +20,6 @@ export default function ModalWithButton({
   state,
   children,
 }: QuantLabModalProps) {
-  // NOTE: 변수명 수정 필요
-
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);

@@ -1,5 +1,4 @@
-import { Grid, Slider, TextField, Typography } from "@mui/material";
-import { Box } from "@mui/system";
+import { Box, Grid, Slider, TextField, Typography } from "@mui/material";
 import React from "react";
 
 interface SliderProps {
@@ -34,6 +33,7 @@ const LabSlider: React.FC<SliderProps> = (props) => {
       label: props.max,
     },
   ];
+
   return (
     <Box sx={{ width: "95%", mx: "10px" }}>
       <Typography>{props.name}</Typography>

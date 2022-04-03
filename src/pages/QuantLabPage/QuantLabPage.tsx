@@ -1,151 +1,142 @@
-import { Button, Card, Container, Typography } from "@mui/material";
-import { Box } from "@mui/system";
-import { useState } from "react";
-import styled from "styled-components";
+import { styled } from "@mui/material/styles";
+import { GridSelectionModel } from "@mui/x-data-grid";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
-import CheckBoxs from "../../components/CheckBoxs";
-import Example from "../../components/graph";
-import ModalBusinessAreas from "../../components/modals/BusinessAreas";
-import ComparativeStockSelect from "../../components/selecter/ComparativeStockSelect";
-import TermSelect from "../../components/selecter/TermSelect";
-import LabSlider from "../../components/slider/LabSlider";
+import { endpoint } from "../../apis/endpoint";
+import { RootState } from "../../stores/store";
+import QuantModelCreation from "./QuantModelCreation";
+import QuantModelTable from "./QuantModelTable";
+import QuantModelViewer from "./QuantModelViewer";
 
-const MainContainer = styled.div`
-  border: 3px solid pink;
-  margin: 5px;
-  padding-left: 10%;
-  padding-right: 10%;
-  padding-top: 30px;
-`;
-
-const GraphContainer = styled(Card)`
-  border: 3px solid blue;
-  margin: 5px;
-  width: 50%;
-`;
-
-const GraphSlectContainer = styled.div`
-  border: 3px solid orange;
-  margin: 5px;
-  display: flex;
-`;
-
-const Graph = styled.div`
-  border: 3px solid green;
-  margin: 5px;
-  height: 300px;
-  padding: 5px;
-`;
-
-const MakeModelContainer = styled.div`
-  border: 3px solid black;
-  argin: 5px;
-  display: flex;
-`;
-
-const ModelContainer = styled(Card)`
-  border: 3px solid red;
-  margin: 5px;
-  width: 50%;
-`;
-
-const ShowQuantModelYieldContainer = styled(Card)`
-  border: 3px solid yellow;
-  margin: 5px;
-  margin-top: 10px;
-`;
-
-// const StyledButton = styled(B)
-
-// CheckBoxs <-
-
-export interface IBusinessArea {
-  [key: string]: boolean;
-}
-
-export interface IChartInfo {
-  [key: string]: boolean;
+export function roundNum(num: number) {
+  const m = Number((Math.abs(num) * 100).toPrecision(15));
+  return (Math.round(m) / 100) * Math.sign(num);
 }
 
 const QuantLabPage = () => {
-  const [businessArea, setBusinessArea] = useState({
-    game: true,
-    enter: false,
-    enter2: false,
-    enter3: false,
-  });
-  const [chartInfo, setChartInfo] = useState({});
-  const [rebalancingTerm, setRebalancingTerm] = useState<number | string>(1);
-  const [numberOfHoldings, setNumberOfHoldings] = useState<number | string>(1);
+  const [modelList, setModelList] = useState<IModel[]>([]);
+  const [selectionModel, setSelectionModel] = useState<GridSelectionModel>([]); // NOTE: 선택된 모델 id의 배열
+
+  const token = useSelector((state: RootState) => state.session.token);
+  useEffect(() => {
+    async function getExModels() {
+      try {
+        const res = await axios.get(endpoint + "/lab/list", {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const modelData: IModel[] = [];
+        for (let index = 0; index < res.data.length; index++) {
+          const element = res.data[index];
+          const tmpCharts = await axios.get(
+            endpoint + "/lab/data/" + res.data[index].id,
+            {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+          element.chart_data = tmpCharts.data.chart;
+          modelData.push(element);
+        }
+        setModelList(modelData);
+        return res;
+      } catch (e) {
+        return e;
+      }
+    }
+    getExModels();
+  }, []);
+
+  const charts: IChart[] = modelList
+    .filter((val) => selectionModel.includes(val.id))
+    .map((val) => {
+      const { id, name, chart_data } = val;
+      return { id, name, chart_data };
+    });
 
   return (
     <MainContainer>
-      <MakeModelContainer>
-        <GraphContainer>
-          <GraphSlectContainer>
-            <ComparativeStockSelect />
-            <TermSelect />
-          </GraphSlectContainer>
-          <Graph>
-            <Example></Example>
-          </Graph>
-        </GraphContainer>
+      <LeftContainer>
+        <QuantModelCreation {...{ setModelList }} />
+      </LeftContainer>
 
-        <ModelContainer>
-          <Container sx={{ px: "5%" }}>
-            <h3>Quant Lab</h3>
-            <LabSlider
-              name={"리밸런싱 주기"}
-              min={1}
-              max={12}
-              value={rebalancingTerm}
-              setValue={setRebalancingTerm}
-            />
-            <LabSlider
-              name={"보유 종목 수"}
-              min={1}
-              max={50}
-              value={numberOfHoldings}
-              setValue={setNumberOfHoldings}
-            />
-          </Container>
-          <Box
-            sx={{
-              display: "grid",
-              gridTemplateColumns: "repeat(2, 1fr)",
-              p: 3,
-            }}
-          >
-            {/* 클릭시 modal 창 열리게 변경*/}
-            {/* <Button variant="contained" sx={{ m: 1 }}>
-              사업분야
-            </Button> */}
-            <Button variant="contained" sx={{ m: 1 }}>
-              재무상태
-            </Button>
-            <Button variant="contained" sx={{ m: 1 }}>
-              주식성향
-            </Button>
-            <Button variant="contained" sx={{ m: 1 }}>
-              차트정보
-            </Button>
-            <ModalBusinessAreas
-              state={businessArea}
-              setState={setBusinessArea}
-            />
-          </Box>
-        </ModelContainer>
-      </MakeModelContainer>
-      <ShowQuantModelYieldContainer>
-        <Typography>모델</Typography>
-        <Typography>누적수익률</Typography>
-        <Typography>연평균수익</Typography>
-        <Typography>승률</Typography>
-        <Typography>최대손실률</Typography>
-        <Typography>편입종목수</Typography>
-      </ShowQuantModelYieldContainer>
+      <RightContainer>
+        <QuantModelViewer {...{ charts }} />
+        <QuantModelTable
+          {...{ setSelectionModel, setModelList }}
+          rows={modelList.map((val) => {
+            const { chart_data, ...field } = val;
+            chart_data; // NOTE: 미사용 워닝 해결을 위해
+            val.annual_average_return = roundNum(val.annual_average_return);
+            val.cumulative_return = roundNum(val.cumulative_return);
+            val.max_loss_rate = roundNum(val.max_loss_rate);
+            val.winning_percentage = roundNum(val.winning_percentage);
+            return field;
+          })}
+        />
+      </RightContainer>
     </MainContainer>
   );
 };
+
+/*
+ * ANCHOR: models
+ */
+
+export interface IChart {
+  id: number;
+  name: string;
+  chart_data: {
+    profit_kospi_data: number[];
+    profit_rate_data: number[];
+  };
+}
+
+export interface IModel extends IChart {
+  cumulative_return: number;
+  annual_average_return: number;
+  winning_percentage: number;
+  max_loss_rate: number;
+  holdings_count: number;
+}
+
+/*
+ * ANCHOR: styles
+ */
+
+const MainContainer = styled("div")`
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  justify-content: center;
+`;
+
+const LeftContainer = styled("div")`
+  width: calc(20% - 10px);
+  /* width: 300px; */
+  min-width: 300px;
+  margin-right: 10px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+`;
+
+const RightContainer = styled("div")`
+  width: calc(80% - 10px);
+  min-width: 1000px;
+  margin-left: 10px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+`;
 
 export default QuantLabPage;

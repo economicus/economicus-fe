@@ -1,94 +1,118 @@
-import { AppBar, Toolbar } from "@material-ui/core";
-import { ChatBubble, Home, Notifications, People } from "@material-ui/icons";
-import { IconButton, Typography } from "@mui/material";
-import { Box } from "@mui/system";
+import { AppBar, Box, Toolbar, Typography } from "@mui/material";
+import { styled } from "@mui/material/styles";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import styled from "styled-components";
 
-import PositionedMenu from "../components/PositionedMenu";
-import SearchTextField from "../components/SearchTextField";
+import { logout } from "../stores/session";
+import {
+  HighlightedTextButton,
+  HighlightedTextLink,
+} from "../styles/myStyledComponents";
 
-const EconomicusLogo = styled("img")({
-  borderRadius: 5,
-  width: 50,
-  height: 50,
-  margin: 10,
-});
+const LogoImage = styled("img")`
+  border-radius: 5px;
+  width: 40px;
+  height: 40px;
+`;
+
+const LogoTypography = styled(Typography)`
+  font-family: "SongMyung";
+  margin-left: 10px;
+`;
+
+const RowContainer = styled(Box)`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+`;
+
+const MainContainer = styled(Box)`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const StyledLink = styled(Link)`
+  display: flex; // NOTE: 하단 공백 제거
+  padding: 10px;
+
+  &,
+  &:visited,
+  &:hover,
+  &:active {
+    color: inherit;
+    text-decoration: none;
+  }
+`;
+
+const LeftContainer = styled(Box)`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const MenuContainer = styled(Box)`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 10px;
+`;
+
+const RightContainer = styled(Box)`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 5px;
+`;
 
 const MainNavigation = () => {
+  const dispatch = useDispatch();
+
   return (
-    // <nav>
-    // <Box sx={{ flexGrow: 1 }}>
-    <AppBar position="static" color="inherit">
-      <Toolbar>
-        <Link to="/">
-          <EconomicusLogo src="https://avatars.githubusercontent.com/u/98199739?s=200&v=4" />
-        </Link>
-        <Box sx={{ flexGrow: 1 }}>
-          <Typography variant="h5">Economicus</Typography>
-        </Box>
-        <SearchTextField />
-        <IconButton
-          size="large"
-          edge="start"
-          color="inherit"
-          aria-label="home"
-          sx={{
-            mr: 1,
-            ml: 1,
-            "&:hover": { backgroundColor: "transparent" },
-          }}
-          href="/"
-        >
-          <Home />
-        </IconButton>
-        <IconButton
-          size="large"
-          edge="start"
-          color="inherit"
-          aria-label="people"
-          sx={{
-            mr: 1,
-            ml: 1,
-            "&:hover": { backgroundColor: "transparent" },
-          }}
-          href="/"
-        >
-          <People />
-        </IconButton>
-        <IconButton
-          size="large"
-          edge="start"
-          color="inherit"
-          aria-label="chatBubble"
-          sx={{
-            mr: 1,
-            ml: 1,
-            "&:hover": { backgroundColor: "transparent" },
-          }}
-          href="/"
-        >
-          <ChatBubble />
-        </IconButton>
-        <IconButton
-          size="large"
-          edge="start"
-          color="inherit"
-          aria-label="notifications"
-          sx={{
-            mr: 1,
-            ml: 1,
-            "&:hover": { backgroundColor: "transparent" },
-          }}
-          href="/"
-        >
-          <Notifications />
-        </IconButton>
-        <PositionedMenu />
-      </Toolbar>
-    </AppBar>
-    // </Box>
-    // </nav>
+    <div style={{ flexGrow: 1 }}>
+      <AppBar
+        position="static"
+        variant="outlined"
+        color="inherit"
+        style={{ borderRight: "none" }}
+        elevation={0}
+      >
+        <Toolbar style={{ padding: "0 3px" }}>
+          <MainContainer>
+            <LeftContainer>
+              <StyledLink to="/">
+                <RowContainer>
+                  <LogoImage src="img/economicusLogo.png" />
+                  <LogoTypography variant="h5">Economicus</LogoTypography>
+                </RowContainer>
+              </StyledLink>
+
+              <MenuContainer>
+                <HighlightedTextLink to="/QuantLabPage">
+                  실험실
+                </HighlightedTextLink>
+              </MenuContainer>
+            </LeftContainer>
+
+            <RightContainer>
+              {/* <TextLink to="/QuantLabPage">로그아웃</TextLink> */}
+              <HighlightedTextButton
+                onClick={() => {
+                  dispatch(logout());
+                }}
+              >
+                로그아웃
+              </HighlightedTextButton>
+            </RightContainer>
+          </MainContainer>
+        </Toolbar>
+      </AppBar>
+    </div>
   );
 };
 
